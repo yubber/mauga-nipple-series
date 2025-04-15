@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description":"preview build Z31HT \n\n it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
+        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
         "modeName": "mauga n!pple pve"
     },
     "lobby": {
@@ -123,11 +123,12 @@ globalvar RightNip = vect(-7.19, 10.8, 30.27)
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
 globalvar objDescs = ["collect pages", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
-globalvar objWeights = [0.1, 0.325, 0.325, 0.25]
+globalvar objWeights = [0.05, 0.35, 0.35, 0.25]
 globalvar objProg
 globalvar objGoal
 globalvar objPos # used for miniboss entity
 globalvar roundNo
+globalvar kills
 globalvar threatList = []
 # threats that use dummy bots
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN/*, THREATS.KITSUNIPS*/]
@@ -179,6 +180,7 @@ rule "init":
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, 3, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     hudSubtext(getAllPlayers(), "use code DS2MD for the latest version", HudPosition.RIGHT, 4, Color.WHITE, HudReeval.VISIBILITY)
+	disableInspector()
 
 	obj = OBJ.INTERMISSION
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
@@ -205,6 +207,7 @@ rule "init":
 	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), "time elapsed", "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.FLAG), "rounds elapsed", roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
@@ -279,7 +282,7 @@ rule "loop":
 		upto += objWeights[i]
 		wait()
 
-	objGoal = [8, 60, 1, 100][obj]
+	objGoal = [8, 80, 1, 100][obj]
 
 	# threats
 	threatList = []
@@ -357,6 +360,10 @@ rule "summon the horde":
 	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
 	mobs.setMoveSpeed(60)
 	wait()
+	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
+		mobs.setDamageReceived(85)
+	else:
+		mobs.setDamageReceived(100)
 	# kill(mobs, null)
 	# mobs.resurrect()
 	# if obj == OBJ.KILL:
@@ -392,7 +399,7 @@ rule "slendy":
 	mobs.setDamageDealt(500)
 	mobs.setMoveSpeed(95)
 	mobs.startScalingSize(2, false)
-	mobs.setMaxHealth(900)
+	mobs.setMaxHealth(1200)
 	getAllPlayers().disableKillFeed()
 	kill(mobs, null)
 	wait()
@@ -401,6 +408,8 @@ rule "slendy":
 	mobs.resurrect()
 	mobs.startModifyingVoicelinePitch(0.6, false)
 	mobs.startForcingName("slenderman")
+	wait(2)
+	heal(mobs,null,99999)
 	while obj == OBJ.PAGES:
 		mobs.forceButtonPress(Button.MELEE)
 		wait(1.2)
@@ -764,9 +773,9 @@ rule "make ice":
 		wait(9)
 		target1 = random.choice(getLivingPlayers(Team.1))
 		target2 = random.choice(getLivingPlayers(Team.1))
-		createProjectile(Projectile.MEI_ICICLE, nipman, LeftNip, directionTowards(LeftNip, target1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 30, 10, 0, 0, 0)
+		createProjectile(Projectile.MEI_ICICLE, nipman, LeftNip, directionTowards(LeftNip, target1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
 		wait(0.36)
-		createProjectile(Projectile.MEI_ICICLE, nipman, RightNip, directionTowards(RightNip, target2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 30, 10, 0, 0, 0)
+		createProjectile(Projectile.MEI_ICICLE, nipman, RightNip, directionTowards(RightNip, target2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
 
 rule "ice impact":
 	@Event playerTookDamage
@@ -781,7 +790,7 @@ rule "miniboss":
 	@Condition obj == OBJ.BOSS
 	# hero must be same as mobs for skin limit
 	wait(0.64)
-	createDummy(enemies[roundNo%len(enemies)], Team.2, -1, Vector.UP * 10, Vector.BACKWARD)
+	createDummy(enemies[roundNo%len(enemies)], Team.2, -1, Vector.UP * 30, Vector.BACKWARD)
 	objPos = getLastCreatedEntity()
 	objPos.setKnockbackReceived(10)
 	objPos.setMoveSpeed(40)
@@ -792,9 +801,9 @@ rule "miniboss":
 	objPos.startForcingThrottle(1,1,0,0,0,1)
 	objPos.startForcingName("miniboss")
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	objPos.setMaxHealth(1500 if objPos.getCurrentHero() in getTankHeroes() else 2500)
+	objPos.setMaxHealth(2500 if objPos.getCurrentHero() in getTankHeroes() else 4500)
 
-	waitUntil(objPos.isOnGround(), 4)
+	waitUntil(objPos.isOnGround(), 3)
 	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
 
 	# while obj == OBJ.BOSS:
@@ -850,9 +859,9 @@ rule "place objective":
 rule "kill/miniboss obj prog + respawn timer":
 	@Event playerDied
 	@Condition eventPlayer.isDummy()
-	heal(attacker, null, 90)
+	heal(attacker, null, 50)
 	if THREATS.DD in threatList:
-		createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 2.5, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
+		createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
 	if obj == OBJ.PAGES:
 		eventPlayer.setRespawnTime(7)
 		# objGoal -= 0.5
@@ -866,12 +875,13 @@ rule "kill/miniboss obj prog + respawn timer":
 		return
 	elif obj == OBJ.BOSS and eventPlayer == objPos:
 		objProg = objGoal
-	eventPlayer.setRespawnTime(4)
+	eventPlayer.setRespawnTime(2.5)
+	kills++
 
 rule "point":
 	@Condition obj == OBJ.CAPTURE
 	if getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF) != []:
-		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / 2
+		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 4.5
 		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos, 25)
 		playEffect(getAllPlayers(), DynamicEffect.WIDOWMAKER_VENOM_MINE_EXPLOSION_SOUND, Color.TEAM_1, objPos, 150)
 	wait(0.48)
@@ -899,6 +909,15 @@ rule "debug finish obj":
 	objProg = objGoal
 
 # misc
+rule "player count balancing, freeze check":
+	while true:
+		# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
+		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",false,0):
+			getPlayers(Team.1).setDamageDealt(900 / getNumberOfPlayers(Team.1))
+		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
+			nipman.setStatusEffect(null, Status.FROZEN, 99999)
+			nipman.setDamageReceived(1)
+		wait(10)
 rule "wake up":
 	@Condition nipman.hasStatusEffect(Status.ASLEEP)
 	nipman.clearStatusEffect(Status.ASLEEP)
@@ -1016,6 +1035,7 @@ rule "win":
 	setSlowMotion(50)
 	wait(0.48)
 	declareTeamVictory(Team.1)
+	destroyAllEffects()
 	setSlowMotion(100)
 	wait(3)
 	restartMatch()
