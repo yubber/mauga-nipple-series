@@ -128,7 +128,7 @@ globalvar objProg
 globalvar objGoal
 globalvar objPos # used for miniboss entity
 globalvar roundNo
-globalvar kills
+# globalvar kills
 globalvar threatList = []
 # threats that use dummy bots
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN/*, THREATS.KITSUNIPS*/]
@@ -139,7 +139,7 @@ globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MEI, Butt
 
 globalvar threatText = ""
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT]
-globalvar mobDmg = [80, 150, 75]
+globalvar mobDmg = [80, 155, 75]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -178,8 +178,8 @@ playervar mobTarget # also used for sniper target, milk wall victims (nipman.mob
 rule "init":
 	# print(len(getPlayers(Team.2)))
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, 3, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-    hudSubtext(getAllPlayers(), "use code DS2MD for the latest version", HudPosition.RIGHT, 4, Color.WHITE, HudReeval.VISIBILITY)
+    hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "use code DS2MD for the latest version", HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY)
 	disableInspector()
 
 	obj = OBJ.INTERMISSION
@@ -207,7 +207,7 @@ rule "init":
 	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), "time elapsed", "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.FLAG), "rounds elapsed", roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
@@ -282,7 +282,7 @@ rule "loop":
 		upto += objWeights[i]
 		wait()
 
-	objGoal = [8, 80, 1, 100][obj]
+	objGoal = [8, 70, 1, 100][obj]
 
 	# threats
 	threatList = []
@@ -360,10 +360,11 @@ rule "summon the horde":
 	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
 	mobs.setMoveSpeed(60)
 	wait()
-	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
-		mobs.setDamageReceived(85)
-	else:
-		mobs.setDamageReceived(100)
+	# if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
+	# 	mobs.setDamageReceived(85)
+	# else:
+	# 	mobs.setDamageReceived(100)
+	
 	# kill(mobs, null)
 	# mobs.resurrect()
 	# if obj == OBJ.KILL:
@@ -471,7 +472,7 @@ rule "milk wall + collision":
 			wallEffects.append(getLastCreatedEntity())
 
 		for wallI in range(3):
-			playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR_SOUND, Color.TEAM_2, wallPos, 300)
+			playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR_SOUND, Color.TEAM_2, wallPos, 800)
 			wait((3 - wallI) * 0.16)
 		chaseOverTime(wallPos, wallPos + 90 * Vector.BACKWARD, 3.5, ChaseTimeReeval.NONE)
 		# collision
@@ -859,7 +860,7 @@ rule "place objective":
 rule "kill/miniboss obj prog + respawn timer":
 	@Event playerDied
 	@Condition eventPlayer.isDummy()
-	heal(attacker, null, 50)
+	heal(attacker, eventPlayer, 50)
 	if THREATS.DD in threatList:
 		createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
 	if obj == OBJ.PAGES:
@@ -876,7 +877,7 @@ rule "kill/miniboss obj prog + respawn timer":
 	elif obj == OBJ.BOSS and eventPlayer == objPos:
 		objProg = objGoal
 	eventPlayer.setRespawnTime(2.5)
-	kills++
+	# kills++
 
 rule "point":
 	@Condition obj == OBJ.CAPTURE
@@ -911,9 +912,9 @@ rule "debug finish obj":
 # misc
 rule "player count balancing, freeze check":
 	while true:
-		# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
 		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",false,0):
-			getPlayers(Team.1).setDamageDealt(900 / getNumberOfPlayers(Team.1))
+			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
+			getPlayers(Team.1).setDamageDealt(min(300,900 / getNumberOfPlayers(Team.1)))
 		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
 			nipman.setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(1)
