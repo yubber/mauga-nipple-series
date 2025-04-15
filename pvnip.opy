@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": "preview build for THE MILK UPDATE - Z31HT\n\nit's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
+        "description":"preview build Z31HT \n\n it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
         "modeName": "mauga n!pple pve"
     },
     "lobby": {
@@ -92,8 +92,7 @@ enum THREATS:
 	SLENDY,
 	ICE, # keep as first after slendy
 	TWISTER,
-	POISON,
-	MISSILES,
+	RAIN,
 	NUKE,
 	DD,
 	WALL,
@@ -133,8 +132,8 @@ globalvar threatList = []
 # threats that use dummy bots
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN/*, THREATS.KITSUNIPS*/]
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "frosty nips", "tiddy twister", "spoiled milk mist", "mammary missiles", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MEI, Button.ULTIMATE), iconString(Icon.SPIRAL), iconString(Icon.POISON), abilityIconString(Hero.PHARAH, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatNames = ["slenderman", "frosty nips", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 
 globalvar threatText = ""
@@ -161,6 +160,8 @@ globalvar wallEffects
 globalvar missilePos
 globalvar missileFx
 globalvar missileTemp
+
+globalvar rainVar
 
 globalvar threatSnipers
 globalvar threatLactaters
@@ -294,7 +295,7 @@ rule "loop":
 	# 		threatList = threatList.slice(1,len(threatList))
 
 	# wait()
-	threatList = [THREATS.MISSILES, THREATS.WALL]
+	threatList = [THREATS.TWISTER, THREATS.RAIN]
 
 	threatText = ""
 	for i in range(len(threatList)):
@@ -509,6 +510,20 @@ rule "X kitsunipples":
 		wait(10)
 		threatTwinks.forceButtonPress(Button.ULTIMATE)
 */
+#!define PosFormula (sin(getTotalTimeElapsed()) * 20) * Vector.LEFT * evalOnce((rainVar % 2) * 2 - 1)
+rule "rain":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.RAIN in threatList
+	for rainVar in range(5):
+		createEffect()
+		threatFx.append(getLastCreatedEntity())
+
+	while obj != OBJ.INTERMISSION:
+		for rainVar in range(5):
+			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-10,10))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
+			wait(0.08)
+			createProjectile(Projectile.MEI_ICICLE, null, )
+
 rule "twister":
 	@Condition THREATS.TWISTER in threatList
 	for twisterCache in range(3,12,2):
@@ -678,9 +693,9 @@ rule "heal milk":
 		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.2).exclude(nipman)))
 		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, RightNip, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.2).exclude(nipman)))
 
-rule "missiles":
+rule "nuke":
 	@Condition obj != OBJ.INTERMISSION
-	@Condition THREATS.MISSILES in threatList
+	@Condition THREATS.NUKE in threatList
 
 	# debug
 	# createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -720,7 +735,7 @@ rule "missiles":
 			return
 		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.8,70, 0,0)
 		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.8,70, 0,0)
-		wait(0.016 * distance(LeftNip, missilePos))
+		wait(0.014 * distance(LeftNip, missilePos))
 		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
 		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
 		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_2, missilePos, 1)
@@ -729,6 +744,10 @@ rule "missiles":
 		missileFx = []
 		missileTemp = getTotalTimeElapsed()
 		wait()
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, missilePos + Vector.DOWN * 10, Vector.UP, 0.8, ProjectileEffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, 6, EffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
 		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos, missilePos + min(8, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
 		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 6, missilePos + Vector.UP * 6 + min(2, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -736,14 +755,11 @@ rule "missiles":
 		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 6, missilePos + Vector.UP * 6 + min(2, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
 		wait(1)
-		for missileTemp in range(len(missileFx)):
+		for missileTemp in range(2,len(missileFx)):
 			destroyEffect(missileFx[missileTemp])
-		missileFx = []
+		missileFx = missileFx.slice(0,2)
 		# dot
-		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, missilePos + Vector.DOWN * 10, Vector.UP, 0.8, ProjectileEffectReeval.VISIBILITY)
-		missileFx.append(getLastCreatedEntity())
-		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, 6, EffectReeval.VISIBILITY)
-		missileFx.append(getLastCreatedEntity())
+
 		for missileTemp in range(50):
 			damage(getPlayersInRadius(missilePos, 6, Team.1, LosCheck.OFF), null, 30)
 			getPlayersInRadius(missilePos, 6, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
