@@ -364,7 +364,7 @@ rule "summon the horde":
 	# 	mobs.setDamageReceived(85)
 	# else:
 	# 	mobs.setDamageReceived(100)
-	
+
 	# kill(mobs, null)
 	# mobs.resurrect()
 	# if obj == OBJ.KILL:
@@ -912,7 +912,7 @@ rule "debug finish obj":
 # misc
 rule "player count balancing, freeze check":
 	while true:
-		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",false,0):
+		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
 			getPlayers(Team.1).setDamageDealt(min(300,900 / getNumberOfPlayers(Team.1)))
 		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
