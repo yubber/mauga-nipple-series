@@ -498,7 +498,7 @@ rule "milk wall + collision":
 		wallEffects = []
 		stopChasingVariable(wallPos)
 
-#!define PosFormula vect((sin(getTotalTimeElapsed() / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(18 - 8 * rainVar))
+#!define PosFormula vect((sin(getTotalTimeElapsed() / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(16 - 8 * rainVar))
 rule "rain":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.RAIN in threatList
@@ -507,12 +507,14 @@ rule "rain":
 	for rainVar in range(5):
 		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.PURPLE, PosFormula + Vector.DOWN * 18, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, PosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
 		for rainVar in range(5):
-			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-10,10))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1.4, 0,0,-5)
-			wait(0.08)
-			createProjectile(Projectile.MEI_ICICLE, null, PosFormula + Vector.UP * 30, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1,4,DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
+			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-6,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1.4, 0,0,-5)
+			wait(0.048)
+			createProjectile(Projectile.MEI_ICICLE, null, PosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 40, 1,3.2,DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
 
 rule "twister":
 	@Condition THREATS.TWISTER in threatList
@@ -682,8 +684,8 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION:
 		wait(0.8)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.2).exclude(nipman)))
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, RightNip, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.2).exclude(nipman)))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, RightNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(mobs))
 
 rule "nuke":
 	@Condition obj != OBJ.INTERMISSION
@@ -707,7 +709,7 @@ rule "nuke":
 				return
 			# probably a bit more optimal since this stops checking on the first player found, instead of checking all players in radius
 			for missileTemp in range(getNumberOfLivingPlayers(Team.1)):
-				if distance(getLivingPlayers(Team.1)[missileTemp].getPosition(), missilePos) < 3:
+				if getLivingPlayers(Team.1)[missileTemp].hasSpawned() and distance(getLivingPlayers(Team.1)[missileTemp].getPosition(), missilePos) < 3:
 					playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, missilePos, 100)
 					destroyEffect(missileFx[0])
 					missileFx = []
@@ -716,11 +718,12 @@ rule "nuke":
 		# arming
 		lbl_0:
 		stopChasingVariable(missilePos)
-		wait()
 		missilePos -= Vector.UP
-		missileTemp = getTotalTimeElapsed()
 		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos + Vector.UP, Vector.UP, 0.1 + 0.1 * (getTotalTimeElapsed() - missileTemp), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 		missileFx.append(getLastCreatedEntity())
+		wait()
+		missileTemp = getTotalTimeElapsed()
+
 		wait(3)
 		# deto
 		if obj == OBJ.INTERMISSION:
@@ -742,11 +745,11 @@ rule "nuke":
 		missileFx.append(getLastCreatedEntity())
 		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, 6, EffectReeval.VISIBILITY)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos, missilePos + min(8, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos, missilePos + min(16, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 6, missilePos + Vector.UP * 6 + min(2, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 6, missilePos + Vector.UP * 6 + min(2, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
 		wait(1)
 		for missileTemp in range(2,len(missileFx)):
@@ -802,7 +805,7 @@ rule "miniboss":
 	objPos.startForcingThrottle(1,1,0,0,0,1)
 	objPos.startForcingName("miniboss")
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	objPos.setMaxHealth(2200 if objPos.getCurrentHero() in getTankHeroes() else 4200)
+	objPos.setMaxHealth(2200 if objPos.getCurrentHero() in getTankHeroes() else 4000)
 
 	waitUntil(objPos.isOnGround(), 3)
 	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
@@ -862,6 +865,9 @@ rule "kill/miniboss obj prog + respawn timer":
 	@Condition eventPlayer.isDummy()
 	heal(attacker, eventPlayer, 50)
 	if THREATS.DD in threatList:
+		# playEffect(getAllPlayers(), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 1)
+		# playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 10)
+		# damage(getPlayersInRadius(eventPlayer.getPosition(), 2, Team.1, LosCheck.SURFACES_AND_ENEMY_BARRIERS),eventPlayer,90)
 		createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
 	if obj == OBJ.PAGES:
 		eventPlayer.setRespawnTime(7)
@@ -882,7 +888,7 @@ rule "kill/miniboss obj prog + respawn timer":
 rule "point":
 	@Condition obj == OBJ.CAPTURE
 	if getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF) != []:
-		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 4.5
+		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 3
 		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos, 25)
 		playEffect(getAllPlayers(), DynamicEffect.WIDOWMAKER_VENOM_MINE_EXPLOSION_SOUND, Color.TEAM_1, objPos, 150)
 	wait(0.48)
@@ -914,7 +920,7 @@ rule "player count balancing, freeze check":
 	while true:
 		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
-			getPlayers(Team.1).setDamageDealt(min(500,900 / getNumberOfPlayers(Team.1)))
+			getPlayers(Team.1).setDamageDealt(min(400,900 / getNumberOfPlayers(Team.1)))
 		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
 			nipman.setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(1)
