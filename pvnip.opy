@@ -60,9 +60,9 @@ settings {
             }
         },
         "allTeams": {
-            "mercy": {
-                "ability2Cooldown%": 0
-            }
+            # "mercy": {
+            #     "ability2Cooldown%": 0
+            # }
         }
     }
 }
@@ -136,6 +136,8 @@ globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN/*, THREATS.K
 globalvar threatNames = ["slenderman", "frosty nips", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
 globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
+# mini maugas have weak spots to shoot before attakc
+globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
 
 globalvar threatText = ""
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT]
@@ -208,6 +210,7 @@ rule "init":
 	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.FLAG), "rounds elapsed", roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers() if isHardcore else null, iconString(Icon.EXCLAMATION_MARK), "hardcore mode is on", "no respawning until round ends", HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
@@ -282,7 +285,7 @@ rule "loop":
 		upto += objWeights[i]
 		wait()
 
-	objGoal = [8, 70, 1, 100][obj]
+	objGoal = [8, 60, 1, 100][obj]
 
 	# threats
 	threatList = []
@@ -354,7 +357,7 @@ rule "summon the horde":
 
 	wait(0.48)
 	getPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)
-	mobs.startForcingButton(Button.PRIMARY_FIRE)
+	mobs.stopForcingButton(Button.PRIMARY_FIRE)
 	mobs.startForcingThrottle(1,1,0,0,0,1)
 	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
 	mobs.setMoveSpeed(60)
@@ -424,12 +427,14 @@ rule "mob respawn":
 	eventPlayer.teleport(LeftNip if random.randint(0,1) == 0 else RightNip)
 	eventPlayer.applyImpulse(vect(random.uniform(-0.15, 0.15), random.uniform(0.4, 0.66), -1), random.uniform(50,70), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 	eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
 
-	if obj != OBJ.PAGES:
-		getPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)
-		mobs.startForcingButton(Button.PRIMARY_FIRE)
+	# torb is hammer only in settings
+	# if obj != OBJ.PAGES:
+	# 	getPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)
+		# mobs.startForcingButton(Button.PRIMARY_FIRE)
 	# wait(0.24)
-	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 3)
+	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 5)
 
 rule "knock mobs":
 	@Event eachPlayer
@@ -442,18 +447,30 @@ rule "knock mobs":
 	wait(1.5)
 	waitUntil(eventPlayer.getPosition().y < 1.8, 7)
 	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 1.6)
+	if obj != OBJ.PAGES:
+		eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
 	# wait(0.24)
 rule "mob retarget":
 	@Condition mobs != []
 	@Condition obj != OBJ.INTERMISSION
-	for i in range(len(mobs)):
-		wait(0.12)
-		# 1st-3rd closest player
-		mobs[i].mobTarget = sorted(getLivingPlayers(Team.1), lambda x: distance(x, mobs[i]) + 999 if not x.hasSpawned() else 0)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
-	wait(0.96)
-	# change boss target
-	if obj == OBJ.BOSS:
-		objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
+	if getLivingPlayers(Team.1) == []:
+		# mobs.mobTarget = null
+		mobs.stopForcingThrottle()
+		if obj == OBJ.BOSS:
+			objPos.stopForcingThrottle()
+	else:
+		mobs.startForcingThrottle(1,1,0,0,0,1)
+		if obj == OBJ.BOSS:
+			objPos.startForcingThrottle(1,1,0,0,0,1)
+		for i in range(len(mobs)):
+			wait(0.12)
+			# 1st-3rd closest player
+			mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
+		wait(0.96)
+		# change boss target
+		if obj == OBJ.BOSS:
+			objPos.mobTarget = mobs[0].mobTarget
+			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
 	if RULE_CONDITION:
 		goto RULE_START
 # threats
@@ -580,11 +597,11 @@ rule "boolet":
 	@Condition THREATS.DAKKA in threatList
 	while obj != OBJ.INTERMISSION:
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, LeftNip,
-			vect(sin(getTotalTimeElapsed()*2)*0.55, cos(getTotalTimeElapsed()) * 0.35 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 8, 7, 0, 0,0)
-		wait(0.08)
+			vect(sin(getTotalTimeElapsed()*2)*0.55, cos(getTotalTimeElapsed()) * 0.3 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 8, 7, 0, 0,0)
+		# wait(0.08)
 		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, RightNip,
-			vect(sin(getTotalTimeElapsed()*2)*-0.55, cos(getTotalTimeElapsed()) * -0.35 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 8, 7, 0, 0,0)
-		wait(0.08)
+			vect(sin(getTotalTimeElapsed()*2)*-0.55, cos(getTotalTimeElapsed()) * -0.3 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 8, 7, 0, 0,0)
+		wait(0.096)
 rule "laser":
 	@Condition THREATS.LASER in threatList
 	area1 = vect(10,0,20)
@@ -684,7 +701,7 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION:
 		wait(0.8)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip + Vector.BACKWARD * 2, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(mobs))
 		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, RightNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(mobs))
 
 rule "nuke":
@@ -794,12 +811,11 @@ rule "miniboss":
 	@Condition obj == OBJ.BOSS
 	# hero must be same as mobs for skin limit
 	wait(0.64)
-	createDummy(enemies[roundNo%len(enemies)], Team.2, -1, Vector.UP * 30, Vector.BACKWARD)
+	createDummy(enemies[roundNo%len(enemies)], Team.2, -1, Vector.UP * 50, Vector.BACKWARD)
 	objPos = getLastCreatedEntity()
 	objPos.setKnockbackReceived(10)
 	objPos.setMoveSpeed(40)
 	objPos.startScalingSize(3, false)
-	objPos.startForcingButton(Button.PRIMARY_FIRE)
 	if objPos.getCurrentHero() == Hero.WINSTON:
 		objPos.setDamageDealt(40)
 	objPos.startForcingThrottle(1,1,0,0,0,1)
@@ -807,8 +823,10 @@ rule "miniboss":
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	objPos.setMaxHealth(2200 if objPos.getCurrentHero() in getTankHeroes() else 4000)
 
-	waitUntil(objPos.isOnGround(), 3)
+	wait(2)
+	waitUntil(objPos.isOnGround(), 4)
 	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
+	objPos.startForcingButton(Button.PRIMARY_FIRE)
 
 	# while obj == OBJ.BOSS:
 	# 	objProg = 1 - objPos.getNormalizedHealth()
@@ -891,7 +909,7 @@ rule "point":
 		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 3
 		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos, 25)
 		playEffect(getAllPlayers(), DynamicEffect.WIDOWMAKER_VENOM_MINE_EXPLOSION_SOUND, Color.TEAM_1, objPos, 150)
-	wait(0.48)
+	wait(0.64)
 	if RULE_CONDITION:
 		goto RULE_START
 
@@ -916,6 +934,22 @@ rule "debug finish obj":
 	objProg = objGoal
 
 # misc
+rule "rez cd if not hardcore":
+	if isHardcore == false:
+		while true:
+			getPlayersOnHero(Hero.MERCY, Team.1).setAbilityCooldown(Button.ABILITY_2, 0)
+			wait(2)
+rule "hardcore":
+	@Event playerDied
+	@Team 1
+	@Condition isHardcore
+	eventPlayer.setRespawnTime(99999)
+	if getLivingPlayers(Team.1) == []:
+		bigMessage(getAllPlayers(), "game over. all players died.")
+		setSlowMotion(50)
+		wait(1)
+		declareTeamVictory(Team.2)
+
 rule "player count balancing, freeze check":
 	while true:
 		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
@@ -1073,5 +1107,5 @@ rule "you are dead, not big surprise":
 	@Event playerDied
 	@Team 1
 	addToTeamScore(Team.2, 1)
-	if getPlayersOnHero(Hero.MERCY, Team.1) == []:
-		eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
+	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
+	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
