@@ -299,7 +299,6 @@ rule "loop":
 				threatList = threatList.slice(1,len(threatList))
 
 	wait()
-	# threatList = [THREATS.TWISTER, THREATS.RAIN]
 
 	threatText = ""
 	for i in range(len(threatList)):
@@ -360,10 +359,10 @@ rule "summon the horde":
 	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
 	mobs.setMoveSpeed(60)
 	wait()
-	# if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
-	# 	mobs.setDamageReceived(85)
-	# else:
-	# 	mobs.setDamageReceived(100)
+	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
+		mobs.setDamageReceived(85)
+	else:
+		mobs.setDamageReceived(100)
 
 	# kill(mobs, null)
 	# mobs.resurrect()
@@ -506,7 +505,7 @@ rule "rain":
 	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	for rainVar in range(5):
-		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.PURPLE, PosFormula + Vector.DOWN * 15, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.PURPLE, PosFormula + Vector.DOWN * 18, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
@@ -701,17 +700,18 @@ rule "nuke":
 		missileFx.append(getLastCreatedEntity())
 		wait()
 		# closest player check, can't use wait until in case rule must break
-		while true:
+		while missileFx != []:
 			if obj == OBJ.INTERMISSION:
 				for missileTemp in range(len(missileFx)):
 					destroyEffect(missileFx[missileTemp])
 				return
-			for missileTemp in range(len(getLivingPlayers(Team.1))):
+			# probably a bit more optimal since this stops checking on the first player found, instead of checking all players in radius
+			for missileTemp in range(getNumberOfLivingPlayers(Team.1)):
 				if distance(getLivingPlayers(Team.1)[missileTemp].getPosition(), missilePos) < 3:
 					playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, missilePos, 100)
 					destroyEffect(missileFx[0])
 					missileFx = []
-					goto lbl_0
+					break
 			wait(0.24)
 		# arming
 		lbl_0:
@@ -719,7 +719,7 @@ rule "nuke":
 		wait()
 		missilePos -= Vector.UP
 		missileTemp = getTotalTimeElapsed()
-		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos, Vector.UP, 0.1 + 0.1 * (getTotalTimeElapsed() - missileTemp), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos + Vector.UP, Vector.UP, 0.1 + 0.1 * (getTotalTimeElapsed() - missileTemp), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 		missileFx.append(getLastCreatedEntity())
 		wait(3)
 		# deto
@@ -727,9 +727,9 @@ rule "nuke":
 			for missileTemp in range(len(missileFx)):
 				destroyEffect(missileFx[missileTemp])
 			return
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.8,70, 0,0)
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.8,70, 0,0)
-		wait(0.014 * distance(LeftNip, missilePos))
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
+		wait(0.012 * distance(LeftNip, missilePos))
 		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
 		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
 		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_2, missilePos, 1)
@@ -798,11 +798,11 @@ rule "miniboss":
 	objPos.startScalingSize(3, false)
 	objPos.startForcingButton(Button.PRIMARY_FIRE)
 	if objPos.getCurrentHero() == Hero.WINSTON:
-		objPos.setDamageDealt(60)
+		objPos.setDamageDealt(40)
 	objPos.startForcingThrottle(1,1,0,0,0,1)
 	objPos.startForcingName("miniboss")
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	objPos.setMaxHealth(2500 if objPos.getCurrentHero() in getTankHeroes() else 4500)
+	objPos.setMaxHealth(2200 if objPos.getCurrentHero() in getTankHeroes() else 4200)
 
 	waitUntil(objPos.isOnGround(), 3)
 	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
@@ -914,7 +914,7 @@ rule "player count balancing, freeze check":
 	while true:
 		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
-			getPlayers(Team.1).setDamageDealt(min(300,900 / getNumberOfPlayers(Team.1)))
+			getPlayers(Team.1).setDamageDealt(min(500,900 / getNumberOfPlayers(Team.1)))
 		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
 			nipman.setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(1)
