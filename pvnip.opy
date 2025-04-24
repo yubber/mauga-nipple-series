@@ -84,12 +84,14 @@ extra attacks
 enum OBJ:
 	INTERMISSION = -1,
 	PAGES, # keep as first
+	MINIS,
 	KILL,
 	BOSS,
 	CAPTURE # keep as last
 
 enum THREATS:
 	SLENDY,
+	MINIS,
 	ICE, # keep as first after slendy
 	TWISTER,
 	RAIN,
@@ -122,8 +124,10 @@ globalvar RightNip = vect(-7.19, 10.8, 30.27)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objDescs = ["collect pages", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
-globalvar objWeights = [0.05, 0.35, 0.35, 0.25]
+globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
+# globalvar objWeights = [0.05, 0.25, 0.25, 0.25, 0.20]
+globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
+
 globalvar objProg
 globalvar objGoal
 globalvar objPos # used for miniboss entity
@@ -133,8 +137,8 @@ globalvar threatList = []
 # threats that use dummy bots
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN/*, THREATS.KITSUNIPS*/]
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "frosty nips", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatNames = ["slenderman", "mini maugas", "frosty nips", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 # mini maugas have weak spots to shoot before attakc
 globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
@@ -285,12 +289,14 @@ rule "loop":
 		upto += objWeights[i]
 		wait()
 
-	objGoal = [8, 60, 1, 100][obj]
+	objGoal = [3, 8, 60, 1, 100][obj]
 
 	# threats
 	threatList = []
 	if obj == OBJ.PAGES:
 		threatList.append(THREATS.SLENDY)
+	elif obj == OBJ.MINIS:
+		threatList.append(THREATS.MINIS)
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
@@ -337,6 +343,7 @@ rule "loop":
 rule "summon the horde":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition obj != OBJ.PAGES
+	@Condition obj != OBJ.MINIS
 	wait(0.64, Wait.ABORT_WHEN_FALSE)
 	getAllPlayers().disableKillFeed()
 	wait()
@@ -807,6 +814,13 @@ rule "ice impact":
 	victim.setStatusEffect(nipman, Status.FROZEN, 1.2)
 
 # objective setup
+rule "minis":
+	@Condition obj == OBJ.MINIS
+	wait(0.64)
+	objPos = []
+	createDummy(Hero.MAUGA, Team.2, -1, vect(-33,-17,0), Vector.LEFT)
+	objPos.append[getLastCreatedEntity()]
+
 rule "miniboss":
 	@Condition obj == OBJ.BOSS
 	# hero must be same as mobs for skin limit
@@ -900,6 +914,8 @@ rule "kill/miniboss obj prog + respawn timer":
 		return
 	elif obj == OBJ.BOSS and eventPlayer == objPos:
 		objProg = objGoal
+	elif obj == OBJ.MINIS and eventPlayer in objPos:
+		objProg++
 	eventPlayer.setRespawnTime(2.5)
 	# kills++
 
