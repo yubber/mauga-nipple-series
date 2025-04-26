@@ -35,6 +35,9 @@ settings {
             "winston": {
                 "ammoClipSize%": 40
             },
+			"venture": {
+                "ability1Cooldown%": 99
+            },
             "general": {
                 "abilityCooldown%": 60,
                 "ammoClipSize%": 150,
@@ -523,7 +526,7 @@ rule "grab init + left":
 	threatFx.append(getLastCreatedEntity())
 	while obj != OBJ.INTERMISSION:
 		grabLeft = LeftNip
-		chaseAtRate()
+		chaseAtRate(grabLeft, )
 
 rule "cage setup":
 	@Condition THREATS.CAGE in threatList
