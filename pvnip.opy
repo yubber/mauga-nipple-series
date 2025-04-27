@@ -513,7 +513,7 @@ rule "mob retarget":
 	if RULE_CONDITION:
 		goto RULE_START
 # threats
-rule "more maugas":
+rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
 	for iMores in range(len(objPos)):
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallLNip, LeftNip if objPos[iMores].smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
@@ -521,6 +521,8 @@ rule "more maugas":
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallRNip, LeftNip if objPos[iMores].smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		objPos[iMores].append(getLastCreatedEntity())
 		wait()
+
+	bigMessage(getAllPlayers(), "")
 
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
