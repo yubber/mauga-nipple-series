@@ -185,6 +185,9 @@ globalvar grabRightPlayer
 globalvar nipletsPosList
 globalvar iniplets
 
+globalvar iMores
+globalvar moreFx
+
 globalvar threatSnipers
 globalvar threatLactaters
 globalvar threatSuns
@@ -198,12 +201,14 @@ globalvar antiCrashOn
 playervar mobTarget # also used for sniper target, milk wall victims (nipman.mobTarget)
 playervar cacheA
 playervar cacheB
+playervar cacheC
 
 #!define chainSetup cacheA
 
 # more maugas' nip pos
 #!define smallLNip cacheA
 #!define smallRNip cacheB
+#!define fx cacheC
 
 #!define MiniScale 15
 
@@ -510,7 +515,13 @@ rule "mob retarget":
 # threats
 rule "more maugas":
 	@Condition obj == OBJ.MORE
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, )
+	for iMores in range(len(objPos)):
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallLNip, LeftNip if objPos[iMores].smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		objPos[iMores].append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallRNip, LeftNip if objPos[iMores].smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		objPos[iMores].append(getLastCreatedEntity())
+		wait()
+
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
 	threatNiplets = []
@@ -547,32 +558,80 @@ rule "grab init + left":
 	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 	threatFx.append(getLastCreatedEntity())
 
-	print(grabLeftPlayer)
+	while obj != OBJ.INTERMISSION:
+		grabLeft = LeftNip
+		grabRight = RightNip
+		# select
+		grabLeftPlayer = random.choice([x for x in getLivingPlayers(Team.1) if x.getPosition().x > 0])
+		grabRightPlayer = random.choice([x for x in getLivingPlayers(Team.1) if x.getPosition().x < 0])
+
+		# attack
+		if entityExists(grabLeftPlayer):
+			chaseOverTime(grabLeft, grabLeftPlayer.getEyePosition(), 4, ChaseTimeReeval.NONE)
+		if entityExists(grabRightPlayer) and grabLeftPlayer != grabRightPlayer:
+			chaseOverTime(grabRight, grabRightPlayer.getEyePosition(), 4, ChaseTimeReeval.NONE)
+
+		wait(4)
+
+		stopChasingVariable(grabLeft)
+		stopChasingVariable(grabRight)
+
+		if obj == OBJ.INTERMISSION:
+			return
+
+		# check landing
+		if distance(grabLeft, grabLeftPlayer) < 2:
+			grabLeftPlayer.startForcingPosition(grabLeft,true)
+			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
+		else:
+			grabLeftPlayer = null
+		if distance(grabRight, grabRightPlayer) < 2:
+			grabRightPlayer.startForcingPosition(grabRight,true)
+			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+		else:
+			grabRightPlayer = null
+
+		# pull
+		chaseOverTime(grabLeft, LeftNip, 1.2, ChaseTimeReeval.NONE)
+		chaseOverTime(grabRight, RightNip, 1.2, ChaseTimeReeval.NONE)
+
+		grabLeftPlayer.startDamageOverTime(null, 1.2, 10)
+		grabRightPlayer.startDamageOverTime(null, 1.2, 10)
+
+		wait(1.2)
+		stopChasingVariable(grabLeft)
+		stopChasingVariable(grabRight)
+		if obj == OBJ.INTERMISSION:
+			return
+
+		grabLeftPlayer.stopForcingPosition()
+		grabRightPlayer.stopForcingPosition()
 
 	# createEffect
-	while obj != OBJ.INTERMISSION:
+	/*while obj != OBJ.INTERMISSION:
 		grabLeft = LeftNip
 		chaseAtRate(grabLeft, getRealClosestPlayer(grabLeft, Team.1).getEyePosition(), 2, ChaseRateReeval.DESTINATION_AND_RATE)
 		while true:
+			wait(0.096)
 			if obj == OBJ.INTERMISSION:
 				stopChasingVariable(grabLeft)
 				return
 			else:
 				for grabLeftPlayer in range(getNumberOfPlayers(Team.1)):
+					wait(0.096)
 					grabLeftPlayer = getPlayersInSlot(grabLeftPlayer, Team.1)
 					if grabLeftPlayer.hasSpawned() and grabLeftPlayer.isAlive() and distance(grabLeft, grabLeftPlayer) < 1:
 						break
-					wait(0.096)
-			wait(0.096)
 		stopChasingVariable(grabLeft)
 		grabLeftPlayer.startForcingPosition(grabLeft, true)
 		chaseAtRate(grabLeft, LeftNip, 20, ChaseRateReeval.NONE)
 		grabLeftPlayer.startDamageOverTime(null, 2, 30)
 		wait(2, Wait.ABORT_WHEN_FALSE)
 		grabLeftPlayer.stopForcingPosition()
-		stopChasingVariable(grabLeft)
+		stopChasingVariable(grabLeft)*/
 
-rule "grab right":
+/*rule "grab right":
+	@Disabled
 	@Condition THREATS.GRAB in threatList
 	wait()
 	while obj != OBJ.INTERMISSION:
@@ -595,18 +654,16 @@ rule "grab right":
 		grabRightPlayer.startDamageOverTime(null, 2, 30)
 		wait(2, Wait.ABORT_WHEN_FALSE)
 		grabRightPlayer.stopForcingPosition()
-		stopChasingVariable(grabRight)
+		stopChasingVariable(grabRight)*/
 
-rule "cage setup":
+rule "cage":
+	@Event eachPlayer
 	@Condition THREATS.CAGE in threatList
 	for nipman.chainSetup in range(9):
 		createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(i),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if i % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
 		wait()
 
-rule "cage pull":
-	@Event eachPlayer
-	@Condition THREATS.CAGE in threatList
 	while obj != OBJ.INTERMISSION:
 		if eventPlayer.getPosition().z < -5:
 			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
@@ -717,8 +774,8 @@ rule "sun":
 		threatSuns.setUltCharge(100)
 		wait(4)
 		threatSuns.forceButtonPress(Button.ULTIMATE)
-		threatSuns[0].setFacing(directionTowards(LeftNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
-		threatSuns.last().setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
+		threatSuns[0].setFacing(directionTowards(LeftNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
+		threatSuns.last().setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
 		wait(1.5)
 		threatSuns.forceButtonPress(Button.PRIMARY_FIRE)
 
@@ -959,6 +1016,7 @@ rule "more maugas":
 	wait(0.16)
 	objPos.disablePlayerCollision()
 	objPos.disableEnvironmentCollision(true)
+	objPos.setKnockbackReceived(0)
 	for i in range(len(objPos)):
 		wait()
 		objPos[i].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[i], Transform.ROTATION_AND_TRANSLATION)
@@ -966,7 +1024,7 @@ rule "more maugas":
 		objPos[i].startForcingPosition(objPos[i].getPosition(), false)
 	objPos.startScalingSize(MiniScale,false)
 	objPos.setMaxHealth(1500)
-	wait()
+	wait(0.48)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 	heal(objPos, null, 99999)
 
@@ -1172,6 +1230,17 @@ rule "charge no breaky":
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	smallMessage(eventPlayer, "do not the mauga")
 
+rule "charge no breaky more maugas":
+	@Event eachPlayer
+	@Hero reinhardt
+	@Condition obj == OBJ.MORE
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition ((eventPlayer.getPosition().z < -18 and eventPlayer.getFacingDirection().z < 0.7)
+	or (eventPlayer.getPosition().x < -18 and eventPlayer.getFacingDirection().x < 0.7)
+	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	smallMessage(eventPlayer, "do not the mauga")
+
 rule "punch no breaky":
 	@Event eachPlayer
 	@Hero doomfist
@@ -1196,7 +1265,7 @@ rule "flux no breaky":
 	@Event playerDealtDamage
 	@Hero sigma
 	@Condition eventAbility == Button.ULTIMATE
-	@Condition victim == nipman
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	smallMessage(eventPlayer, "do not the mauga")
 	wait(0.8)
@@ -1204,23 +1273,23 @@ rule "flux no breaky":
 rule "punch unbreaky":
 	@Event playerDealtDamage
 	@Hero doomfist
-	@Condition victim == nipman
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventAbility == Button.SECONDARY_FIRE
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	nipman.clearStatusEffect(Status.FROZEN)
+	victim.clearStatusEffect(Status.FROZEN)
 	wait(0.48, Wait.ABORT_WHEN_FALSE)
-	nipman.setStatusEffect(null, Status.FROZEN, 9999)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
 rule "hook unbreaky":
 	@Event playerDealtDamage
 	@Hero roadhog
-	@Condition victim == nipman
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventAbility == Button.ABILITY_1
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	nipman.clearStatusEffect(Status.FROZEN)
+	victim.clearStatusEffect(Status.FROZEN)
 	wait(0.48, Wait.ABORT_WHEN_FALSE)
-	nipman.setStatusEffect(null, Status.FROZEN, 9999)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
 rule "debug":
 	@Disabled
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
