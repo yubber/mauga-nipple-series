@@ -508,6 +508,9 @@ rule "mob retarget":
 	if RULE_CONDITION:
 		goto RULE_START
 # threats
+rule "more maugas":
+	@Condition obj == OBJ.MORE
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, )
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
 	threatNiplets = []
