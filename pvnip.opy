@@ -178,13 +178,18 @@ globalvar missileTemp
 globalvar rainVar
 
 globalvar grabLeft
+globalvar grabLeftPlayer
 globalvar grabRight
+globalvar grabRightPlayer
+
+globalvar nipletsPosList
+globalvar iniplets
 
 globalvar dummyThreatBots
-#!define threatSnipers dummyThreatBots
-#!define threatLactaters dummyThreatBots
-#!define threatSuns dummyThreatBots
-#!define threatNiplets dummyThreatBots
+globalvar threatSnipers
+globalvar threatLactaters
+globalvar threatSuns
+globalvar threatNiplets
 # globalvar threatTwinks
 globalvar mobs = []
 # persistent effects only (not destroyed until round end)
@@ -194,10 +199,12 @@ globalvar antiCrashOn
 playervar mobTarget # also used for sniper target, milk wall victims (nipman.mobTarget)
 playervar cacheA
 playervar cacheB
-#!define smallLNip cacheA
-#!define smallRNip cacheB
 
 #!define chainSetup cacheA
+
+# more maugas' nip pos
+#!define smallLNip cacheA
+#!define smallRNip cacheB
 
 #!define MiniScale 15
 
@@ -518,15 +525,76 @@ rule "niplets":
 	dummyThreatBots[0].startForcingPosition(LeftNip + 2 * Vector.DOWN)
 	dummyThreatBots.startScalingSize(2, false)
 
+	nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, dummyThreatBots[0], Transform.ROTATION_AND_TRANSLATION))
+	nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, dummyThreatBots.last(), Transform.ROTATION_AND_TRANSLATION))
+	nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, dummyThreatBots[0], Transform.ROTATION_AND_TRANSLATION))
+	nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, dummyThreatBots.last(), Transform.ROTATION_AND_TRANSLATION))
+
+	iniplets = 0
+	while obj != OBJ.INTERMISSION:
+		iniplets = (iniplets + 1) % len(nipletsPosList)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, null, nipletsPosList[iniplets], vect(random.uniform(-1,1),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 5)
+
 rule "grab init + left":
 	@Condition THREATS.GRAB in threatList
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, LeftNip, grabLeft, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, RightNip, grabRight, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabLeft,Vector.BACKWARD, 0.2,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.BACKWARD, 0.2,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+
+	# createEffect
 	while obj != OBJ.INTERMISSION:
 		grabLeft = LeftNip
-		chaseAtRate(grabLeft, )
+		chaseAtRate(grabLeft, getRealClosestPlayer(grabLeft, Team.1).getPosition(), 2, ChaseRateReeval.DESTINATION_AND_RATE)
+		while true:
+			if obj == OBJ.INTERMISSION:
+				stopChasingVariable(grabLeft)
+				stopChasingVariable(grabRight)
+				return
+			else:
+				for grabLeftPlayer in range(getNumberOfPlayers(Team.1)):
+					if getPlayersInSlot(grabLeftPlayer, Team.1).hasSpawned() and getPlayersInSlot(grabLeftPlayer, Team.1).isAlive():
+						grabLeftPlayer = getPlayersInSlot(grabLeftPlayer, Team.1)
+						break
+					wait()
+			wait(0.36)
+		stopChasingVariable(grabLeft)
+		grabLeftPlayer.startForcingPosition(grabLeft, true)
+		chaseAtRate(grabLeft, LeftNip, 20, ChaseRateReeval.NONE)
+		grabLeftPlayer.startDamageOverTime(null, 2, 30)
+		wait(2, Wait.ABORT_WHEN_FALSE)
+		grabLeftPlayer.stopForcingPosition()
+		stopChasingVariable(grabLeft)
+
+rule "grab right":
+	@Condition THREATS.GRAB in threatList
+	wait()
+	while obj != OBJ.INTERMISSION:
+		grabLeft = LeftNip
+		chaseAtRate(grabLeft, getRealClosestPlayer(grabLeft, Team.1).getPosition(), 2, ChaseRateReeval.DESTINATION_AND_RATE)
+		while true:
+			if obj == OBJ.INTERMISSION:
+				stopChasingVariable(grabLeft)
+				stopChasingVariable(grabRight)
+				return
+			else:
+				for grabLeftPlayer in range(getNumberOfPlayers(Team.1)):
+					if getPlayersInSlot(grabLeftPlayer, Team.1).hasSpawned() and getPlayersInSlot(grabLeftPlayer, Team.1).isAlive():
+						grabLeftPlayer = getPlayersInSlot(grabLeftPlayer, Team.1)
+						break
+					wait()
+			wait(0.36)
+		stopChasingVariable(grabLeft)
+		grabLeftPlayer.startForcingPosition(grabLeft, true)
+		chaseAtRate(grabLeft, LeftNip, 20, ChaseRateReeval.NONE)
+		grabLeftPlayer.startDamageOverTime(null, 2, 30)
+		wait(2, Wait.ABORT_WHEN_FALSE)
+		grabLeftPlayer.stopForcingPosition()
+		stopChasingVariable(grabLeft)
 
 rule "cage setup":
 	@Condition THREATS.CAGE in threatList
@@ -1193,7 +1261,7 @@ rule "you are dead, not big surprise":
 	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
 	if isHardcore:
 		# eventPlayer.setRespawnTime(99999)
-		if getLivingPlayers(Team.1) == []:
+		if [x for x in getPlayers(Team.1) if x.isAlive() and x.hasSpawned()] == []:
 			bigMessage(getAllPlayers(), "game over. all players died.")
 			setSlowMotion(50)
 			wait(1)
