@@ -515,14 +515,21 @@ rule "mob retarget":
 # threats
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
+	moreFx = []
 	for iMores in range(len(objPos)):
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallLNip, LeftNip if objPos[iMores].smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-		objPos[iMores].append(getLastCreatedEntity())
+		moreFx.append(getLastCreatedEntity())
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallRNip, LeftNip if objPos[iMores].smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-		objPos[iMores].append(getLastCreatedEntity())
+		moreFx.append(getLastCreatedEntity())
 		wait()
 
 	bigMessage(getAllPlayers(), "")
+
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 20 * (getTotalTimeElapsed() + evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.P)
+	moreFx.append(getLastCreatedEntity())
+
+	for iMores in range(-15, 15, 5):
+		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, )
 
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
@@ -549,7 +556,7 @@ rule "niplets":
 		iniplets = (iniplets + 1) % len(nipletsPosList)
 		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, null, nipletsPosList[iniplets], vect(random.uniform(-1,1),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 5)
 
-rule "grab init + left":
+rule "grab":
 	@Condition THREATS.GRAB in threatList
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, LeftNip, grabLeft, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
