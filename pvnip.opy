@@ -191,7 +191,7 @@ globalvar iniplets
 globalvar iMores
 globalvar moreFx
 globalvar attackingClone
-globalvar weakSpots
+globalvar weakSpots = []
 
 globalvar threatSnipers
 globalvar threatLactaters
@@ -338,6 +338,7 @@ rule "loop":
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
+	wait(0.8)
 	if obj != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
 		threatText = random.randint(THREATS.ICE, THREATS.LASER) # temp orangemint
 		if not threatText in threatList:
@@ -520,15 +521,20 @@ rule "mob retarget":
 	if ruleCondition:
 		loop
 # threats
+rule "more maugas persistent attack":
+	@Condition obj == OBJ.MORE
+
+
 rule "init weak spots": # ALL hammond dummies are weak spots
 	@Event eachPlayer
 	@Hero wreckingBall
 	@Condition eventPlayer.isDummy()
 	eventPlayer.startScalingSize(0.7, false)
 	eventPlayer.startForcingName("weak spot")
-	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
 	weakSpots.append(eventPlayer)
+	wait(0.096)
+	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
 
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
@@ -547,10 +553,10 @@ rule "more maugas charge attack":
 
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.45, 0.266)*MiniScale)
+		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.371, 0.766)*MiniScale)
 		wait()
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.45, 0.466)*MiniScale)
+		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.378, 0.966)*MiniScale)
 		weakSpots.setHealth(200)
 		weakSpots.setHealingReceived(0)
 		wait(0.064)
@@ -571,11 +577,11 @@ rule "more maugas charge attack":
 		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		moreFx.append(getLastCreatedEntity())
 
-		for iMores in range(15, -15, -5):
+		for iMores in range(15, -17, -5):
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(10,0,iMores), 9)
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(-10,0,iMores), 9)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
 			wait(0.016*21)
 
 		destroyEffect(moreFx)
@@ -1106,13 +1112,13 @@ rule "more maugas":
 	objPos.disablePlayerCollision()
 	objPos.disableEnvironmentCollision(true)
 	objPos.setKnockbackReceived(0)
-	for i in range(len(objPos)):
+	for iMores in range(len(objPos)):
 		wait()
-		objPos[i].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[i], Transform.ROTATION_AND_TRANSLATION)
-		objPos[i].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[i], Transform.ROTATION_AND_TRANSLATION)
-		objPos[i].startForcingPosition(objPos[i].getPosition(), false)
-		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[i]).getNormalizedHealth() * 100, "{} / {} HP".format(evalOnce(objPos[i]).getHealth(), evalOnce(objPos[i]).getMaxHealth()), objPos[i], 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
-		objPos[i].hpBar = getLastCreatedText()
+		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
+		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
+		objPos[iMores].startForcingPosition(objPos[iMores].getPosition(), false)
+		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 100, "{} / {} HP".format(evalOnce(objPos[iMores]).getHealth(), evalOnce(objPos[iMores]).getMaxHealth()), objPos[iMores], 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		objPos[iMores].hpBar = getLastCreatedText()
 	objPos.startScalingSize(MiniScale,false)
 	objPos.setMaxHealth(1500)
 	wait(0.48)
@@ -1206,6 +1212,7 @@ rule "kill/obj prog/weak spot + respawn timer":
 				destroyEffect(moreFx)
 				moreFx = []
 				attackingClone = null
+				bigMessage(getAllPlayers(), "success! attack cancelled.")
 		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
 		return
 
