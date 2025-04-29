@@ -60,6 +60,9 @@ settings {
             "winston": {
                 "ammoClipSize%": 70,
                 "health%": 60
+            },
+			"wreckingBall": {
+                "enableRollOnly": true
             }
         },
         "allTeams": {
@@ -493,6 +496,7 @@ rule "knock mobs":
 		eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
 	# wait(0.24)
 rule "mob retarget":
+	@Event global
 	@Condition mobs != []
 	@Condition obj != OBJ.INTERMISSION
 	if getLivingPlayers(Team.1) == []:
@@ -513,14 +517,14 @@ rule "mob retarget":
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
 			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
-	if RULE_CONDITION:
-		goto RULE_START
+	if ruleCondition:
+		loop
 # threats
 rule "init weak spots": # ALL hammond dummies are weak spots
 	@Event eachPlayer
-	@Hero wreckingball
+	@Hero wreckingBall
 	@Condition eventPlayer.isDummy()
-	eventPlayer.startScalingSize(0.5, false)
+	eventPlayer.startScalingSize(0.7, false)
 	eventPlayer.startForcingName("weak spot")
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
@@ -528,53 +532,54 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
-	wait(16)
-	moreFx = []
+	while obj == OBJ.MORE:
+		wait(16)
+		moreFx = []
 
-	attackingClone = random.choice(objPos)
+		attackingClone = random.choice(objPos)
 
-	createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-	moreFx.append(getLastCreatedEntity())
-	createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-	moreFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		moreFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		moreFx.append(getLastCreatedEntity())
 
-	bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the weak spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
+		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the weak spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
 
-	# all hammond dummies get weak spot init
-	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-	getLastCreatedEntity().attachTo(attackingClone, attackingClone.smallLNip)
-	wait()
-	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-	getLastCreatedEntity().attachTo(attackingClone, attackingClone.smallRNip)
-	weakSpots.setHealth(2000)
-	wait(0.064)
-	heal(weakSpots, null, 99999)
+		# all hammond dummies get weak spot init
+		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.45, 0.266)*MiniScale)
+		wait()
+		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.45, 0.466)*MiniScale)
+		weakSpots.setHealth(200)
+		weakSpots.setHealingReceived(0)
+		wait(0.064)
+		heal(weakSpots, null, 99999)
 
-	wait(10)
+		wait(10)
 
-	if obj != OBJ.MORE:
-		return
+		if obj != OBJ.MORE:
+			return
 
-	if (entityExists(attackingClone) == false) or (weakSpots == []):
-		continue
+		if (entityExists(attackingClone) == false) or (weakSpots == []):
+			continue
 
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	moreFx.append(getLastCreatedEntity())
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	moreFx.append(getLastCreatedEntity())
+		bigMessage(getAllPlayers(), "failed to stop the attack. brace for impact!")
 
-	for iMores in range(15, -15, -5):
-		playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(10,0,iMores), 9)
-		playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(-10,0,iMores), 9)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-		wait(0.016*21)
+		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		moreFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		moreFx.append(getLastCreatedEntity())
 
-	destroyEffect(moreFx)
-	moreFx = []
+		for iMores in range(15, -15, -5):
+			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(10,0,iMores), 9)
+			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(-10,0,iMores), 9)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			wait(0.016*21)
 
-	if RULE_CONDITION:
-		goto RULE_START
+		destroyEffect(moreFx)
+		moreFx = []
 
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
@@ -611,9 +616,9 @@ rule "grab":
 	threatFx.append(getLastCreatedEntity())
 	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 	threatFx.append(getLastCreatedEntity())
-	createEffect(getAllPlayers() if entityExists(grabLeftPlayer) else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if grabLeftPlayer != null else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	createEffect(getAllPlayers() if entityExists(grabRightPlayer) else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if grabRightPlayer != null else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
@@ -625,9 +630,11 @@ rule "grab":
 
 		# attack
 		if entityExists(grabLeftPlayer):
-			chaseOverTime(grabLeft, grabLeftPlayer.getEyePosition(), 4, ChaseTimeReeval.NONE)
+			grabLeftPlayer = grabLeftPlayer.getEyePosition()
+			chaseOverTime(grabLeft, grabLeftPlayer, 4, ChaseTimeReeval.NONE)
 		if entityExists(grabRightPlayer) and grabLeftPlayer != grabRightPlayer:
-			chaseOverTime(grabRight, grabRightPlayer.getEyePosition(), 4, ChaseTimeReeval.NONE)
+			grabRightPlayer = grabRightPlayer.getEyePosition()
+			chaseOverTime(grabRight, grabRightPlayer, 4, ChaseTimeReeval.NONE)
 
 		wait(4)
 
@@ -638,18 +645,23 @@ rule "grab":
 			return
 
 		# check landing
-		if distance(grabLeft, grabLeftPlayer) < 2:
-			grabLeftPlayer.startForcingPosition(grabLeft,true)
-			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
-			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
-		else:
-			grabLeftPlayer = null
-		if distance(grabRight, grabRightPlayer) < 2:
-			grabRightPlayer.startForcingPosition(grabRight,true)
-			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
-			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 1)
-		else:
-			grabRightPlayer = null
+		grabLeftPlayer = getRealPlayersInRadius(grabLeft, 2)
+		grabLeftPlayer.startForcingPosition(grabLeft,true)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
+
+		grabRightPlayer = getRealPlayersInRadius(grabRight, 2)
+		grabRightPlayer.startForcingPosition(grabRight,true)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 20)
+		# else:
+		# 	grabLeftPlayer = null
+		# if distance(grabRight, grabRightPlayer) < 2:
+		# 	grabRightPlayer.startForcingPosition(grabRight,true)
+		# 	playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+		# 	playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 1)
+		# else:
+		# 	grabRightPlayer = null
 
 		# pull
 		chaseOverTime(grabLeft, LeftNip, 1.2, ChaseTimeReeval.NONE)
@@ -664,6 +676,7 @@ rule "grab":
 		if obj == OBJ.INTERMISSION:
 			return
 
+		wait()
 		grabLeftPlayer.stopForcingPosition()
 		grabRightPlayer.stopForcingPosition()
 
@@ -1139,7 +1152,7 @@ rule "clean bots":
 	@Condition eventPlayer.isDummy()
 	@Condition eventPlayer != nipman
 	@Condition obj == OBJ.INTERMISSION
-
+	destroyProgressBarInWorldText(eventPlayer.hpBar)
 	destroyDummy(Team.2, eventPlayer.getSlot())
 
 rule "setup & refresh forest":
@@ -1179,7 +1192,7 @@ rule "place objective":
 	@Condition obj == OBJ.CAPTURE
 	objPos = vect(random.randint(-13,13),0,random.randint(-13,13))
 # objective progress
-rule "kill/miniboss obj prog + respawn timer":
+rule "kill/obj prog/weak spot + respawn timer":
 	@Event playerDied
 	@Condition eventPlayer.isDummy()
 
@@ -1192,6 +1205,7 @@ rule "kill/miniboss obj prog + respawn timer":
 				attackingClone.setStatusEffect(null, Status.STUNNED, 1)
 				destroyEffect(moreFx)
 				moreFx = []
+				attackingClone = null
 		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
 		return
 
@@ -1221,6 +1235,7 @@ rule "kill/miniboss obj prog + respawn timer":
 			moreFx = []
 		objProg++
 		objPos.remove(eventPlayer)
+		destroyProgressBarInWorldText(eventPlayer.hpBar)
 		destroyDummy(Team.2, eventPlayer.getSlot())
 	eventPlayer.setRespawnTime(2.5)
 	# kills++
