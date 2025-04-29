@@ -515,6 +515,7 @@ rule "mob retarget":
 # threats
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
+	wait(16)
 	moreFx = []
 	for iMores in range(len(objPos)):
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallLNip, LeftNip if objPos[iMores].smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
@@ -525,11 +526,17 @@ rule "more maugas charge attack":
 
 	bigMessage(getAllPlayers(), "")
 
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 20 * (getTotalTimeElapsed() + evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.P)
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 20 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	moreFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 20 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	moreFx.append(getLastCreatedEntity())
 
 	for iMores in range(-15, 15, 5):
-		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, )
+		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, vect(10,0,iMores), 5)
+		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, vect(-10,0,iMores), 5)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+		wait(0.016)
 
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
@@ -566,6 +573,10 @@ rule "grab":
 	threatFx.append(getLastCreatedEntity())
 	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers() if entityExists(grabLeftPlayer) else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers() if entityExists(grabRightPlayer) else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
 		grabLeft = LeftNip
@@ -592,11 +603,13 @@ rule "grab":
 		if distance(grabLeft, grabLeftPlayer) < 2:
 			grabLeftPlayer.startForcingPosition(grabLeft,true)
 			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
+			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
 		else:
 			grabLeftPlayer = null
 		if distance(grabRight, grabRightPlayer) < 2:
 			grabRightPlayer.startForcingPosition(grabRight,true)
 			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+			playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 1)
 		else:
 			grabRightPlayer = null
 
@@ -667,16 +680,25 @@ rule "grab":
 
 rule "cage":
 	@Event eachPlayer
+	@Condition eventPlayer.hasSpawned()
 	@Condition THREATS.CAGE in threatList
-	for nipman.chainSetup in range(9):
-		createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(i),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if i % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-		threatFx.append(getLastCreatedEntity())
-		wait()
+	# for nipman.chainSetup in range(9):
+	# 	createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(i),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if i % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# 	threatFx.append(getLastCreatedEntity())
+	# 	wait()
+
+	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
 		if eventPlayer.getPosition().z < -5:
-			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 		wait(0.24)
+
+rule "cage boundary":
+	@Condition THREATS.CAGE in threatList
+	createBeam(getAllPlayers(), Beam.BAD, vect(-20,0.1,-5), vect(20,0.1,-5), Color.ROSE, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
 
 rule "milk wall + collision":
 	@Condition obj != OBJ.INTERMISSION
