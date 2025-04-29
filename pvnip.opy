@@ -126,8 +126,8 @@ enum THREATS:
 #!define PlayerSlots 9
 
 globalvar nipman
-globalvar LeftNip = vect(2.93, 10.84, 26.15)
-globalvar RightNip = vect(-7.19, 10.8, 30.27)
+globalvar LeftNip = vect(2.93, 10.84-1.8, 26.15)
+globalvar RightNip = vect(-7.19, 10.8-1.8, 30.27)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
@@ -187,6 +187,8 @@ globalvar iniplets
 
 globalvar iMores
 globalvar moreFx
+globalvar attackingClone
+globalvar weakSpotDummies
 
 globalvar threatSnipers
 globalvar threatLactaters
@@ -203,12 +205,12 @@ playervar cacheA
 playervar cacheB
 playervar cacheC
 
-#!define chainSetup cacheA
+#!define chainSetup nipman.cacheA
 
-# more maugas' nip pos
+# small maugas' nip pos
 #!define smallLNip cacheA
 #!define smallRNip cacheB
-#!define fx cacheC
+#!define hpBar cacheC
 
 #!define MiniScale 15
 
@@ -222,7 +224,7 @@ rule "init":
 	obj = OBJ.INTERMISSION
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	nipman = getLastCreatedEntity()
-	nipman.startForcingPosition(vect(0,-17,35), false)
+	nipman.startForcingPosition(vect(0,-17-1.8,35), false)
 	nipman.startFacing(Vector.BACKWARD, 999, Relativity.TO_WORLD, FacingReeval.NONE)
 	nipman.disablePlayerCollision()
 	nipman.startScalingSize(20, false) # max size
@@ -284,6 +286,7 @@ rule "loop":
 	@Condition any([x.hasSpawned() for x in getPlayers(Team.1)])
 	# intermission
 	destroyEffect(threatFx)
+	destroyEffect(moreFx)
 	threatFx = []
 	threatLactaters = []
 	threatSuns = []
@@ -513,30 +516,63 @@ rule "mob retarget":
 	if RULE_CONDITION:
 		goto RULE_START
 # threats
+rule "init weak spots": # ALL hammond dummies are weak spots
+	@Event eachPlayer
+	@Hero wreckingball
+	@Condition eventPlayer.isDummy()
+	eventPlayer.startScalingSize(0.5, false)
+	eventPlayer.startForcingName("weak spot")
+	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
+	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
+	weakSpots.append(eventPlayer)
+
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
 	wait(16)
 	moreFx = []
-	for iMores in range(len(objPos)):
-		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallLNip, LeftNip if objPos[iMores].smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-		moreFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, objPos[iMores].smallRNip, LeftNip if objPos[iMores].smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
-		moreFx.append(getLastCreatedEntity())
-		wait()
 
-	bigMessage(getAllPlayers(), "")
+	attackingClone = random.choice(objPos)
 
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 20 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 	moreFx.append(getLastCreatedEntity())
-	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 20 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 	moreFx.append(getLastCreatedEntity())
 
-	for iMores in range(-15, 15, 5):
-		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, vect(10,0,iMores), 5)
-		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, vect(-10,0,iMores), 5)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-		wait(0.016)
+	bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the weak spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
+
+	# all hammond dummies get weak spot init
+	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+	wait()
+	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+	weakSpots.setHealth(2000)
+	wait(0.064)
+	heal(weakSpots, null, 99999)
+
+	wait(10)
+
+	if obj != OBJ.MORE:
+		return
+
+	if (entityExists(attackingClone) == false) or (weakSpots == []):
+		continue
+
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	moreFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	moreFx.append(getLastCreatedEntity())
+
+	for iMores in range(15, -15, -5):
+		playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(10,0,iMores), 9)
+		playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(-10,0,iMores), 9)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 8, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+		wait(0.016*21)
+
+	destroyEffect(moreFx)
+	moreFx = []
+
+	if RULE_CONDITION:
+		goto RULE_START
 
 rule "niplets":
 	@Condition THREATS.FRACTAL in threatList
@@ -680,6 +716,7 @@ rule "grab":
 
 rule "cage":
 	@Event eachPlayer
+	@Condition eventPlayer.isDummy() == false
 	@Condition eventPlayer.hasSpawned()
 	@Condition THREATS.CAGE in threatList
 	# for nipman.chainSetup in range(9):
@@ -687,7 +724,7 @@ rule "cage":
 	# 	threatFx.append(getLastCreatedEntity())
 	# 	wait()
 
-	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
@@ -697,6 +734,12 @@ rule "cage":
 
 rule "cage boundary":
 	@Condition THREATS.CAGE in threatList
+
+	# for chainSetup in range(9):
+	# 	createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(chainSetup),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if chainSetup % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# 	threatFx.append(getLastCreatedEntity())
+	# 	wait()
+
 	createBeam(getAllPlayers(), Beam.BAD, vect(-20,0.1,-5), vect(20,0.1,-5), Color.ROSE, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 
@@ -988,13 +1031,13 @@ rule "nuke":
 		missileFx.append(getLastCreatedEntity())
 		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, 8, EffectReeval.VISIBILITY)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos, missilePos + min(16, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos, missilePos + min(16, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.ZARYA_PARTICLE, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		missileFx.append(getLastCreatedEntity())
-		wait(1)
+		wait(2)
 		for missileTemp in range(2,len(missileFx)):
 			destroyEffect(missileFx[missileTemp])
 		missileFx = missileFx.slice(0,2)
@@ -1037,11 +1080,11 @@ rule "more maugas":
 	@Condition obj == OBJ.MORE
 	wait(0.64)
 	objPos = []
-	createDummy(Hero.MAUGA, Team.2, -1, vect(-33,-19,0), Vector.LEFT)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(-33,-19.5,0), Vector.LEFT)
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(33,-19,0), Vector.RIGHT)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(33,-19.5,0), Vector.RIGHT)
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(0,-19,-33), Vector.FORWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(0,-19.5,-33), Vector.FORWARD)
 	objPos.append(getLastCreatedEntity())
 	objPos.setGravity(0)
 	wait(0.16)
@@ -1053,11 +1096,15 @@ rule "more maugas":
 		objPos[i].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[i], Transform.ROTATION_AND_TRANSLATION)
 		objPos[i].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[i], Transform.ROTATION_AND_TRANSLATION)
 		objPos[i].startForcingPosition(objPos[i].getPosition(), false)
+		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[i]).getNormalizedHealth() * 100, "{} / {} HP".format(evalOnce(objPos[i]).getHealth(), evalOnce(objPos[i]).getMaxHealth()), objPos[i], 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		objPos[i].hpBar = getLastCreatedText()
 	objPos.startScalingSize(MiniScale,false)
 	objPos.setMaxHealth(1500)
 	wait(0.48)
-	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 	heal(objPos, null, 99999)
+	objPos.setHealingDealt(0)
+	wait(0.64)
+	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 
 rule "miniboss":
 	@Condition obj == OBJ.BOSS
@@ -1133,12 +1180,25 @@ rule "place objective":
 rule "kill/miniboss obj prog + respawn timer":
 	@Event playerDied
 	@Condition eventPlayer.isDummy()
+
+	if eventPlayer in weakSpots:
+		weakSpots.remove(eventPlayer)
+		playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR, Color.TEAM_2, eventPlayer, 1)
+		playEffect(getAllPlayers(), DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer, 50)
+		if weakSpots == []:
+			if obj == OBJ.MORE:
+				attackingClone.setStatusEffect(null, Status.STUNNED, 1)
+				destroyEffect(moreFx)
+				moreFx = []
+		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
+		return
+
 	heal(attacker, eventPlayer, 50)
 	if THREATS.DD in threatList:
-		# playEffect(getAllPlayers(), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 1)
-		# playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 10)
-		# damage(getPlayersInRadius(eventPlayer.getPosition(), 2, Team.1, LosCheck.SURFACES_AND_ENEMY_BARRIERS),eventPlayer,90)
-		createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
+		playEffect(getAllPlayers(), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 1)
+		playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 10)
+		damage(getPlayersInRadius(eventPlayer.getPosition(), 2, Team.1, LosCheck.SURFACES_AND_ENEMY_BARRIERS),eventPlayer,90)
+		# createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
 	if obj == OBJ.PAGES:
 		eventPlayer.setRespawnTime(7)
 		# objGoal -= 0.5
@@ -1153,6 +1213,10 @@ rule "kill/miniboss obj prog + respawn timer":
 	elif obj == OBJ.BOSS and eventPlayer == objPos:
 		objProg = objGoal
 	elif obj == OBJ.MORE and eventPlayer in objPos:
+		if eventPlayer == attackingClone:
+			attackingClone = null
+			destroyEffect(moreFx)
+			moreFx = []
 		objProg++
 		objPos.remove(eventPlayer)
 		destroyDummy(Team.2, eventPlayer.getSlot())
