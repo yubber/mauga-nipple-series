@@ -188,7 +188,7 @@ globalvar iniplets
 globalvar iMores
 globalvar moreFx
 globalvar attackingClone
-globalvar weakSpotDummies
+globalvar weakSpots
 
 globalvar threatSnipers
 globalvar threatLactaters
@@ -542,8 +542,10 @@ rule "more maugas charge attack":
 
 	# all hammond dummies get weak spot init
 	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+	getLastCreatedEntity().attachTo(attackingClone, attackingClone.smallLNip)
 	wait()
 	createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+	getLastCreatedEntity().attachTo(attackingClone, attackingClone.smallRNip)
 	weakSpots.setHealth(2000)
 	wait(0.064)
 	heal(weakSpots, null, 99999)
@@ -724,12 +726,12 @@ rule "cage":
 	# 	threatFx.append(getLastCreatedEntity())
 	# 	wait()
 
-	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
 		if eventPlayer.getPosition().z < -5:
-			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 		wait(0.24)
 
 rule "cage boundary":
