@@ -615,7 +615,7 @@ rule "more maugas charge attack":
 		if obj != OBJ.MORE:
 			return
 		if attackingClone.isDead() or (entityExists(attackingClone) == false) or (weakSpots == []):
-			attackingClone.setStatusEffect(null, Status.STUNNED, 1)
+			# attackingClone.setStatusEffect(null, Status.STUNNED, 1)
 			attackingClone.clearStatusEffect(Status.BURNING)
 			destroyEffect(moreFx)
 			moreFx = []
@@ -1215,12 +1215,13 @@ rule "dupe boolet":
 		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, cycledClone, cycledClone.smallLNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, cycledClone, cycledClone.smallRNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
 
-rule "dupe sniper"
+rule "dupe sniper":
 	@Event eachPlayer
 	@Hero mauga
 	@Condition obj == OBJ.MORE
 	@Condition THREATS.SNIPER in threatList
 	@Condition eventPlayer in objPos
+	wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botA = getLastCreatedEntity()
 	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
@@ -1233,6 +1234,13 @@ rule "dupe sniper"
 	threatSnipers.append(eventPlayer.botB)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), updateEveryTick(eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
+
+	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
+	threatSnipers.disableNameplatesFor(getAllPlayers())
+	threatSnipers.startForcingName("s-nip-ers")
+	threatSnipers.setDamageDealt(50)
+	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatSnipers.startScalingSize(0.1, false)
 
 rule "dupe suns":
 	@Event eachPlayer
@@ -1288,7 +1296,7 @@ rule "more maugas":
 		# print(evalOnce([vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores]))
 		objPos[iMores].startForcingName("mauga jr.")
 		# createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getHealth() / evalOnce(ceill(objPos[iMores].getHealth()))evalOnce(objPos[iMores]).getNormalizedHealth()*/  * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
-		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getHealth() / evalOnce(objPos[iMores]).getMaxHealth() * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
 	wait(0.8)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
