@@ -338,7 +338,7 @@ rule "loop":
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
-	wait(0.8)
+	wait(0.36)
 	if obj != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
 		threatText = random.randint(THREATS.ICE, THREATS.LASER) # temp orangemint
 		if not threatText in threatList:
@@ -533,7 +533,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	eventPlayer.startForcingName("weak spot")
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
 	weakSpots.append(eventPlayer)
-	wait(0.096)
+	wait(0.112)
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
 
 rule "more maugas charge attack":
@@ -543,26 +543,31 @@ rule "more maugas charge attack":
 		moreFx = []
 
 		attackingClone = random.choice(objPos)
+		for iMores in range(len(weakSpots)):
+			destroyDummy(Team.2, weakSpots[iMores].getSlot())
+		weakSpots = []
 
-		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		# createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		moreFx.append(getLastCreatedEntity())
-		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		# createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		moreFx.append(getLastCreatedEntity())
 
 		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the weak spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
 
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.371, 0.766)*MiniScale)
+		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.34, 0.3)*MiniScale)
 		wait()
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.378, 0.966)*MiniScale)
+		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.34, 0.486)*MiniScale)
 		weakSpots.setHealth(200)
 		weakSpots.setHealingReceived(0)
 		wait(0.064)
 		heal(weakSpots, null, 99999)
 
-		wait(10)
+		wait(12)
 
 		if obj != OBJ.MORE:
 			return
@@ -571,6 +576,12 @@ rule "more maugas charge attack":
 			continue
 
 		bigMessage(getAllPlayers(), "failed to stop the attack. brace for impact!")
+
+		for iMores in range(len(weakSpots)):
+			destroyDummy(Team.2, weakSpots[iMores].getSlot())
+		weakSpots = []
+
+		wait(1.6)
 
 		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		moreFx.append(getLastCreatedEntity())
@@ -588,7 +599,9 @@ rule "more maugas charge attack":
 		moreFx = []
 
 rule "niplets":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.FRACTAL in threatList
+	wait(THREATS.FRACTAL * 0.032)
 	threatNiplets = []
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, Vector.BACKWARD)
 	threatNiplets.append(getLastCreatedEntity())
@@ -613,7 +626,10 @@ rule "niplets":
 		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, null, nipletsPosList[iniplets], vect(random.uniform(-1,1),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 5)
 
 rule "grab":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.GRAB in threatList
+	wait(THREATS.GRAB * 0.032)
+
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, LeftNip, grabLeft, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, RightNip, grabRight, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -711,6 +727,7 @@ rule "grab":
 
 /*rule "grab right":
 	@Disabled
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.GRAB in threatList
 	wait()
 	while obj != OBJ.INTERMISSION:
@@ -737,6 +754,7 @@ rule "grab":
 
 rule "cage":
 	@Event eachPlayer
+	@Condition obj != OBJ.INTERMISSION
 	@Condition eventPlayer.isDummy() == false
 	@Condition eventPlayer.hasSpawned()
 	@Condition THREATS.CAGE in threatList
@@ -744,6 +762,8 @@ rule "cage":
 	# 	createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(i),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if i % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# 	threatFx.append(getLastCreatedEntity())
 	# 	wait()
+
+	wait(THREATS.CAGE * 0.032)
 
 	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
@@ -754,6 +774,7 @@ rule "cage":
 		wait(0.24)
 
 rule "cage boundary":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.CAGE in threatList
 
 	# for chainSetup in range(9):
@@ -767,11 +788,12 @@ rule "cage boundary":
 rule "milk wall + collision":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.WALL in threatList
+	wait(THREATS.WALL * 0.032)
 	wallEffects = []
 	while obj != OBJ.INTERMISSION:
 		wallPos = vect(random.uniform(-20, 20 - WallGap * WallWidth), 0, 20)
 		for wallI in range(54):
-			createProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip if wallI % 2 == 0 else RightNip, directionTowards(LeftNip if wallI % 2 == 0 else RightNip, wallPos + vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 0, 0, 0.1, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.1, 50,
+			createProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip if wallI % 2 == 0 else RightNip, directionTowards(LeftNip if wallI % 2 == 0 else RightNip, wallPos + vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 0, 0, 0.1, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR_SOUND, 0.1, 50,
 				magnitude((LeftNip if wallI % 2 == 0 else RightNip) - wallPos + (vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap)) / 120 /*0.6 - 0.002 * wallI ** 2*/, 0,0,0)
 			wait(0.144)
 			createProjectileEffect(getAllPlayers(), Projectile.ECHO_STICKY_BOMB, null, wallPos + evalOnce(vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Vector.BACKWARD, 0.1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
@@ -809,6 +831,7 @@ rule "milk wall + collision":
 rule "rain":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.RAIN in threatList
+	wait(THREATS.RAIN * 0.032)
 	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	for rainVar in range(5):
@@ -824,7 +847,10 @@ rule "rain":
 			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 40, 1,3.2,DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
 
 rule "twister":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.TWISTER in threatList
+	wait(THREATS.TWISTER * 0.032)
+
 	for twisterCache in range(3,12,2):
 		# smallMessage(getAllPlayers(), i)
 		createEffect(getAllPlayers(), Effect.BAD_AURA, Color.GRAY, Vector.UP * evalOnce(twisterCache*2.5 - 6) + twisterPos, evalOnce(twisterCache * 0.7), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -850,7 +876,9 @@ rule "twister":
 		wait(0.24)
 
 rule "sun":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SUN in threatList
+	wait(THREATS.SUN * 0.032)
 	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
 	createDummy(Hero.ILLARI, Team.2, -1, RightNip, Vector.DOWN)
@@ -884,7 +912,9 @@ rule "gravitatas":
 	if RULE_CONDITION:
 		goto RULE_START # to affect new players
 rule "boolet":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.DAKKA in threatList
+	wait(THREATS.DAKKA * 0.032)
 	while obj != OBJ.INTERMISSION:
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, LeftNip,
 			vect(sin(getTotalTimeElapsed()*2)*0.55, cos(getTotalTimeElapsed()) * 0.3 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 8, 7, 0, 0,0)
@@ -893,7 +923,9 @@ rule "boolet":
 			vect(sin(getTotalTimeElapsed()*2)*-0.55, cos(getTotalTimeElapsed()) * -0.3 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 8, 7, 0, 0,0)
 		wait(0.128)
 rule "laser":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.LASER in threatList
+	wait(THREATS.LASER * 0.032)
 	area1 = vect(10,0,20)
 	area2 = vect(-10,0,20)
 	createBeam(getAllPlayers(), Beam.OMNIC_SLICER, LeftNip, area1, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -908,8 +940,6 @@ rule "laser":
 	chase(area1, getRealClosestPlayer(area1,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
 	chase(area2, getRealClosestPlayer(area2,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
 
-rule "laser hurty loop":
-	@Condition THREATS.LASER in threatList
 	while obj != OBJ.INTERMISSION:
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, nipman, area1 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 10, 55, 0, 0)
 		wait(0.08)
@@ -917,7 +947,9 @@ rule "laser hurty loop":
 		wait(0.8)
 
 rule "snipers":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
+	wait(THREATS.SNIPER * 0.032)
 	threatSnipers = []
 	wait()
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
@@ -952,7 +984,9 @@ rule "snipers":
 		threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
 
 rule "sniper change target":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
+	wait(THREATS.SNIPER * 0.032)
 	while obj != OBJ.INTERMISSION:
 		wait(4)
 		threatSnipers[0].mobTarget = random.choice(getLivingPlayers(Team.1))
@@ -960,7 +994,10 @@ rule "sniper change target":
 		threatSnipers.setAmmo(0,9999)
 
 rule "discharge":
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.COOM in threatList
+	wait(THREATS.COOM * 0.032)
+
 	createDummy(Hero.TORBJORN, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	threatLactaters.append(getLastCreatedEntity())
 	getLastCreatedEntity().startForcingPosition(LeftNip, false)
@@ -997,6 +1034,7 @@ rule "heal milk":
 rule "nuke":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.NUKE in threatList
+	wait(THREATS.NUKE * 0.032)
 
 	# debug
 	# createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -1099,7 +1137,7 @@ rule "ice impact":
 # objective setup
 rule "more maugas":
 	@Condition obj == OBJ.MORE
-	wait(0.64)
+	wait()
 	objPos = []
 	createDummy(Hero.MAUGA, Team.2, -1, vect(-33,-19.5,0), Vector.LEFT)
 	objPos.append(getLastCreatedEntity())
@@ -1109,6 +1147,7 @@ rule "more maugas":
 	objPos.append(getLastCreatedEntity())
 	objPos.setGravity(0)
 	wait(0.16)
+	objPos.startScalingSize(MiniScale,false)
 	objPos.disablePlayerCollision()
 	objPos.disableEnvironmentCollision(true)
 	objPos.setKnockbackReceived(0)
@@ -1117,9 +1156,8 @@ rule "more maugas":
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].startForcingPosition(objPos[iMores].getPosition(), false)
-		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 100, "{} / {} HP".format(evalOnce(objPos[iMores]).getHealth(), evalOnce(objPos[iMores]).getMaxHealth()), objPos[iMores], 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(objPos[iMores]).getMaxHealth()), objPos[iMores].getEyePosition() + Vector.UP, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
-	objPos.startScalingSize(MiniScale,false)
 	objPos.setMaxHealth(1500)
 	wait(0.48)
 	heal(objPos, null, 99999)
