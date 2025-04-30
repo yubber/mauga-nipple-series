@@ -228,7 +228,7 @@ rule "init":
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     hudSubtext(getAllPlayers(), "use code DS2MD for the latest version", HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY)
-	disableInspector()
+	# disableInspector()
 
 	obj = OBJ.INTERMISSION
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
@@ -324,6 +324,8 @@ rule "loop":
 	mobs = []
 
 	# pick objective. using objgoal instead of obj because rules check the obj var
+	objPos = Vector.DOWN * nipman.getMaxHealth()
+
 	objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
 	upto = 0
 	for i in range(len(objWeights)): # weighted rand from stackoverflow
@@ -340,15 +342,19 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
-	wait(0.36)
-	if objGoal != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
-		threatText = random.randint(THREATS.ICE, THREATS.LASER) # temp orangemint
-		if not threatText in threatList:
-			threatList.append(threatText)
-			if all([x in dummyThreats for x in threatList]): # if dummy bots used would exceed cap. allow slendy override
-				threatList = threatList.slice(1,len(threatList))
+	# wait(0.36)
+	# if objGoal != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
+	# 	threatText = random.randint(THREATS.ICE, THREATS.LASER) # temp orangemint
+	# 	if not threatText in threatList:
+	# 		threatList.append(threatText)
+	# 		if all([x in dummyThreats for x in threatList]): # if dummy bots used would exceed cap. allow slendy override
+	# 			threatList = threatList.slice(1,len(threatList))
+
+	threatList.append(THREATS.DAKKA)
+	# threatList.append(THREATS.FRACTAL)
+	threatList.append(THREATS.COOM)
 
 	wait()
 
@@ -362,7 +368,6 @@ rule "loop":
 	wait()
 
 	obj = objGoal
-	objPos = Vector.DOWN * nipman.getMaxHealth()
 	objGoal = [8, 3, 60, 1, 100][obj]
 
 	bigMessage(getAllPlayers(), "round start!")
@@ -548,6 +553,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
+	wait(2.4)
 	while obj == OBJ.MORE:
 		wait(8)
 		moreFx = []
@@ -614,8 +620,8 @@ rule "more maugas charge attack":
 		for iMores in range(15, -17, -5):
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(10,0,iMores), 9)
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(-10,0,iMores), 9)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 300, 1, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 300, 1, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
 			wait(0.016*21)
 
 		destroyEffect(moreFx)
@@ -633,12 +639,14 @@ rule "niplets":
 
 	wait(THREATS.FRACTAL * 0.032)
 
-	threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)
-	threatNiplets.setStatusEffect(null, Status.INVINCIBLE, 99999)
+	# threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)
+	threatNiplets.setStatusEffect(null, Status.PHASED_OUT, 99999)
 
-	threatNiplets.last().startForcingPosition(RightNip + vect(0,-3.5, -1),false)
-	threatNiplets[0].startForcingPosition(LeftNip + vect(0,-3.5, -1),false)
+	threatNiplets.last().startForcingPosition(RightNip + vect(0.5,-3.5, -1),false)
+	threatNiplets[0].startForcingPosition(LeftNip + vect(-0.5,-3.5, -1),false)
 	threatNiplets.startScalingSize(2, false)
+
+	wait(0.096)
 
 	if len(nipletsPosList) <= 0:
 		nipletsPosList = []
@@ -647,18 +655,18 @@ rule "niplets":
 		nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, threatNiplets[0], Transform.ROTATION_AND_TRANSLATION))
 		nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, threatNiplets.last(), Transform.ROTATION_AND_TRANSLATION))
 
-	print(nipletsPosList)
-
 	wait(0.096)
 
-	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets[0], 1, EffectReeval.VISIBILITY)
-	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets.last(), 1, EffectReeval.VISIBILITY)
+	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets.last(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
 
 	iniplets = 0
 	while obj != OBJ.INTERMISSION:
-		wait(0.112)
+		wait(1.6)
 		iniplets = (iniplets + 1) % len(nipletsPosList)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, null, nipletsPosList[iniplets], vect(random.uniform(-1,1),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 5)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, threatNiplets[0], nipletsPosList[iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 2)
 
 rule "grab":
 	@Condition obj != OBJ.INTERMISSION
@@ -951,10 +959,10 @@ rule "boolet":
 	wait(THREATS.DAKKA * 0.032)
 	while obj != OBJ.INTERMISSION:
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, LeftNip,
-			vect(sin(getTotalTimeElapsed()*2)*0.55, cos(getTotalTimeElapsed()) * 0.3 - 0.4, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 8, 7, 0, 0,0)
+			vect(sin(getTotalTimeElapsed()*2)*0.55, cos(getTotalTimeElapsed()) * 0.25 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 8, 7, 0, 0,0)
 		# wait(0.08)
 		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, RightNip,
-			vect(sin(getTotalTimeElapsed()*2)*-0.55, cos(getTotalTimeElapsed()) * -0.3 - 0.53, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 8, 7, 0, 0,0)
+			vect(sin(getTotalTimeElapsed()*2)*-0.55, cos(getTotalTimeElapsed()) * -0.25 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 8, 7, 0, 0,0)
 		wait(0.128)
 rule "laser":
 	@Condition obj != OBJ.INTERMISSION
@@ -1044,7 +1052,7 @@ rule "discharge":
 	threatLactaters.setDamageDealt(50)
 	threatLactaters.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatLactaters.startForcingButton(Button.PRIMARY_FIRE)
-	threatLactaters.startFacing(vect(sin(getTotalTimeElapsed() * 33)*0.42, sin(getTotalTimeElapsed() * 47)*0.28 - 0.1, -1), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	threatLactaters.startFacing(vect(sin(getTotalTimeElapsed() * 33)*0.42, sin(getTotalTimeElapsed() * 47)*0.28 + 0.05, -1), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.36)
 	threatLactaters.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
 	threatLactaters.startForcingName("overheating glands")
@@ -1171,12 +1179,13 @@ rule "ice impact":
 # objective setup
 rule "more maugas":
 	@Condition obj == OBJ.MORE
+	# wait(0.016 * THREATS.MORE)
 	objPos = []
-	createDummy(Hero.MAUGA, Team.2, -1, vect(-31,-18,0), Vector.LEFT) # need to keep them far away or the fingers block the weak spots
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.LEFT) # need to keep them far away or the fingers block the weak spots
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(31,-18,0), Vector.RIGHT)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.RIGHT)
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(0,-18,-31), Vector.FORWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.FORWARD)
 	objPos.append(getLastCreatedEntity())
 	objPos.setGravity(0)
 	wait()
@@ -1185,14 +1194,18 @@ rule "more maugas":
 	objPos.disableEnvironmentCollision(true)
 	objPos.setKnockbackReceived(0)
 	objPos.setMaxHealth(1500)
-	wait(0.16)
+	wait(0.048)
 	heal(objPos, null, 99999)
 	objPos.setHealingDealt(0)
-	for iMores in range(len(objPos)):
-		wait(0.032)
+	for iMores in range(0,3,1):
+		wait()
+		objPos[iMores].startForcingPosition([vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores], false)
+		wait(0.08) # LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
-		objPos[iMores].startForcingPosition(objPos[iMores].getPosition(), false)
+		# smallMessage(hostPlayer, [vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores])
+		# print(evalOnce(iMores))
+		# print(evalOnce([vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores]))
 		objPos[iMores].startForcingName("mauga jr.")
 		createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getNormalizedHealth()*/ evalOnce(objPos[iMores]).getHealth() / evalOnce(ceil(objPos[iMores].getHealth())) * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
