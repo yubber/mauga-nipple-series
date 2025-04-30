@@ -92,22 +92,30 @@ rule "":
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(l*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(r*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	wait(1)
-    rdummy.startForcingPosition(l, true)
+    rdummy.startForcingPosition(worldVector(r*scale, nip, Transform.ROTATION_AND_TRANSLATION), true)
 	rdummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
-	rdummy.startScalingSize(scale / 16, true)
+	rdummy.startScalingSize(scale / 12, true)
+    rdummy.startFacing(nip.getFacingDirection()*-1, Math.INFINITY, Relativity.TO_WORLD)
     createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, rdummy, 1, EffectReeval.VISIBILITY)
-    ldummy.startForcingPosition(l, true)
+    ldummy.startForcingPosition(worldVector(l*scale, nip, Transform.ROTATION_AND_TRANSLATION), true)
 	ldummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
-	ldummy.startScalingSize(scale / 16, true)
+	ldummy.startScalingSize(scale / 12, true)
+    ldummy.startFacing(nip.getFacingDirection()*-1, Math.INFINITY, Relativity.TO_WORLD)
     createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, ldummy, 1, EffectReeval.VISIBILITY)
 
 	nip.setStatusEffect(null, Status.FROZEN, 99999)
 
+    createDummy(Hero.MAUGA, Team.1, -1, Vector.FORWARD * 15, Vector.FORWARD)
+    wait(3)
+    getPlayersOnHero(Hero.MAUGA, Team.1).setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+
 rule "set r":
+    @Disabled
 	@Condition hostPlayer.isFiringPrimaryFire()
 	r = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
 
 rule "set l":
+    @Disabled
 	@Condition hostPlayer.isFiringSecondaryFire()
 	l = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
 
