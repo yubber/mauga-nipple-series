@@ -38,6 +38,9 @@ settings {
 			"venture": {
                 "ability1Cooldown%": 99
             },
+			"echo": {
+                "ability1Cooldown%": 99
+            },
             "general": {
                 "abilityCooldown%": 60,
                 "ammoClipSize%": 150,
@@ -144,8 +147,8 @@ globalvar objPos # used for miniboss entity
 globalvar roundNo
 # globalvar kills
 globalvar threatList = []
-# threats that use dummy bots
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL/*, THREATS.KITSUNIPS*/]
+# threats that use dummy bots. more included bc it uses hammonds which contributes to skin limit
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.MORE/*, THREATS.KITSUNIPS*/]
 # keep lazer as last and frosty as 1st after slender
 globalvar threatNames = ["slenderman", "more maugas", "frosty nips", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
 globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
@@ -317,33 +320,31 @@ rule "loop":
 	wait(0.5)
 	mobs = []
 
-	# pick objective
-	obj = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
+	# pick objective. using objgoal instead of obj because rules check the obj var
+	objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
 	upto = 0
 	for i in range(len(objWeights)): # weighted rand from stackoverflow
-		if upto + objWeights[i] >= obj:
-			obj = i
+		if upto + objWeights[i] >= objGoal:
+			objGoal = i
 			break
 		upto += objWeights[i]
 		wait()
 
-	objGoal = [8, 3, 60, 1, 100][obj]
-
 	# threats
 	threatList = []
-	if obj == OBJ.PAGES:
+	if objGoal == OBJ.PAGES:
 		threatList.append(THREATS.SLENDY)
-	elif obj == OBJ.MORE:
+	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
 	wait(0.36)
-	if obj != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
+	if objGoal != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
 		threatText = random.randint(THREATS.ICE, THREATS.LASER) # temp orangemint
 		if not threatText in threatList:
 			threatList.append(threatText)
-			if all([x in dummyThreats for x in threatList]): # if dummy bots used would exceed cap. allow slendy and more to override
+			if all([x in dummyThreats for x in threatList]): # if dummy bots used would exceed cap. allow slendy override
 				threatList = threatList.slice(1,len(threatList))
 
 	wait()
@@ -356,10 +357,14 @@ rule "loop":
 	roundNo++
 
 	wait()
+
+	obj = objGoal
+	objGoal = [8, 3, 60, 1, 100][obj]
+
 	bigMessage(getAllPlayers(), "round start!")
 	nipman.forceButtonPress(Button.ABILITY_2)
 	wait(0.48)
-	nipman.setDamageReceived(1)
+	nipman.setDamageReceived(0) # i forgot why this can't be 0. surely nothing bad happens :clueless:
 	nipman.setStatusEffect(null, Status.FROZEN, 99999)
 
 	waitUntil(objProg >= objGoal, 99999)
@@ -513,7 +518,7 @@ rule "mob retarget":
 			wait(0.12)
 			# 1st-3rd closest player
 			mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
-		wait(0.96)
+		wait(1.6)
 		# change boss target
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
@@ -529,7 +534,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	@Event eachPlayer
 	@Hero wreckingBall
 	@Condition eventPlayer.isDummy()
-	eventPlayer.startScalingSize(0.7, false)
+	eventPlayer.startScalingSize(0.8, false)
 	eventPlayer.startForcingName("weak spot")
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
 	weakSpots.append(eventPlayer)
@@ -547,6 +552,9 @@ rule "more maugas charge attack":
 			destroyDummy(Team.2, weakSpots[iMores].getSlot())
 		weakSpots = []
 
+		if obj != OBJ.MORE:
+			return
+
 		# createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		moreFx.append(getLastCreatedEntity())
@@ -558,16 +566,16 @@ rule "more maugas charge attack":
 
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
-		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.34, 0.3)*MiniScale)
+		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.34, 0.4)*MiniScale)
 		wait()
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
 		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.34, 0.486)*MiniScale)
-		weakSpots.setHealth(200)
+		weakSpots.setHealth(250)
 		weakSpots.setHealingReceived(0)
 		wait(0.064)
 		heal(weakSpots, null, 99999)
 
-		wait(12)
+		wait(18)
 
 		if obj != OBJ.MORE:
 			return
@@ -591,8 +599,8 @@ rule "more maugas charge attack":
 		for iMores in range(15, -17, -5):
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(10,0,iMores), 9)
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.YELLOW, vect(-10,0,iMores), 9)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 200, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 120, 20, 9, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 50, 0,0)
 			wait(0.016*21)
 
 		destroyEffect(moreFx)
@@ -622,6 +630,7 @@ rule "niplets":
 
 	iniplets = 0
 	while obj != OBJ.INTERMISSION:
+		wait(0.112)
 		iniplets = (iniplets + 1) % len(nipletsPosList)
 		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, null, nipletsPosList[iniplets], vect(random.uniform(-1,1),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 1, 10, 0, 5, 5)
 
@@ -630,6 +639,7 @@ rule "grab":
 	@Condition THREATS.GRAB in threatList
 	wait(THREATS.GRAB * 0.032)
 
+	# grabplayer changes between player, position, list of players
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, LeftNip, grabLeft, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, RightNip, grabRight, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -638,9 +648,9 @@ rule "grab":
 	threatFx.append(getLastCreatedEntity())
 	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 	threatFx.append(getLastCreatedEntity())
-	createEffect(getAllPlayers() if grabLeftPlayer != null else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if grabLeftPlayer.z != null else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	createEffect(getAllPlayers() if grabRightPlayer != null else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer.getEyePosition(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if grabRightPlayer.z != null else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
@@ -695,10 +705,8 @@ rule "grab":
 		wait(1.2)
 		stopChasingVariable(grabLeft)
 		stopChasingVariable(grabRight)
-		if obj == OBJ.INTERMISSION:
-			return
 
-		wait()
+		wait(0.08)
 		grabLeftPlayer.stopForcingPosition()
 		grabRightPlayer.stopForcingPosition()
 
@@ -844,7 +852,7 @@ rule "rain":
 		for rainVar in range(5):
 			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.048)
-			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 40, 1,3.2,DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 30, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
 
 rule "twister":
 	@Condition obj != OBJ.INTERMISSION
@@ -1139,11 +1147,11 @@ rule "more maugas":
 	@Condition obj == OBJ.MORE
 	wait()
 	objPos = []
-	createDummy(Hero.MAUGA, Team.2, -1, vect(-33,-19.5,0), Vector.LEFT)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(-29,-18,0), Vector.LEFT)
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(33,-19.5,0), Vector.RIGHT)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(29,-18,0), Vector.RIGHT)
 	objPos.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, vect(0,-19.5,-33), Vector.FORWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, vect(0,-18,-29), Vector.FORWARD)
 	objPos.append(getLastCreatedEntity())
 	objPos.setGravity(0)
 	wait(0.16)
@@ -1152,17 +1160,17 @@ rule "more maugas":
 	objPos.disableEnvironmentCollision(true)
 	objPos.setKnockbackReceived(0)
 	for iMores in range(len(objPos)):
-		wait()
+		wait(0.032)
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].startForcingPosition(objPos[iMores].getPosition(), false)
 		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(objPos[iMores]).getMaxHealth()), objPos[iMores].getEyePosition() + Vector.UP, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
 	objPos.setMaxHealth(1500)
-	wait(0.48)
+	wait(0.08)
 	heal(objPos, null, 99999)
 	objPos.setHealingDealt(0)
-	wait(0.64)
+	wait(0.8)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 
 rule "miniboss":
@@ -1196,7 +1204,8 @@ rule "clean bots":
 	@Condition eventPlayer.isDummy()
 	@Condition eventPlayer != nipman
 	@Condition obj == OBJ.INTERMISSION
-	destroyProgressBarInWorldText(eventPlayer.hpBar)
+	if entityExists(eventPlayer.hpBar):
+		destroyProgressBarInWorldText(eventPlayer.hpBar)
 	destroyDummy(Team.2, eventPlayer.getSlot())
 
 rule "setup & refresh forest":
@@ -1239,6 +1248,7 @@ rule "place objective":
 rule "kill/obj prog/weak spot + respawn timer":
 	@Event playerDied
 	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer != nipman
 
 	if eventPlayer in weakSpots:
 		weakSpots.remove(eventPlayer)
@@ -1275,13 +1285,14 @@ rule "kill/obj prog/weak spot + respawn timer":
 		objProg = objGoal
 	elif obj == OBJ.MORE and eventPlayer in objPos:
 		if eventPlayer == attackingClone:
-			attackingClone = null
+			kill(weakSpots, attacker)
 			destroyEffect(moreFx)
 			moreFx = []
+			attackingClone = null
 		objProg++
 		objPos.remove(eventPlayer)
 		destroyProgressBarInWorldText(eventPlayer.hpBar)
-		destroyDummy(Team.2, eventPlayer.getSlot())
+		eventPlayer.disableRespawn()
 	eventPlayer.setRespawnTime(2.5)
 	# kills++
 
@@ -1299,6 +1310,7 @@ rule "page found":
 	@Event eachPlayer
 	@Team 1
 	@Condition obj == OBJ.PAGES
+	@Condition eventPlayer.isDummy() == false
 	@Condition distance(eventPlayer, objPos) < 1.3
 	smallMessage(getAllPlayers(), " {} found a page!".format(eventPlayer))
 	playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objPos, 65)
@@ -1367,7 +1379,7 @@ rule "where did he go":
 	upto = nipman.getMaxHealth()
 	wait(0.08)
 	nipman.setMaxHealth(10000)
-	kill(nipman, null) # this is to fill hp and reset his pose
+	# kill(nipman, null) # this is to fill hp and reset his pose
 	nipman.setKnockbackReceived(0)
 	disableGamemodeCompletion()
 	disableMusic()
@@ -1466,6 +1478,7 @@ rule "win":
 
 rule "player init, cage add":
 	@Event eachPlayer
+	@Team 1
 	@Condition eventPlayer.hasSpawned()
 	eventPlayer.disableGamemodeHud()
 	eventPlayer.setAllowedHeroes(getAllHeroes())

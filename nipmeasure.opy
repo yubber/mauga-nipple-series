@@ -67,8 +67,13 @@ settings {
     }
 }
 
+#!extension buffStatusEffects
+
 globalvar l = vect(0.360, 1.371, 0.266)
 globalvar r = vect(-0.137, 1.378, 0.466)
+
+globalvar ldummy
+globalvar rdummy
 
 globalvar nip
 globalvar scale = 1
@@ -77,10 +82,25 @@ rule "":
 	print(scale)
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
 	nip = getLastCreatedEntity()
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
+    rdummy = getLastCreatedEntity()
+    wait(1)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
+    ldummy = getLastCreatedEntity()
+    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, getLastCreatedEntity(), 1, EffectReeval.VISIBILITY)
 	nip.startScalingSize(scale,true)
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(l*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(r*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	wait(1)
+    rdummy.startForcingPosition(l, true)
+	rdummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+	rdummy.startScalingSize(scale / 16, true)
+    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, rdummy, 1, EffectReeval.VISIBILITY)
+    ldummy.startForcingPosition(l, true)
+	ldummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+	ldummy.startScalingSize(scale / 16, true)
+    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, ldummy, 1, EffectReeval.VISIBILITY)
+
 	nip.setStatusEffect(null, Status.FROZEN, 99999)
 
 rule "set r":
