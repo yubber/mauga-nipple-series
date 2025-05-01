@@ -138,8 +138,8 @@ enum THREATS:
 #!define PlayerSlots 9
 
 globalvar nipman
-globalvar LeftNip = vect(2.93, 10.84-2.8, 26.15)
-globalvar RightNip = vect(-7.19, 10.8-2.8, 30.27)
+#!define LeftNip nipman.smallLNip
+#!define RightNip nipman.smallRNip
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
@@ -153,8 +153,8 @@ globalvar objPos # used for miniboss entity
 globalvar roundNo
 # globalvar kills
 globalvar threatList = []
-# threats that use dummy bots. more included bc it uses hammonds which contributes to skin limit
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.MORE/*, THREATS.KITSUNIPS*/]
+# threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 globalvar moreFunThreats = [THREATS.COOM, THREATS.DAKKA, THREATS.FRACTAL, THREATS.HEAL, THREATS.LASER, THREATS.SNIPER, THREATS.SUN]
@@ -222,10 +222,11 @@ playervar cacheB
 playervar cacheC
 playervar botA
 playervar botB
+playervar threatDecor # persistent effects for a threat
 
-#!define chainSetup nipman.cacheA
+#!define chainSetup nipman.cacheC
 
-# small maugas' nip pos. world vect
+# big and small maugas' nip pos. world vect
 #!define smallLNip cacheA
 #!define smallRNip cacheB
 #!define hpBar cacheC
@@ -263,6 +264,9 @@ rule "init":
 	wait()
 	nipman.setHealth(72500)
 
+	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
+	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+
 	# score huds
 	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), "time elapsed", "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
@@ -285,14 +289,14 @@ rule "init":
 	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
 
 	# threat fx
-	createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, LeftNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, RightNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, RightNip, Vector.BACKWARD, 0.02, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
-	createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, RightNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, LeftNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, RightNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, RightNip, Vector.BACKWARD, 0.02, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, RightNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
 
 	wait(0.16)
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
@@ -300,7 +304,7 @@ rule "init":
 	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "objective: {}! {} / {}".format(objDescs[obj], objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
     hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;threats: {}\&fullwidth_space;".format(threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
-	setMatchTime(5/*10*/)
+	setMatchTime(5)
 
 rule "loop":
 	# start game when any player spawns for the first time
@@ -308,11 +312,13 @@ rule "loop":
 	# intermission
 	destroyEffect(threatFx)
 	destroyEffect(moreFx)
+	destroyEffect(nipman.threatDecor)
 	threatFx = []
 	threatLactaters = []
 	threatSuns = []
 	threatSnipers = []
 	threatNiplets = []
+	nipman.threatDecor = []
 	nipman.setDamageReceived(60)
 	nipman.clearStatusEffect(Status.FROZEN) # has to be unfroze early bc his hitbox desyncs with model
 	pauseMatchTime()
@@ -366,12 +372,8 @@ rule "loop":
 			threatText = random.randint(THREATS.ICE, THREATS.LASER)
 		if not threatText in threatList:
 			threatList.append(threatText)
-			if all([x in dummyThreats for x in threatList]): # if dummy bots used would exceed cap. allow slendy override
+			if len([x for x in threatList if x in dummyThreats]) >= 2: # if dummy bots used would exceed cap. allow slendy override
 				threatList = threatList.slice(1,len(threatList))
-
-	# threatList.append(THREATS.DAKKA)
-	# threatList.append(THREATS.FRACTAL)
-	# threatList.append(THREATS.COOM)
 
 	wait()
 
@@ -591,7 +593,6 @@ rule "more maugas charge attack":
 		moreFx.append(getLastCreatedEntity())
 
 		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the sensitive spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
-		attackingClone.setStatusEffect(null, Status.BURNING, 99999)
 
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
@@ -605,18 +606,19 @@ rule "more maugas charge attack":
 		heal(weakSpots, null, 99999)
 
 		for iMores in range(15): # wait until with less checking
+			wait(0.96)
 			if obj != OBJ.MORE:
 				return
 			if attackingClone.isDead() or (weakSpots == []) or (entityExists(attackingClone) == false):
 				break
-			wait(0.8)
+			attackingClone.setStatusEffect(null, Status.BURNING, 1)
 
 		# decide on logic
 		if obj != OBJ.MORE:
 			return
 		if attackingClone.isDead() or (entityExists(attackingClone) == false) or (weakSpots == []):
 			# attackingClone.setStatusEffect(null, Status.STUNNED, 1)
-			attackingClone.clearStatusEffect(Status.BURNING)
+			# attackingClone.clearStatusEffect(Status.BURNING)
 			destroyEffect(moreFx)
 			moreFx = []
 			attackingClone = null
@@ -936,24 +938,16 @@ rule "twister":
 		damage(twisterCache, null, 35)
 		wait(0.24)
 
-rule "sun":
+rule "sun loop":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SUN in threatList
-	wait(THREATS.SUN * 0.032)
-	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
-	threatSuns.append(getLastCreatedEntity())
-	createDummy(Hero.ILLARI, Team.2, -1, RightNip, Vector.DOWN)
-	threatSuns.append(getLastCreatedEntity())
-	threatSuns[0].startForcingPosition(LeftNip, false)
-	threatSuns.last().startForcingPosition(RightNip, false)
-
-	threatSuns.setInvisibility(Invis.ENEMIES)
-	threatSuns.startForcingName("sunkissed nips")
-	threatSuns.setDamageDealt(90)
-	threatSuns.setProjectileSpeed(30)
-	threatSuns.disableNameplatesFor(getAllPlayers())
 
 	while obj != OBJ.INTERMISSION:
+		threatSuns.setInvisibility(Invis.ENEMIES)
+		threatSuns.startForcingName("sunkissed nips")
+		threatSuns.setDamageDealt(90)
+		threatSuns.setProjectileSpeed(30)
+		threatSuns.disableNameplatesFor(getAllPlayers())
 		wait(2)
 		threatSuns.setUltCharge(100)
 		wait(4)
@@ -1006,53 +1000,6 @@ rule "laser":
 		wait(0.08)
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, nipman, area2 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 3, 55, 0, 0)
 		wait(0.8)
-
-rule "snipers":
-	@Condition obj != OBJ.INTERMISSION
-	@Condition THREATS.SNIPER in threatList
-	wait(THREATS.SNIPER * 0.032)
-	threatSnipers = []
-	wait()
-	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
-	threatSnipers.append(getLastCreatedEntity())
-	getLastCreatedEntity().startForcingPosition(LeftNip + Vector.BACKWARD, false)
-	getLastCreatedEntity().startFacing(directionTowards(threatSnipers[0].getEyePosition(), threatSnipers[0].mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-
-	wait()
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, threatSnipers[0].getEyePosition(), updateEveryTick(threatSnipers[0].getEyePosition() + 80 * threatSnipers[0].getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	threatFx.append(getLastCreatedEntity())
-
-	wait()
-	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
-	threatSnipers.append(getLastCreatedEntity())
-	getLastCreatedEntity().startForcingPosition(RightNip + vect(0,-0.3,-1), false)
-	getLastCreatedEntity().startFacing(directionTowards(threatSnipers.last().getEyePosition(), threatSnipers.last().mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, threatSnipers.last().getEyePosition(), updateEveryTick(threatSnipers.last().getEyePosition() + 80 * threatSnipers.last().getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	threatFx.append(getLastCreatedEntity())
-
-	wait(0.36)
-
-	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
-	threatSnipers.disableNameplatesFor(getAllPlayers())
-	threatSnipers.startForcingName("s-nip-ers")
-	threatSnipers.setDamageDealt(50)
-	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
-	threatSnipers.startScalingSize(0.1, false)
-
-	while obj != OBJ.INTERMISSION:
-		wait(2)
-		threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
-
-rule "sniper change target":
-	@Condition obj != OBJ.INTERMISSION
-	@Condition THREATS.SNIPER in threatList
-	wait(THREATS.SNIPER * 0.032)
-	while obj != OBJ.INTERMISSION:
-		wait(4)
-		threatSnipers[0].mobTarget = random.choice(getLivingPlayers(Team.1))
-		threatSnipers.last().mobTarget = random.choice(getLivingPlayers(Team.1))
-		threatSnipers.setAmmo(0,9999)
 
 rule "discharge":
 	@Condition obj != OBJ.INTERMISSION
@@ -1208,29 +1155,34 @@ rule "dupe ice":
 		createProjectile(Projectile.MEI_ICICLE, nipman, cycledClone.smallRNip, directionTowards(cycledClone.smallRNip, target2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
 
 rule "dupe boolet":
-	@Condition obj == OBJ.MORE
-	@Condition THREATS.DAKKA in threatList
-	while obj != OBJ.INTERMISSION:
-		wait(0.08)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, cycledClone, cycledClone.smallLNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
-		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, cycledClone, cycledClone.smallRNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
-
-rule "dupe sniper":
 	@Event eachPlayer
 	@Hero mauga
 	@Condition obj == OBJ.MORE
-	@Condition THREATS.SNIPER in threatList
+	@Condition THREATS.DAKKA in threatList
 	@Condition eventPlayer in objPos
+	while obj != OBJ.INTERMISSION:
+		wait(0.8)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, eventPlayer, eventPlayer.smallLNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, eventPlayer, eventPlayer.smallRNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
+
+rule "dupe + normal sniper":
+	@Event eachPlayer
+	@Hero mauga
+	# @Condition obj == OBJ.MORE
+	@Condition THREATS.SNIPER in threatList
+	@Condition (eventPlayer in objPos) or (eventPlayer == nipman)
 	wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botA = getLastCreatedEntity()
 	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botA)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), updateEveryTick(eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botB)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), updateEveryTick(eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
@@ -1242,12 +1194,29 @@ rule "dupe sniper":
 	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatSnipers.startScalingSize(0.1, false)
 
-rule "dupe suns":
+rule "sniper change target":
+	@Event eachPlayer
+	@Hero widowmaker
+	@Team 2
+	while obj != OBJ.INTERMISSION:
+		wait(4)
+		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
+		eventPlayer.setAmmo(0,9999)
+
+rule "sniper fire":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.SNIPER in threatList
+	wait(2)
+	threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
+	if ruleCondition:
+		loop()
+
+rule "init suns":
 	@Event eachPlayer
 	@Hero mauga
-	@Condition obj == OBJ.MORE
+	# @Condition obj == OBJ.MORE
 	@Condition THREATS.SUN in threatList
-	@Condition eventPlayer in objPos
+	@Condition eventPlayer in objPos or eventPlayer == nipman
 	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
 	eventPlayer.botA = (getLastCreatedEntity())
@@ -1259,6 +1228,7 @@ rule "dupe suns":
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
 
 	threatSuns.setInvisibility(Invis.ENEMIES)
+	threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
 	threatSuns.startForcingName("sunkissed nips")
 	threatSuns.setDamageDealt(90)
 	threatSuns.setProjectileSpeed(30)
@@ -1291,12 +1261,10 @@ rule "more maugas":
 		wait(0.08) # LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
-		# smallMessage(hostPlayer, [vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores])
-		# print(evalOnce(iMores))
-		# print(evalOnce([vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores]))
 		objPos[iMores].startForcingName("mauga jr.")
 		# createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getHealth() / evalOnce(ceill(objPos[iMores].getHealth()))evalOnce(objPos[iMores]).getNormalizedHealth()*/  * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
-		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getHealth() / evalOnce(objPos[iMores]).getMaxHealth() * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		# WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG
+		createProgressBarInWorldText(getAllPlayers(), evalOnce(objPos[iMores]).getNormalizedHealth() * 400, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
 	wait(0.8)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
@@ -1414,6 +1382,8 @@ rule "kill/obj prog/weak spot + respawn timer":
 			moreFx = []
 			attackingClone = null
 		objProg++
+		destroyDummy(eventPlayer.botA.getTeam(), eventPlayer.botA.getSlot())
+		destroyDummy(eventPlayer.botB.getTeam(), eventPlayer.botB.getSlot())
 		objPos.remove(eventPlayer)
 		destroyProgressBarInWorldText(eventPlayer.hpBar)
 		eventPlayer.disableRespawn()
@@ -1463,8 +1433,8 @@ rule "player count balancing, freeze check":
 		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
 			getPlayers(Team.1).setDamageDealt(min(400,900 / getNumberOfPlayers(Team.1)))
-		if (nipman.hasStatusEffect(Status.FROZEN) == false) and (obj != OBJ.INTERMISSION):
-			nipman.setStatusEffect(null, Status.FROZEN, 99999)
+		if (obj != OBJ.INTERMISSION):
+			getPlayersOnHero(Hero.MAUGA, Team.2).setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(1)
 		wait(10)
 rule "wake up":
