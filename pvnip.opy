@@ -138,8 +138,8 @@ enum THREATS:
 #!define PlayerSlots 9
 
 globalvar nipman
-#!define LeftNip nipman.smallLNip
-#!define RightNip nipman.smallRNip
+#!define LeftNip (nipman.smallLNip)
+#!define RightNip (nipman.smallRNip)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
@@ -157,7 +157,10 @@ globalvar threatList = []
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
-globalvar moreFunThreats = [THREATS.COOM, THREATS.DAKKA, THREATS.FRACTAL, THREATS.HEAL, THREATS.LASER, THREATS.SNIPER, THREATS.SUN]
+
+# threats that have extra behavior in more maugas
+globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.FRACTAL,*/ THREATS.HEAL, THREATS.SNIPER, THREATS.SUN]
+# niplets can't be there because they block weak spots
 
 # keep lazer as last and frosty as 1st after slender
 globalvar threatNames = ["slenderman", "more maugas", "frosty nips", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
@@ -198,13 +201,12 @@ globalvar grabLeftPlayer
 globalvar grabRight
 globalvar grabRightPlayer
 
-globalvar nipletsPosList
-globalvar iniplets
-
 globalvar iMores
 globalvar moreFx
 globalvar attackingClone
 globalvar weakSpots = []
+
+globalvar isun
 
 globalvar threatSnipers
 globalvar threatLactaters
@@ -222,7 +224,7 @@ playervar cacheB
 playervar cacheC
 playervar botA
 playervar botB
-playervar threatDecor # persistent effects for a threat
+# playervar threatDecor # persistent effects for a threat NVM just use threatFx. does the same thing
 
 #!define chainSetup nipman.cacheC
 
@@ -230,6 +232,10 @@ playervar threatDecor # persistent effects for a threat
 #!define smallLNip cacheA
 #!define smallRNip cacheB
 #!define hpBar cacheC
+
+# event player.
+#!define nipletsPosList botA.cacheA
+playervar iniplets
 
 # choose 1 clone
 #!define cycledClone objPos[getTotalTimeElapsed() % len(objPos)]
@@ -312,13 +318,13 @@ rule "loop":
 	# intermission
 	destroyEffect(threatFx)
 	destroyEffect(moreFx)
-	destroyEffect(nipman.threatDecor)
+	# destroyEffect(nipman.threatDecor)
 	threatFx = []
 	threatLactaters = []
 	threatSuns = []
 	threatSnipers = []
 	threatNiplets = []
-	nipman.threatDecor = []
+	# nipman.threatDecor = []
 	nipman.setDamageReceived(60)
 	nipman.clearStatusEffect(Status.FROZEN) # has to be unfroze early bc his hitbox desyncs with model
 	pauseMatchTime()
@@ -363,17 +369,21 @@ rule "loop":
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
 	wait(0.36)
-	if objGoal != OBJ.PAGES: # random.randint(0,2) > 0: # chance to add 2nd threat
-		# guarantee a threat that will get copied by mauga clones
+	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
 		# threatText is used as temp storage
+		# guarantee a threat that will get copied by mauga clones
 		if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
 			threatText = random.choice(moreFunThreats)
 		else:
 			threatText = random.randint(THREATS.ICE, THREATS.LASER)
 		if not threatText in threatList:
 			threatList.append(threatText)
-			if len([x for x in threatList if x in dummyThreats]) >= 2: # if dummy bots used would exceed cap. allow slendy override
-				threatList = threatList.slice(1,len(threatList))
+	# prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit.
+	if len([x for x in threatList if x in dummyThreats]) >= 2:
+		threatList = threatList.slice(1,len(threatList))
+
+	# threatList.append(THREATS.FRACTAL)
+	# threatList.append(THREATS.DAKKA)
 
 	wait()
 
@@ -567,7 +577,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	eventPlayer.startForcingName("sensitive spot")
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
 	weakSpots.append(eventPlayer)
-	wait(0.112)
+	wait(0.16)
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
 
 rule "more maugas charge attack":
@@ -617,12 +627,15 @@ rule "more maugas charge attack":
 		if obj != OBJ.MORE:
 			return
 		if attackingClone.isDead() or (entityExists(attackingClone) == false) or (weakSpots == []):
-			# attackingClone.setStatusEffect(null, Status.STUNNED, 1)
-			# attackingClone.clearStatusEffect(Status.BURNING)
+			attackingClone.clearStatusEffect(Status.FROZEN)
+			wait(0.112)
+			attackingClone.setStatusEffect(null, Status.STUNNED, 1)
 			destroyEffect(moreFx)
 			moreFx = []
-			attackingClone = null
 			bigMessage(getAllPlayers(), "success! stopped the attack!")
+			wait(1)
+			attackingClone.setStatusEffect(null, Status.FROZEN, 99999)
+			attackingClone = null
 			continue
 
 		bigMessage(getAllPlayers(), "{} failed to stop the attack. brace for impact!".format(iconString(Icon.SAD)))
@@ -648,14 +661,18 @@ rule "more maugas charge attack":
 		destroyEffect(moreFx)
 		moreFx = []
 
-rule "niplets":
+rule "niplets + dupe":
+	@Event eachPlayer
+	@Hero mauga
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.FRACTAL in threatList
-	threatNiplets = []
+	@Condition (eventPlayer == nipman) # or (eventPlayer in objPos)
 
-	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, Vector.BACKWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, eventPlayer.getFacingDirection())
+	eventPlayer.botA = getLastCreatedEntity()
 	threatNiplets.append(getLastCreatedEntity())
-	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, Vector.BACKWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, eventPlayer.getFacingDirection())
+	eventPlayer.botB = getLastCreatedEntity()
 	threatNiplets.append(getLastCreatedEntity())
 
 	wait(THREATS.FRACTAL * 0.032)
@@ -663,31 +680,37 @@ rule "niplets":
 	# threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)
 	threatNiplets.setStatusEffect(null, Status.PHASED_OUT, 99999)
 
-	threatNiplets.last().startForcingPosition(RightNip + vect(0.5,-3.5, -1),false)
-	threatNiplets[0].startForcingPosition(LeftNip + vect(-0.5,-3.5, -1),false)
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip + vect(-0.5,-3.5, -1),false)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip + vect(0.5,-3.5, -1),false)
 	threatNiplets.startScalingSize(2, false)
 
-	wait(0.096)
+	wait(0.24)
 
-	if len(nipletsPosList) <= 0:
-		nipletsPosList = []
-		nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, threatNiplets[0], Transform.ROTATION_AND_TRANSLATION))
-		nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, threatNiplets.last(), Transform.ROTATION_AND_TRANSLATION))
-		nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, threatNiplets[0], Transform.ROTATION_AND_TRANSLATION))
-		nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, threatNiplets.last(), Transform.ROTATION_AND_TRANSLATION))
+	# if len(eventPlayer.nipletsPosList) <= 0:
+	# 	eventPlayer.nipletsPosList = []
+	# 	wait()
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, eventPlayer.botA, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, eventPlayer.botB, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, eventPlayer.botA, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, eventPlayer.botB, Transform.ROTATION_AND_TRANSLATION))
 
-	wait(0.096)
+	wait(0.48)
 
-	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets[0], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botA, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	createEffect(getAllPlayers(), Effect.WINSTON_PRIMAL_RAGE, Color.TEAM_2, threatNiplets.last(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botB, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
+	threatNiplets.startForcingName("niplet")
+	threatNiplets.disableNameplatesFor(getAllPlayers())
 
-	iniplets = 0
+	# eventPlayer.iniplets = 0
 	while obj != OBJ.INTERMISSION:
-		wait(1.6)
-		iniplets = (iniplets + 1) % len(nipletsPosList)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, threatNiplets[0], nipletsPosList[iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),-3), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 80, 20, 0, 5, 0.05)
+		wait(0.24)
+		# eventPlayer.iniplets = (eventPlayer.iniplets + 1) % len(eventPlayer.nipletsPosList)
+		# createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, eventPlayer.nipletsPosList[eventPlayer.iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 3, 0, 35, 30)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(-0.5,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
+		wait(0.24)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(-0.5,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
 
 rule "grab":
 	@Condition obj != OBJ.INTERMISSION
@@ -943,18 +966,26 @@ rule "sun loop":
 	@Condition THREATS.SUN in threatList
 
 	while obj != OBJ.INTERMISSION:
+		wait(0.64)
 		threatSuns.setInvisibility(Invis.ENEMIES)
+		threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
 		threatSuns.startForcingName("sunkissed nips")
-		threatSuns.setDamageDealt(90)
 		threatSuns.setProjectileSpeed(30)
 		threatSuns.disableNameplatesFor(getAllPlayers())
-		wait(2)
+		threatSuns.setDamageDealt(max(35,180 / len(threatSuns)))
+		threatSuns.startModifyingVoicelinePitch(0, false)
 		threatSuns.setUltCharge(100)
 		wait(4)
 		threatSuns.forceButtonPress(Button.ULTIMATE)
-		threatSuns[0].setFacing(directionTowards(LeftNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
-		threatSuns.last().setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
-		wait(1.5)
+		for isun in range(len(threatSuns)):
+			if entityExists(threatSuns[isun]) == false:
+				threatSuns.remove(threatSuns[isun])
+			else:
+				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
+			wait(0.96)
+		# threatSuns.slice(0,len(threatSuns)/2).setFacing(, Relativity.TO_PLAYER)
+		# threatSuns.slice(len(threatSuns/2),len(threatSuns)).setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
+		wait(2)
 		threatSuns.forceButtonPress(Button.PRIMARY_FIRE)
 
 rule "gravitatas":
@@ -972,11 +1003,11 @@ rule "boolet":
 	wait(THREATS.DAKKA * 0.032)
 	while obj != OBJ.INTERMISSION:
 		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, LeftNip,
-			vect(sin(getTotalTimeElapsed()*2)*0.5, cos(getTotalTimeElapsed()) * 0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 110, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 14, 4, 0, 0,0)
-		# wait(0.08)
+			vect(sin(getTotalTimeElapsed()*2)*0.5, cos(getTotalTimeElapsed()) * 0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 130, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 14, 4, 0, 0,0)
+		wait(0.016 * 5)
 		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, RightNip,
-			vect(sin(getTotalTimeElapsed()*2)*-0.5, cos(getTotalTimeElapsed()) * -0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 110, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 14, 4, 0, 0,0)
-		wait(0.128)
+			vect(sin(getTotalTimeElapsed()*2)*-0.5, cos(getTotalTimeElapsed()) * -0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 130, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 14, 4, 0, 0,0)
+		wait(0.016 * 5)
 rule "laser":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.LASER in threatList
@@ -1002,42 +1033,59 @@ rule "laser":
 		wait(0.8)
 
 rule "discharge":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.COOM in threatList
 	wait(THREATS.COOM * 0.032)
 
 	createDummy(Hero.TORBJORN, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botA = getLastCreatedEntity()
 	threatLactaters.append(getLastCreatedEntity())
-	getLastCreatedEntity().startForcingPosition(LeftNip, false)
+	getLastCreatedEntity().startForcingPosition(eventPlayer.smallLNip, false)
 	createDummy(Hero.TORBJORN, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botB = getLastCreatedEntity()
 	threatLactaters.append(getLastCreatedEntity())
-	getLastCreatedEntity().startForcingPosition(RightNip, false)
+	getLastCreatedEntity().startForcingPosition(eventPlayer.smallRNip, false)
 	wait(0.36)
 	threatLactaters.setWeapon(2)
 	threatLactaters.startScalingSize(0.3, false)
-	threatLactaters.setDamageDealt(50)
 	threatLactaters.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatLactaters.setInvisibility(Invis.ALL)
 	threatLactaters.startForcingButton(Button.PRIMARY_FIRE)
-	threatLactaters.startFacing(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(evalOnce(directionTowards(eventPlayer.smallLNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.5 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.5)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(evalOnce(directionTowards(eventPlayer.smallRNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.5 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.5)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	# eventPlayer.botA.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	# eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.36)
 	threatLactaters.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
 	threatLactaters.startForcingName("overheating glands")
 	threatLactaters.disableNameplatesFor(getAllPlayers())
-	wait(0.8)
+
+rule "everybody discharge":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.COOM in threatList
 	while THREATS.COOM in threatList:
-		threatLactaters.setUltCharge(100)
-		wait(0.096)
-		threatLactaters.forceButtonPress(Button.ULTIMATE)
 		wait(10)
+		threatLactaters.setUltCharge(100)
+		threatLactaters.setDamageDealt((80 / len(threatLactaters)))
+		threatLactaters.disableNameplatesFor(getAllPlayers())
+		wait(0.12)
+		threatLactaters.forceButtonPress(Button.ULTIMATE)
 
 rule "heal milk":
+	@Event eachPlayer
+	@Hero mauga
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.HEAL in threatList
+	# sure let the niplets also do this
+	@Condition eventPlayer.isAlive()
 
-	while obj != OBJ.INTERMISSION:
+	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(0.8)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos if obj == OBJ.MORE else mobs))
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, nipman, RightNip + Vector.BACKWARD, Vector.BACKWARD, Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos if obj == OBJ.MORE else mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
 
 rule "nuke":
 	@Condition obj != OBJ.INTERMISSION
@@ -1142,6 +1190,18 @@ rule "ice impact":
 	@Condition THREATS.ICE in threatList
 	victim.setStatusEffect(nipman, Status.FROZEN, 1.2)
 
+rule "ice effect init":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.ICE in threatList
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
+	waitUntil(eventPlayer.smallLNip != null, 3)
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallLNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallRNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
 # more maugas threat duping
 rule "dupe ice":
 	@Condition obj == OBJ.MORE
@@ -1160,10 +1220,12 @@ rule "dupe boolet":
 	@Condition obj == OBJ.MORE
 	@Condition THREATS.DAKKA in threatList
 	@Condition eventPlayer in objPos
-	while obj != OBJ.INTERMISSION:
-		wait(0.8)
-		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, eventPlayer, eventPlayer.smallLNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
-		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, eventPlayer, eventPlayer.smallRNip, vect(sin(getTotalTimeElapsed()),-0.05,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 90, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0, 14, 4, 0,0,0)
+	# print("bullet dupe run")
+	while obj == OBJ.MORE:
+		wait(0.36)
+		# smallMessage(hostPlayer, eventPlayer.smallRNip)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, eventPlayer, vect(0.360, 1.371, 0.266)*MiniScale, vect(sin(getTotalTimeElapsed())*-12,-0.5,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 50, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0.03, 20, 3, 0,0,0)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, eventPlayer, vect(-0.137, 1.378, 0.466)*MiniScale, vect(sin(getTotalTimeElapsed()) * 12,-0.5,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 50, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0.03, 20, 3, 0,0,0)
 
 rule "dupe + normal sniper":
 	@Event eachPlayer
@@ -1215,8 +1277,10 @@ rule "init suns":
 	@Event eachPlayer
 	@Hero mauga
 	# @Condition obj == OBJ.MORE
+	@Condition eventPlayer.hasSpawned()
 	@Condition THREATS.SUN in threatList
-	@Condition eventPlayer in objPos or eventPlayer == nipman
+	@Condition (eventPlayer in objPos) or (eventPlayer == nipman)
+
 	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
 	eventPlayer.botA = (getLastCreatedEntity())
@@ -1227,12 +1291,14 @@ rule "init suns":
 	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
 
-	threatSuns.setInvisibility(Invis.ENEMIES)
-	threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
-	threatSuns.startForcingName("sunkissed nips")
-	threatSuns.setDamageDealt(90)
-	threatSuns.setProjectileSpeed(30)
-	threatSuns.disableNameplatesFor(getAllPlayers())
+	wait(0.64)
+
+	# eventPlayer.threatDecor = []
+
+	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), 0.02, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
 
 # objective setup
 rule "more maugas":
@@ -1384,6 +1450,7 @@ rule "kill/obj prog/weak spot + respawn timer":
 		objProg++
 		destroyDummy(eventPlayer.botA.getTeam(), eventPlayer.botA.getSlot())
 		destroyDummy(eventPlayer.botB.getTeam(), eventPlayer.botB.getSlot())
+		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
 		objPos.remove(eventPlayer)
 		destroyProgressBarInWorldText(eventPlayer.hpBar)
 		eventPlayer.disableRespawn()
@@ -1503,6 +1570,7 @@ rule "charge no breaky":
 	@Condition eventPlayer.getPosition().z > 18
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
 	smallMessage(eventPlayer, "do not the mauga")
 
 rule "charge no breaky more maugas":
@@ -1514,6 +1582,7 @@ rule "charge no breaky more maugas":
 	or (eventPlayer.getPosition().x < -18 and eventPlayer.getFacingDirection().x < 0.7)
 	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
 	smallMessage(eventPlayer, "do not the mauga")
 
 rule "punch no breaky":
