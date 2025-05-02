@@ -69,8 +69,12 @@ settings {
 
 #!extension buffStatusEffects
 
+# local vectors for mauga of scale 1
 globalvar l = vect(0.360, 1.371, 0.266)
 globalvar r = vect(-0.137, 1.378, 0.466)
+
+globalvar lyingr = vect(-0.187, 0.698, -0.702);
+globalvar lyingl = vect(0.396, 0.602, -0.566);
 
 globalvar ldummy
 globalvar rdummy
