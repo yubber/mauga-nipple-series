@@ -112,6 +112,16 @@ rule "scale dababy":
 		hostPlayer.target.startScalingSize(facingdial, false)
 	# hostPlayer.target.startScalingSize(hostPlayer.oldFacing - hostPlayer.getVerticalFacingAngle(), false)
 
+rule "edit bot facing/status":
+	@Condition hostPlayer.isHoldingButton(Button.RELOAD)
+	@Condition baby == null
+	baby = Chungus
+	baby.startFacing(eventPlayer.getFacingDirection(), Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	wait(0.64)
+	waitUntil(hostPlayer.isHoldingButton(Button.RELOAD), 99999)
+	baby.stopFacing()
+	baby = null
+
 rule ".NoClip": # from workshop.codes/RVWKC
     @Event eachPlayer
     @Condition eventPlayer.isHoldingButton(Button.INTERACT)
