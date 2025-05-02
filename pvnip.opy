@@ -1203,9 +1203,9 @@ rule "ice effect init":
 	@Condition THREATS.ICE in threatList
 	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
 	waitUntil(eventPlayer.smallLNip != null, 3)
-	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale), eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallLNip /*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
-	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale), eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallRNip /*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 
 # more maugas threat duping
@@ -1242,13 +1242,13 @@ rule "dupe + normal sniper":
 	wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botA)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), updateEveryTick(eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botB)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), updateEveryTick(eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
