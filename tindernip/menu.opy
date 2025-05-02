@@ -1,4 +1,5 @@
-#!mainFile "tindernip.opy"
+# nvm i'm not doing this lmao
+# !mainFile "tindernip.opy"
 
 globalvar cms
 globalvar cm_Buttons
@@ -108,8 +109,8 @@ rule "[CM] Add Buttons ★":
     #10 - Cursor Tooltip
     #11 - Cursor Tooltip Color [color or custom color]
     #12 - Visible [true/false]
-    cm_Buttons[0] = [null, 1, "BALANCE THE GAME", true, 0, 7, 3.5, 3.7, rgb(225, 225, 225), Color.WHITE, "WARNING: REQUIRES EFFORT", Color.YELLOW, true]
-    cm_Buttons[1] = [null, 2, "NERF GENJI", true, 0, -7, 3.5, 3.7, rgb(225, 225, 225), Color.LIME_GREEN, null, null, true]
+    cm_Buttons[0] = [null, 1, "back", true, 0, 7, 3.5, 3.7, rgb(225, 225, 225), Color.WHITE, "WARNING: REQUIRES EFFORT", Color.YELLOW, true]
+    cm_Buttons[1] = [null, 2, "next", true, 0, -7, 3.5, 3.7, rgb(225, 225, 225), Color.LIME_GREEN, null, null, true]
 
 
 rule "[CM] Generate Buttons":
