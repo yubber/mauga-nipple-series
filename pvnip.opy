@@ -165,7 +165,7 @@ globalvar nipman
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
 globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
-globalvar objWeights = [0.05, 0.25, 0.25, 0.25, 0.20]
+globalvar objWeights = [0.05, 0.20, 0.275, 0.275, 0.20]
 # globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
 
 globalvar objProg
@@ -406,8 +406,8 @@ rule "loop":
 	if len([x for x in threatList if x in dummyThreats]) >= 2:
 		threatList = threatList.slice(0,len(threatList) - 1)
 
-	# threatList.append(THREATS.FRACTAL)
-	# threatList.append(THREATS.CAGE)
+	# threatList.append(THREATS.SUN)
+	# threatList.append(THREATS.NUKE)
 
 	wait()
 
@@ -603,7 +603,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	@Condition eventPlayer.isDummy()
 	eventPlayer.startScalingSize(0.8, false)
 	eventPlayer.startForcingName("sensitive spot")
-	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 255 * (sin(getTotalTimeElapsed()) + 1) / 2, 0), true)
+	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 205 + 50 * (sin(getTotalTimeElapsed() * 4)) / 2, 0), true)
 	weakSpots.append(eventPlayer)
 	wait(0.16)
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
@@ -751,9 +751,9 @@ rule "niplets + dupe":
 		wait(0.24)
 		# eventPlayer.iniplets = (eventPlayer.iniplets + 1) % len(eventPlayer.nipletsPosList)
 		# createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, eventPlayer.nipletsPosList[eventPlayer.iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 3, 0, 35, 30)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(2,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 24, 6, 0, 15, 110)
 		wait(0.24)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(2,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 24, 6, 0, 15, 110)
 
 rule "grab":
 	@Condition obj != OBJ.INTERMISSION
@@ -1284,21 +1284,21 @@ rule "dupe boolet":
 rule "dupe + normal sniper":
 	@Event eachPlayer
 	@Hero mauga
-	# @Condition obj == OBJ.MORE
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
-	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
-	wait(0.048 * objPos.index(eventPlayer))
+	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (eventPlayer in objPos)
+	# wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botA)
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), updateEveryTick(eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), (eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botB)
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), updateEveryTick(eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), (eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
@@ -1324,7 +1324,7 @@ rule "sniper fire":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
 	wait(2)
-	threatSnipers.setDamageDealt(120 / len(getPlayersOnHero(Hero.WIDOWMAKER, Team.2)))
+	threatSnipers.setDamageDealt(60 / len(getPlayersOnHero(Hero.WIDOWMAKER, Team.2)))
 	threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
 	if ruleCondition:
 		loop()
@@ -1332,15 +1332,14 @@ rule "sniper fire":
 rule "init suns":
 	@Event eachPlayer
 	@Hero mauga
-	# @Condition obj == OBJ.MORE
-	@Condition eventPlayer.hasSpawned()
+	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SUN in threatList
-	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
+	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (eventPlayer in objPos)
 
-	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
+	createDummy(Hero.ILLARI, Team.2, -1, eventPlayer.smallLNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
 	eventPlayer.botA = (getLastCreatedEntity())
-	createDummy(Hero.ILLARI, Team.2, -1, RightNip, Vector.DOWN)
+	createDummy(Hero.ILLARI, Team.2, -1, eventPlayer.smallRNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
 	eventPlayer.botB = (getLastCreatedEntity())
 
@@ -1348,9 +1347,7 @@ rule "init suns":
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
 
 	wait(0.64)
-
 	# eventPlayer.threatDecor = []
-
 	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), 0.02, ProjectileEffectReeval.VISIBILITY)
@@ -1496,6 +1493,7 @@ rule "kill/obj prog/weak spot + respawn timer":
 		weakSpots.remove(eventPlayer)
 		playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR, Color.TEAM_2, eventPlayer, 1)
 		playEffect(getAllPlayers(), DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer, 50)
+		wait(0.48)
 		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
 		return
 
