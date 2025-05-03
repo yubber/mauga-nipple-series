@@ -59,6 +59,10 @@ settings {
                 "ability2Cooldown%": 50,
                 "secondaryFireCooldown%": 60,
 			},
+			"lucio":{
+				"damageDealt%": 150,
+                "ammoClipSize%": 300
+			},
             "general": {
                 "abilityCooldown%": 60,
                 "ammoClipSize%": 150,
@@ -1030,21 +1034,26 @@ rule "sun loop":
 				threatSuns.remove(threatSuns[isun])
 			else:
 				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
-			wait(0.08)
+			wait(0.064)
 		# threatSuns.slice(0,len(threatSuns)/2).setFacing(, Relativity.TO_PLAYER)
 		# threatSuns.slice(len(threatSuns/2),len(threatSuns)).setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
-		wait(0.96)
+		wait(2)
 		threatSuns.forceButtonPress(Button.PRIMARY_FIRE)
 
 rule "gravitatas":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.GRAV in threatList
+
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
 	# there was an issue with players getting stuck on the bottom rocks opposite mauga
 	# getPlayers(Team.1).startAcceleration(Vector.FORWARD + 0.15 * Vector.DOWN, 80, 15, Relativity.TO_WORLD, AccelReeval.NONE)
-	getPlayers(Team.1).setGravity(300)
-	wait(6)
-	if RULE_CONDITION:
-		goto RULE_START # to affect new players
+	while obj != OBJ.INTERMISSION:
+		getPlayers(Team.1).setGravity(300)
+		wait(6)
 rule "boolet":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.DAKKA in threatList
@@ -1129,6 +1138,12 @@ rule "heal milk":
 	@Condition THREATS.HEAL in threatList
 	# sure let the niplets also do this
 	@Condition eventPlayer.isAlive()
+
+	createProjectileEffect(getAllPlayers(), Projectile.MOIRA_HEAL_ORB, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.MOIRA_HEAL_ORB, null, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(0.8)
@@ -1361,7 +1376,7 @@ rule "missing mauga":
 	smallMessage(getAllPlayers(), "something went wrong. skipping phase...")
 	objProg = objGoal
 rule "NO BOTS?":
-	@Condition obj == OBJ.KILL
+	@Condition obj == OBJ.KILL # slendy is also a mob
 	@Condition getNumberOfPlayers(Team.2) < 8
 	wait(3, Wait.ABORT_WHEN_FALSE)
 	for i in range(len(mobs)):
@@ -1730,6 +1745,7 @@ rule "win":
 	@Condition eventPlayer == nipman
 	@Condition attacker != null
 	setSlowMotion(50)
+	getPlayers(Team.ALL).communicate(Comms.VOICE_LINE_UP)
 	wait(0.48)
 	declareTeamVictory(Team.1)
 	destroyAllEffects()
