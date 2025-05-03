@@ -39,11 +39,26 @@ settings {
             #     "ammoClipSize%": 40,
             # },
 			"venture": {
-                "ability1Cooldown%": 99
+                "ability1Cooldown%": 120
             },
 			"echo": {
-                "ability1Cooldown%": 99
+                "ability1Cooldown%": 120
             },
+			"roadhog": {
+                "ultGen%": 55
+            },
+			"zarya": {
+                "ultGen%": 60
+            },
+			"cassidy":{
+				"damageDealt%": 85
+			},
+			"doomfist":{
+				"ammoRegenerationTime%": 33,
+                "ability1Cooldown%": 50,
+                "ability2Cooldown%": 50,
+                "secondaryFireCooldown%": 60,
+			},
             "general": {
                 "abilityCooldown%": 60,
                 "ammoClipSize%": 150,
@@ -65,7 +80,7 @@ settings {
             },
             "winston": {
                 "ammoClipSize%": 70,
-                "health%": 60
+                "health%": 80
             },
 			"wreckingBall": {
                 "enableRollOnly": true
@@ -150,7 +165,7 @@ globalvar nipman
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
 globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
-globalvar objWeights = [0.1, 0.20, 0.25, 0.25, 0.20]
+globalvar objWeights = [0.05, 0.25, 0.25, 0.25, 0.20]
 # globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
 
 globalvar objProg
@@ -177,7 +192,7 @@ globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players 
 
 globalvar threatText = ""
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT]
-globalvar mobDmg = [80, 155, 75]
+globalvar mobDmg = [100, 155, 75]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -429,14 +444,8 @@ rule "loop":
 	goto RULE_START
 
 # mobs
-rule "summon the horde":
-	@Condition obj != OBJ.INTERMISSION
-	@Condition obj != OBJ.PAGES
-	@Condition obj != OBJ.MORE
-	wait(0.64, Wait.ABORT_WHEN_FALSE)
-	getAllPlayers().disableKillFeed()
-	wait()
-	# destroyAllInWorldTexts() # debug
+def mobsInit():
+	mobs = []
 	for i in range(MaxBots-4):
 		# createDummy(enemies[i%len(enemies)], Team.2, -1, Vector.DOWN, Vector.BACKWARD)
 		# can't split enemy heroes bc skin limit
@@ -456,7 +465,7 @@ rule "summon the horde":
 	mobs.stopForcingButton(Button.PRIMARY_FIRE)
 	mobs.startForcingThrottle(1,1,0,0,0,1)
 	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
-	mobs.setMoveSpeed(60)
+	mobs.setMoveSpeed(70)
 	wait()
 	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
 		mobs.setDamageReceived(85)
@@ -471,6 +480,15 @@ rule "summon the horde":
 	if THREATS.BOOST in threatList:
 		startDamageModification(getPlayers(Team.1), mobs, 130, DamageReeval.RECEIVERS_AND_DAMAGERS)
 
+rule "summon the horde":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition obj != OBJ.PAGES
+	@Condition obj != OBJ.MORE
+	wait(0.64, Wait.ABORT_WHEN_FALSE)
+	getAllPlayers().disableKillFeed()
+	wait()
+	# destroyAllInWorldTexts() # debug
+	mobsInit()
 	getAllPlayers().enableKillFeed()
 	# wait(5)
 
@@ -586,6 +604,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	weakSpots.append(eventPlayer)
 	wait(0.16)
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
+	eventPlayer.communicate(Comms.HELLO)
 
 rule "more maugas charge attack":
 	@Condition obj == OBJ.MORE
@@ -611,18 +630,20 @@ rule "more maugas charge attack":
 
 		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the sensitive spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
 
+		random.choice(getLivingPlayers(Team.1)).communicate(Comms.PRESS_THE_ATTACK)
+
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
 		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.34, 0.38)*MiniScale) # left
 		wait()
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
 		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.34, 0.486)*MiniScale)
-		weakSpots.setHealth(250)
+		weakSpots.setHealth(300)
 		weakSpots.setHealingReceived(0)
 		wait(0.064)
 		heal(weakSpots, null, 99999)
 
-		for iMores in range(15): # wait until with less checking
+		for iMores in range(12): # wait until with less checking
 			wait(0.96)
 			if obj != OBJ.MORE:
 				return
@@ -652,7 +673,14 @@ rule "more maugas charge attack":
 			destroyDummy(Team.2, weakSpots[iMores].getSlot())
 		weakSpots = []
 
-		wait(3)
+		random.choice(getLivingPlayers(Team.1)).communicate(Comms.COUNTDOWN)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		wait(1)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		wait(1)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		random.choice(getLivingPlayers(Team.1)).communicate(Comms.INCOMING)
+		wait(1)
 
 		if obj != OBJ.MORE:
 			return
@@ -719,9 +747,9 @@ rule "niplets + dupe":
 		wait(0.24)
 		# eventPlayer.iniplets = (eventPlayer.iniplets + 1) % len(eventPlayer.nipletsPosList)
 		# createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, eventPlayer.nipletsPosList[eventPlayer.iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 3, 0, 35, 30)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(-0.5,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
 		wait(0.24)
-		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(-0.5,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,3),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 6, 0, 35, 150)
 
 rule "grab":
 	@Condition obj != OBJ.INTERMISSION
@@ -946,7 +974,7 @@ rule "rain":
 		for rainVar in range(5):
 			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.048)
-			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 40, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 300, 1,0,0,0)
 
 rule "twister":
 	@Condition obj != OBJ.INTERMISSION
@@ -1085,7 +1113,7 @@ rule "everybody discharge":
 	while THREATS.COOM in threatList:
 		wait(10)
 		threatLactaters.setUltCharge(100)
-		threatLactaters.setDamageDealt((200 / len(threatLactaters)))
+		threatLactaters.setDamageDealt((80 / len(threatLactaters)))
 		threatLactaters.disableNameplatesFor(getAllPlayers())
 		wait(0.12)
 		threatLactaters.forceButtonPress(Button.ULTIMATE)
@@ -1248,7 +1276,7 @@ rule "dupe + normal sniper":
 	@Hero mauga
 	# @Condition obj == OBJ.MORE
 	@Condition THREATS.SNIPER in threatList
-	@Condition (eventPlayer in objPos) or (eventPlayer == nipman)
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
 	wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
@@ -1297,7 +1325,7 @@ rule "init suns":
 	# @Condition obj == OBJ.MORE
 	@Condition eventPlayer.hasSpawned()
 	@Condition THREATS.SUN in threatList
-	@Condition (eventPlayer in objPos) or (eventPlayer == nipman)
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
 
 	createDummy(Hero.ILLARI, Team.2, -1, LeftNip, Vector.DOWN)
 	threatSuns.append(getLastCreatedEntity())
@@ -1319,6 +1347,17 @@ rule "init suns":
 	threatFx.append(getLastCreatedEntity())
 
 # objective setup
+rule "NO BOTS?":
+	@Condition obj == OBJ.KILL
+	@Condition getNumberOfPlayers(Team.2) < 8
+	wait(3, Wait.ABORT_WHEN_FALSE)
+	for i in range(len(mobs)):
+		destroyDummy(mobs[i].getTeam(), mobs[i].getSlot())
+
+	mobs = []
+
+	mobsInit()
+
 rule "more maugas":
 	@Condition obj == OBJ.MORE
 	# wait(0.016 * THREATS.MORE)
@@ -1366,11 +1405,11 @@ rule "miniboss":
 	objPos.setMoveSpeed(40)
 	objPos.startScalingSize(3, false)
 	if objPos.getCurrentHero() == Hero.WINSTON:
-		objPos.setDamageDealt(40)
+		objPos.setDamageDealt(55)
 	objPos.startForcingThrottle(1,1,0,0,0,1)
 	objPos.startForcingName("miniboss")
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	objPos.setMaxHealth(2200 if objPos.getCurrentHero() in getTankHeroes() else 4000)
+	objPos.setMaxHealth(3500 if objPos.getCurrentHero() in getTankHeroes() else 4500)
 
 	wait(2)
 	waitUntil(objPos.isOnGround(), 4)
@@ -1512,11 +1551,18 @@ rule "debug finish obj":
 	objProg = objGoal
 
 # misc
+rule "wrong mauga":
+	@Event playerDealtDamage
+	@Condition victim == nipman
+	@Condition obj != OBJ.INTERMISSION
+	eventPlayer.communicate(Comms.NO)
+	wait(10)
 rule "rez cd if not hardcore":
+	wait(2)
 	if isHardcore == false:
 		while true:
 			getPlayersOnHero(Hero.MERCY, Team.1).setAbilityCooldown(Button.ABILITY_2, 0)
-			wait(2)
+			wait(1)
 
 rule "player count balancing, freeze check":
 	while true:
