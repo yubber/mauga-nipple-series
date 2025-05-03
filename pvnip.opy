@@ -15,7 +15,10 @@ settings {
         "tdm": {
             "enabledMaps": [
                 "workshopIslandNight"
-            ]
+            ],
+			"enablePerks": true,
+            "perkEliminationCatchupLevelAmount%": 100,
+            "perkGeneration%": 500
         },
         "general": {
             "gameLengthInMn": 15,
@@ -82,6 +85,9 @@ settings {
 /*
 known issues
 - more maugas hp bar starts depleted (tank passive grrr)
+
+broken perks
+- zarya grav
 
 right -0.16, 1.32, 0.56 | left 0.43, 1.31, 0.31
 scaled at 0 -15 30: righ 4.46, 24.61, 21.40 | left -6.51, 24.36, 24.04
@@ -383,7 +389,7 @@ rule "loop":
 		threatList = threatList.slice(0,len(threatList) - 1)
 
 	# threatList.append(THREATS.FRACTAL)
-	# threatList.append(THREATS.DAKKA)
+	# threatList.append(THREATS.CAGE)
 
 	wait()
 
@@ -437,7 +443,7 @@ rule "summon the horde":
 		# do not put this above skybox in case enemies aren't killed
 		createDummy(enemies[roundNo%len(enemies)], Team.2, -1, 40 * Vector.UP, Vector.BACKWARD)
 		mobs.append(getLastCreatedEntity())
-		wait(0.08)
+		wait(0.112)
 		# mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 		if THREATS.BOOST in threatList:
 			createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, mobs[evalOnce(i)], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -544,7 +550,7 @@ rule "mob retarget":
 	@Event global
 	@Condition mobs != []
 	@Condition obj != OBJ.INTERMISSION
-	if getLivingPlayers(Team.1) == []:
+	if getNumberOfLivingPlayers(Team.1) == 0:
 		# mobs.mobTarget = null
 		mobs.stopForcingThrottle()
 		if obj == OBJ.BOSS:
@@ -556,14 +562,15 @@ rule "mob retarget":
 		for i in range(len(mobs)):
 			wait(0.12)
 			# 1st-3rd closest player
-			mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
+			if mobs[i].isAlive():
+				mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
 		wait(1.6)
 		# change boss target
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
 			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
 	if ruleCondition:
-		loop
+		loop()
 # threats
 rule "more maugas persistent attack":
 	@Disabled
@@ -846,6 +853,7 @@ rule "grab":
 
 rule "cage":
 	@Event eachPlayer
+	@Team 1
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventPlayer.isDummy() == false
 	@Condition eventPlayer.hasSpawned()
@@ -860,10 +868,12 @@ rule "cage":
 	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
+	wait(eventPlayer.getSlot() * 0.016)
+
 	while obj != OBJ.INTERMISSION:
 		if eventPlayer.getPosition().z < -5 and (eventPlayer.isCrouching() == false):
 			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
-		wait(0.24)
+		wait(0.36)
 
 rule "cage boundary":
 	@Condition obj != OBJ.INTERMISSION
