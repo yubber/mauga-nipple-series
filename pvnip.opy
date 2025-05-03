@@ -144,8 +144,8 @@ globalvar nipman
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
 globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
-# globalvar objWeights = [0.05, 0.25, 0.25, 0.25, 0.20]
-globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
+globalvar objWeights = [0.1, 0.20, 0.25, 0.25, 0.20]
+# globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
 
 globalvar objProg
 globalvar objGoal
@@ -861,7 +861,7 @@ rule "cage":
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
-		if eventPlayer.getPosition().z < -5:
+		if eventPlayer.getPosition().z < -5 and (eventPlayer.isCrouching() == false):
 			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 		wait(0.24)
 
@@ -1386,6 +1386,7 @@ rule "setup & refresh forest":
 	wait(1.5, Wait.ABORT_WHEN_FALSE)
 	for i in range(TreeNo):
 		createDummy(Hero.LIFEWEAVER, Team.2, -1, Vector.UP, Vector.DOWN)
+		getLastCreatedEntity().startModifyingVoicelinePitch(0.5 + i * (1/TreeNo), false)
 		wait(0.032)
 		if len(getPlayersOnHero(Hero.LIFEWEAVER, Team.2)) > TreeNo:
 			break
@@ -1417,6 +1418,9 @@ rule "setup & refresh forest":
 rule "place objective":
 	@Condition obj == OBJ.CAPTURE
 	objPos = vect(random.randint(-13,13),0,random.randint(-13,13))
+	wait()
+	if (objPos.z < -5) and THREATS.CAGE in threatList:
+		loop()
 # objective progress
 rule "kill/obj prog/weak spot + respawn timer":
 	@Event playerDied

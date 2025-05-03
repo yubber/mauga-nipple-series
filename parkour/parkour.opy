@@ -42,29 +42,64 @@ globalvar lyingl = vect(0.396, 0.602, -0.566)
 
 globalvar baby
 
-globalvar floorgaPos = []
-globalvar floorgaFacing = []
+globalvar maugaPos = []
+globalvar maugaFacing = []
+globalvar maugaType = []
 
-globalvar shelfgaPos = []
-globalvar shelfgaFacing = []
+enum MAUGA:
+	GRAB,
+	GEYSER,
+	PUSHOFF,
+	PLATFORM,
+	JUMP
+
+globalvar maugaIcons = [abilityIconString(Hero.ROADHOG, Button.ABILITY_1), abilityIconString(Hero.FREJA, Button.ABILITY_2, abilityIconString(Hero.GENJI, Button.ABILITY_2), abilityIconString(Hero.LIFEWEAVER, Button.ABILITY_1), abilityIconString(Hero.KIRIKO, Button.ABILITY_1))]
+globalvar maugaPrompts = ["grapple", "geyser", "springboard", "platform", "double jump"]
+globalvar meleeMaugas = [MAUGA.PUSHOFF]
 
 globalvar i
 
+globalvar editmode
 playervar oldFacing
-
 playervar target
-
+playervar lookingAt
 playervar _NoClip
 
-#!define facingdial 10 * (hostPlayer.oldFacing - hostPlayer.getVerticalFacingAngle())
 #!define botpos oldFacing
+#!define type target
+#!define botFx lookingAt
+#!define playerUseTimes _NoClip
+
+#!define facingdial 10 * (hostPlayer.oldFacing - hostPlayer.getVerticalFacingAngle())
 #!define Chungus (sorted(getLivingPlayers(Team.2), lambda x: angleBetweenVectors(hostPlayer.getFacingDirection(), directionTowards(hostPlayer.getEyePosition(), x.getPosition())))[0])
 
+# player to bot
+
+
+# bot behavior
+rule "init bot":
+	@Event eachPlayer
+	@Condition eventPlayer.isDummy()
+	eventPlayer.playerUseTimes = [null for x in getNumberOfSlots(Team.1)]
+rule "grapple":
+	@Event eachPlayer
+
+
+# core
+rule "set target":
+	@Event eachPlayer
+	@Condition eventPlayer.hasSpawned()
+	@Condition eventPlayer.isDummy() == false
+	wait(0.096)
+	eventPlayer.lookingAt = Chungus
+	loop()
 # editor
 rule "fx":
 	print(facingdial)
-	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, Chungus, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, localPlayer.lookingAt, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	waitUntil(hostPlayer.hasSpawned(), 999)
+
+	createInWorldText(getAllPlayers(), )
 
 	pauseMatchTime()
 	hostPlayer.setUltEnabled(false)
@@ -124,6 +159,7 @@ rule "edit bot facing/status":
 
 rule ".NoClip": # from workshop.codes/RVWKC
     @Event eachPlayer
+	@Condition eventPlayer.isDummy() == false
     @Condition eventPlayer.isHoldingButton(Button.INTERACT)
     eventPlayer._NoClip = not eventPlayer._NoClip
     eventPlayer.startForcingPosition(eventPlayer.getPosition() + ((Vector.UP * (eventPlayer.isHoldingButton(Button.JUMP) - eventPlayer.isHoldingButton(Button.CROUCH)) + worldVector(eventPlayer.getThrottle(), eventPlayer, Transform.ROTATION)) * createWorkshopSettingFloat(".NoClip", ".NoClip speed", 0.2, 0, 1)))
@@ -143,24 +179,30 @@ rule "theshredder / theknocker":
 	if baby == null:
 		kill(Chungus, hostPlayer)
 	else:
-		if baby.hasStatus(Status.FROZEN):
-			baby.clearStatusEffect(Status.FROZEN)
-		else:
-			baby.setStatusEffect(hostPlayer, Status.FROZEN, 99999)
+		baby.type = (baby.type + 1) % len(maugaPrompts)
+		# if baby.hasStatus(Status.FROZEN):
+		# 	baby.clearStatusEffect(Status.FROZEN)
+		# else:
+		# 	baby.setStatusEffect(hostPlayer, Status.FROZEN, 99999)
 
-rule "export":
+rule "export & toggle edit mode":
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
-	floorgaPos = []
-	floorgaFacing = []
-	shelfgaPos = []
-	shelfgaFacing = []
-	for i in range(getNumberOfLivingPlayers(Team.2)):
-		if getLivingPlayers(Team.2)[i].hasStatus(Status.KNOCKED_DOWN):
-			floorgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
-			floorgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
-		else:
-			shelfgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
-			shelfgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+	if editmode:
+		floorgaPos = []
+		floorgaFacing = []
+		shelfgaPos = []
+		shelfgaFacing = []
+		for i in range(getNumberOfLivingPlayers(Team.2)):
+			if getLivingPlayers(Team.2)[i].hasStatus(Status.KNOCKED_DOWN):
+				floorgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
+				floorgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+			else:
+				shelfgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
+				shelfgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+	else:
+		kill(getPlayers(Team.2), null)
+
+	editmode = not editmode
 
 # rule ""
 
