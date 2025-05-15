@@ -378,14 +378,16 @@ rule "loop":
 	# pick objective. using objgoal instead of obj because rules check the obj var
 	objPos = Vector.DOWN * nipman.getMaxHealth()
 
-	objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
-	upto = 0
-	for i in range(len(objWeights)): # weighted rand from stackoverflow
-		if upto + objWeights[i] >= objGoal:
-			objGoal = i
-			break
-		upto += objWeights[i]
-		wait()
+	# objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
+	# upto = 0
+	# for i in range(len(objWeights)): # weighted rand from stackoverflow
+	# 	if upto + objWeights[i] >= objGoal:
+	# 		objGoal = i
+	# 		break
+	# 	upto += objWeights[i]
+	# 	wait()
+
+	objGoal = OBJ.PAGES
 
 	# threats
 	threatList = []
@@ -394,24 +396,24 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
 
-	wait(0.36)
-	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
-		# threatText is used as temp storage
-		# guarantee a threat that will get copied by mauga clones
-		if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
-			threatText = random.choice(moreFunThreats)
-		else:
-			threatText = random.randint(THREATS.ICE, THREATS.LASER)
-		if not threatText in threatList:
-			threatList.append(threatText)
-	# prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit.
-	if len([x for x in threatList if x in dummyThreats]) >= 2:
-		threatList = threatList.slice(0,len(threatList) - 1)
+	# wait(0.36)
+	# if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
+	# 	# threatText is used as temp storage
+	# 	# guarantee a threat that will get copied by mauga clones
+	# 	if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
+	# 		threatText = random.choice(moreFunThreats)
+	# 	else:
+	# 		threatText = random.randint(THREATS.ICE, THREATS.LASER)
+	# 	if not threatText in threatList:
+	# 		threatList.append(threatText)
+	# # prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit.
+	# if len([x for x in threatList if x in dummyThreats]) >= 2:
+	# 	threatList = threatList.slice(0,len(threatList) - 1)
 
 	# threatList.append(THREATS.SUN)
-	# threatList.append(THREATS.NUKE)
+	threatList.append(THREATS.CAGE)
 
 	wait()
 
@@ -1570,7 +1572,9 @@ rule "page found":
 	addToTeamScore(Team.1, 1) # sound
 	setTeamScore(Team.1, 0)
 	objProg++
-	objPos = vect(random.randint(-18,18),0,random.randint(-18,16))
+	while (THREATS.CAGE in threatList) and objPos.z < -5:
+		objPos = vect(random.randint(-18,18),0,random.randint(-18,16))
+		wait()
 
 rule "debug finish obj":
 	@Disabled
