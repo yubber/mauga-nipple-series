@@ -1,2104 +1,1802 @@
-settings
-{
-	main
-	{
-		Description: "it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it"
-		Mode Name: "mauga n!pple pve"
-	}
-	lobby
-	{
-		Allow Players Who Are In Queue: Yes
-		Max Spectators: 5
-		Max Team 1 Players: 9
-		Max Team 2 Players: 0
-		Return To Lobby: Never
-		Swap Teams After Match: No
-	}
-	modes
-	{
-		Team Deathmatch
-		{
-			enabled maps
-			{
-				Workshop Island Night
-			}
-			Enable Perks: On
-			Perk Elimination Catchup Level Amount: 100%
-			Perk Generation: 500%
-		}
-		General
-		{
-			Game Length In Minutes: 15
-			Game Mode Start: Immediately
-			Hero Limit: Off
-			Imbalanced Team Score To Win: On
-			Kill Cam: Off
-			Respawn Time Scalar: 40%
-			Self Initiated Respawn: Off
-			Tank Role Passive Health Bonus: Always Enabled
-			Team 1 Score To Win: 100
-			Team 2 Score To Win: 1
-		}
-	}
-	heroes
-	{
-		Team 1
-		{
-			Ability Cooldown Time: 60%
-			Ammunition Clip Size Scalar: 150%
-			Jump Vertical Speed: 121%
-			Movement Gravity: 110%
-			Movement Speed: 140%
-			Ultimate Generation: 160%
-			Venture
-			{
-				Burrow Cooldown Time: 120%
-			}
-			Echo
-			{
-				Flight Cooldown Time: 120%
-			}
-			Roadhog
-			{
-				Ultimate Generation Whole Hog: 55%
-			}
-			Zarya
-			{
-				Ultimate Generation Graviton Surge: 30%
-			}
-			Cassidy
-			{
-				Damage Dealt: 85%
-			}
-			Doomfist
-			{
-				Ammunition Regeneration Time Scalar: 33%
-				Power Block Cooldown Time: 50%
-				Seismic Slam Cooldown Time: 50%
-				Rocket Punch Cooldown Time: 60%
-			}
-			Lúcio
-			{
-				Damage Dealt: 150%
-				Ammunition Clip Size Scalar: 300%
-			}
-		}
-		Team 2
-		{
-			Passive Health Regeneration: Off
-			Lifeweaver
-			{
-				Spawn With Ultimate Ready: On
-			}
-			Reinhardt
-			{
-				Health: 60%
-			}
-			Torbjörn
-			{
-				Weapons Enabled: Forge Hammer Only
-			}
-			Winston
-			{
-				Ammunition Clip Size Scalar: 30%
-				Health: 80%
-			}
-			Wrecking Ball
-			{
-				Roll Always Active: On
-			}
-		}
-		General
-		{
-		}
-	}
-	extensions
-	{
-		Spawn More Dummy Bots
-		Projectiles
-		Beam Effects
-		Energy Explosion Effects
-		Buff Status Effects
-		Explosion Sounds
-	}
+settings {
+    "main": {
+        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
+        "modeName": "mauga n!pple pve"
+    },
+    "lobby": {
+        "allowPlayersInQueue": true,
+        "spectatorSlots": 5,
+        "team1Slots": 9,
+        "team2Slots": 0,
+        "returnToLobby": "never",
+        "swapTeamsAfterMatch": false
+    },
+    "gamemodes": {
+        "tdm": {
+            "enabledMaps": [
+                "workshopIslandNight"
+            ],
+			"enablePerks": true,
+            "perkEliminationCatchupLevelAmount%": 100,
+            "perkGeneration%": 500
+        },
+        "general": {
+            "gameLengthInMn": 15,
+            "gamemodeStartTrigger": "immediately",
+            "heroLimit": "off",
+            "needsImbalancedTeamScoreToWin": true,
+            "enableKillCam": false,
+            "respawnTime%": 40,
+            "enableSelfInitiatedRespawn": false,
+            "tankPassiveHealthBonus": "alwaysEnabled",
+            "team1ScoreToWin": 100,
+            "team2ScoreToWin": 1
+        }
+    },
+    "heroes": {
+        "team1": {
+            # "winston": {
+            #     "ammoClipSize%": 40,
+            # },
+			"venture": {
+                "ability1Cooldown%": 120
+            },
+			"echo": {
+                "ability1Cooldown%": 120
+            },
+			"roadhog": {
+                "ultGen%": 55
+            },
+			"zarya": {
+                "ultGen%": 30
+            },
+			"cassidy":{
+				"damageDealt%": 85
+			},
+			"doomfist":{
+				"ammoRegenerationTime%": 33,
+                "ability1Cooldown%": 50,
+                "ability2Cooldown%": 50,
+                "secondaryFireCooldown%": 60,
+			},
+			"lucio":{
+				"damageDealt%": 150,
+                "ammoClipSize%": 300
+			},
+            "general": {
+                "abilityCooldown%": 60,
+                "ammoClipSize%": 150,
+                "jumpVerticalSpeed%": 121,
+                "movementGravity%": 110,
+                "movementSpeed%": 140,
+                "ultGen%": 160
+            }
+        },
+        "team2": {
+            "lifeweaver": {
+                "enableSpawningWithUlt": true
+            },
+            "reinhardt": {
+                "health%": 60
+            },
+            "torbjorn": {
+                "weaponsEnabled": "hammer"
+            },
+            "winston": {
+                "ammoClipSize%": 30,
+                "health%": 80
+            },
+			"wreckingBall": {
+                "enableRollOnly": true
+            },
+			"general": {
+                "passiveHealthRegen": false
+            }
+        },
+        "allTeams": {
+            # "mercy": {
+            #     "ability2Cooldown%": 0
+            # }
+        }
+    }
 }
-variables {
-    global:
-        0: nipman
-        1: obj
-        2: objDescs
-        3: objWeights
-        4: objProg
-        5: objGoal
-        6: objPos
-        7: roundNo
-        8: threatList
-        9: dummyThreats
-        10: moreFunThreats
-        11: threatNames
-        12: threatIcons
-        13: isHardcore
-        14: threatText
-        15: enemies
-        16: mobDmg
-        17: i
-        18: upto
-        19: target1
-        20: target2
-        21: area1
-        22: area2
-        23: twisterPos
-        24: twisterCache
-        25: wallPos
-        26: wallI
-        27: wallEffects
-        28: missilePos
-        29: missileFx
-        30: missileTemp
-        31: rainVar
-        32: grabLeft
-        33: grabLeftPlayer
-        34: grabRight
-        35: grabRightPlayer
-        36: iMores
-        37: moreFx
-        38: attackingClone
-        39: weakSpots
-        40: isun
-        41: threatSnipers
-        42: threatLactaters
-        43: threatSuns
-        44: threatNiplets
-        45: mobs
-        46: threatFx
-        47: antiCrashOn
-    player:
-        0: mobTarget
-        1: cacheA
-        2: cacheB
-        3: cacheC
-        4: botA
-        5: botB
-        6: iniplets
-}
-subroutines {
-    0: mobsInit
-}
-rule ("Initialize global variables") {
-    event {
-        Ongoing - Global;
-    }
-    actions {
-        Set Global Variable(objDescs, Array(Custom String("collect pages"), Custom String("defeat the mini maugas"), Custom String("slay enemies"), Custom String("slay the miniboss"), Custom String("capture the point")));
-        Set Global Variable(objWeights, Array(0.05, 0.20, 0.275, 0.275, 0.20));
-        Set Global Variable(threatList, Empty Array);
-        Set Global Variable(dummyThreats, Array(12, 13, 17, 4));
-        Set Global Variable(moreFunThreats, Array(2, 12, 15, 11, 13, 17));
-        Set Global Variable(threatNames, Array(Custom String("slenderman"), Custom String("more maugas"), Custom String("frosty nips"), Custom String("grabbyteats"), Custom String("niplets"), Custom String("cup fight"), Custom String("tiddy twister"), Custom String("lactose hail"), Custom String("n!pple nuke"), Custom String("dairy deaths"), Custom String("milk wall"), Custom String("mending milk"), Custom String("scalding discharge"), Custom String("s-nip-ers"), Custom String("boobsted mobs"), Custom String("booblet hell"), Custom String("gravitatas"), Custom String("sun exposure"), Custom String("lazer")));
-        Set Global Variable(threatIcons, Array(Hero Icon String(Hero(Reaper)), Ability Icon String(Hero(Mauga), Button(Ability 1)), Ability Icon String(Hero(Mei), Button(Ultimate)), Ability Icon String(Hero(Moira), Button(Secondary Fire)), Ability Icon String(Hero(Sigma), Button(Ability 1)), Ability Icon String(Hero(Mauga), Button(Ultimate)), Ability Icon String(Hero(Junker Queen), Button(Ultimate)), Ability Icon String(Hero(Hazard), Button(Ultimate)), Icon String(Radioactive), Ability Icon String(Hero(Reaper), Button(Ultimate)), Ability Icon String(Hero(Mei), Button(Ability 2)), Icon String(Plus), Ability Icon String(Hero(Torbjörn), Button(Ultimate)), Ability Icon String(Hero(Widowmaker), Button(Ultimate)), Ability Icon String(Hero(Ana), Button(Ultimate)), Ability Icon String(Hero(Pharah), Button(Ultimate)), Ability Icon String(Hero(Zarya), Button(Ultimate)), Ability Icon String(Hero(Illari), Button(Ultimate)), Ability Icon String(Hero(Echo), Button(Ability 2))));
-        Set Global Variable(isHardcore, Workshop Setting Toggle(Custom String("difficulty"), Custom String("respawn players only when round ends"), False, 0));
-        Set Global Variable(threatText, Custom String(""));
-        Set Global Variable(enemies, Array(Hero(Winston), Hero(Torbjörn), Hero(Reinhardt)));
-        Set Global Variable(mobDmg, Array(90, 155, 75));
-        Set Global Variable(weakSpots, Empty Array);
-        Set Global Variable(mobs, Empty Array);
-    }
-}
-
-rule ("init") {
-    event {
-        Ongoing - Global;
-    }
-    actions {
-        "print(len(getPlayers(Team.2)))\nhudText(hostPlayer, iconString(Icon.EYE), \"eye position\", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)"
-        Create HUD Text(All Players(All Teams), Null, Custom String("peak: {0} | average: {1}", Server Load Peak, Server Load Average), Custom String("server load: {0}\n", Server Load), Right, -2, Color(Orange), Color(Gray), Color(Gray), Visible To and String, Visible Always);
-        Create HUD Text(All Players(All Teams), Null, Null, Custom String("use code DS2MD for the latest version"), Right, -1, Null, Null, Color(White), Visible To, Default Visibility);
-        Disable Inspector Recording;
-        Set Global Variable(obj, -1);
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Up, Backward);
-        Set Global Variable(nipman, Last Created Entity);
-        Start Forcing Player Position(Global.nipman, Vector(0, -19.8, 35), False);
-        Start Facing(Global.nipman, Backward, 999, To World, None);
-        Disable Movement Collision With Players(Global.nipman);
-        "max size"
-        Start Scaling Player(Global.nipman, 20, False);
-        Set Global Variable(upto, Max Health(Global.nipman));
-        Wait(0.08, Ignore Condition);
-        Set Max Health(Global.nipman, Absolute Value(10000));
-        "this is to fill hp and reset his pose"
-        Kill(Global.nipman, Null);
-        Set Knockback Received(Global.nipman, 0);
-        Disable Built-In Game Mode Completion;
-        Disable Built-In Game Mode Music;
-        Disable Built-In Game Mode Scoring;
-        Heal(Global.nipman, Null, 999999);
-        Wait(0.016, Ignore Condition);
-        Set Healing Received(Global.nipman, 0);
-        Wait(0.016, Ignore Condition);
-        Set Player Health(Global.nipman, 72500);
-        Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
-        Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
-        "score huds"
-        Create HUD Text(All Players(All Teams), Ability Icon String(Hero(Lúcio), Button(Ability 2)), Custom String("time elapsed"), Custom String("{0}:{1}", Round To Integer(Divide(Total Time Elapsed, 60), Down), Modulo(Total Time Elapsed, 60)), Left, 1, Color(Sky Blue), Color(White), Color(White), Visible To and String, Default Visibility);
-        Create HUD Text(All Players(All Teams), Icon String(Skull), Custom String("team deaths"), Team Score(Team 2), Left, 2, Color(Red), Color(White), Color(White), Visible To and String, Default Visibility);
-        Create HUD Text(All Players(All Teams), Icon String(Flag), Custom String("rounds elapsed"), Global.roundNo, Left, 2, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
-        "hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), \"total kills\", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)"
-        Create HUD Text(If-Then-Else(Global.isHardcore, All Players(All Teams), Null), Icon String(Exclamation Mark), Custom String("hardcore mode is on"), Custom String("no respawning until round ends"), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
-        Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Baptiste Immortality Field Protected Effect, Color(Team 2), Global.nipman, 1, Visible To Position and Radius);
-        "createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)\ncreateEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)\nobjective effects"
-        Create Effect(If-Then-Else(Compare(Global.obj, ==, 0), All Players(All Teams), Empty Array), Bad Aura, Color(Gray), Up, 50, Visible To Position and Radius);
-        For Global Variable(i, 0, 6, 1);
-            Create Effect(If-Then-Else(Compare(Global.obj, ==, 0), All Players(All Teams), Empty Array), Cloud, Color(Gray), Subtract(Multiply(Multiply(Up, Global.i), 0.1), 0.7), 50, Visible To);
-            Wait(0.016, Ignore Condition);
-        End;
-        Create Effect(All Players(All Teams), Sphere, Color(White), If-Then-Else(Compare(Global.obj, ==, 0), Global.objPos, Down), 0.7, Visible To Position and Radius);
-        Create Effect(All Players(All Teams), Ring, Color(Blue), If-Then-Else(Compare(Global.obj, ==, 4), Global.objPos, Multiply(Down, Total Time Elapsed)), 12, Visible To Position and Radius);
-        Create Icon(If-Then-Else(Compare(Global.obj, ==, 4), All Players(All Teams), Empty Array), Global.objPos, Arrow: Down, Visible To and Position, Color(Team 1), True);
-        "createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, RightNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)"
-        Wait(0.16, Ignore Condition);
-        "objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there"
-        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, ==, -1), All Players(All Teams), Empty Array), Divide(Multiply(100, Health(Global.nipman)), 57500), Custom String("{0} {1} / 57500 hp", Hero Icon String(Hero(Mauga)), Round To Integer(Health(Global.nipman), Up)), Top, 1, Color(Team 2), Color(White), Visible To Values and Color, Default Visibility);
-        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("objective: {0}! {1} / {2}", Value In Array(Global.objDescs, Global.obj), Global.objProg, Global.objGoal), Top, 1, If-Then-Else(Compare(Global.obj, ==, 3), Color(Team 2), Color(Team 1)), Color(White), Visible To Values and Color, Default Visibility);
-        Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　threats: {0}　", Global.threatText), Custom String(""), Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
-        Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
-        Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
-        Set Match Time(5);
-    }
-}
-
-rule ("loop") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        "start game when any player spawns for the first time"
-        Is True For Any(All Players(Team 1), Has Spawned(Current Array Element)) == True;
-    }
-    actions {
-        "intermission"
-        Destroy Effect(Global.threatFx);
-        Destroy Effect(Global.moreFx);
-        "destroyEffect(nipman.threatDecor)"
-        Set Global Variable(threatFx, Empty Array);
-        Set Global Variable(threatLactaters, Empty Array);
-        Set Global Variable(threatSuns, Empty Array);
-        Set Global Variable(threatSnipers, Empty Array);
-        Set Global Variable(threatNiplets, Empty Array);
-        "nipman.threatDecor = []"
-        Set Damage Received(Global.nipman, 60);
-        "has to be unfroze early bc his hitbox desyncs with model"
-        Clear Status(Global.nipman, Frozen);
-        Pause Match Time;
-        Stop Chasing Global Variable(area1);
-        Stop Chasing Global Variable(area2);
-        Stop Chasing Global Variable(twisterPos);
-        Stop Chasing Global Variable(missilePos);
-        Stop All Damage Modifications;
-        "getPlayers(Team.1).stopAcceleration()"
-        Set Gravity(All Players(Team 1), 100);
-        Set Global Variable(obj, -1);
-        Set Global Variable(objProg, 0);
-        Set Global Variable(threatList, Empty Array);
-        Set Match Time(11);
-        Unpause Match Time;
-        Wait(8, Ignore Condition);
-        Big Message(All Players(All Teams), Custom String("next objective in 3 seconds!"));
-        Wait(2.5, Ignore Condition);
-        Pause Match Time;
-        Wait(0.5, Ignore Condition);
-        Set Global Variable(mobs, Empty Array);
-        "pick objective. using objgoal instead of obj because rules check the obj var"
-        Set Global Variable(objPos, Multiply(Down, Max Health(Global.nipman)));
-        "sum(weights) must be 1. obj is r here"
-        Set Global Variable(objGoal, Random Real(0, 1));
-        Set Global Variable(upto, 0);
-        "weighted rand from stackoverflow"
-        For Global Variable(i, 0, Count Of(Global.objWeights), 1);
-            If(Compare(Add(Global.upto, Value In Array(Global.objWeights, Global.i)), >=, Global.objGoal));
-                Set Global Variable(objGoal, Global.i);
-                Break;
-            End;
-            Modify Global Variable(upto, Add, Value In Array(Global.objWeights, Global.i));
-            Wait(0.016, Ignore Condition);
-        End;
-        "objGoal = OBJ.PAGES\nthreats"
-        Set Global Variable(threatList, Empty Array);
-        If(Compare(Global.objGoal, ==, 0));
-            Modify Global Variable(threatList, Append To Array, 0);
-        Else If(Compare(Global.objGoal, ==, 1));
-            Modify Global Variable(threatList, Append To Array, 1);
-        End;
-        Modify Global Variable(threatList, Append To Array, Random Integer(2, 18));
-        Wait(0.36, Ignore Condition);
-        "attempt to add a 2nd threat"
-        If(Compare(Global.objGoal, !=, 0));
-            "threatText is used as temp storage\nguarantee a threat that will get copied by mauga clones"
-            If(And(Compare(Global.objGoal, ==, 1), Not(Array Contains(Global.moreFunThreats, Last Of(Global.threatList)))));
-                Set Global Variable(threatText, Random Value In Array(Global.moreFunThreats));
-            Else;
-                Set Global Variable(threatText, Random Integer(2, 18));
-            End;
-            If(Not(Array Contains(Global.threatList, Global.threatText)));
-                Modify Global Variable(threatList, Append To Array, Global.threatText);
-            End;
-        End;
-        "prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit."
-        If(Compare(Count Of(Filtered Array(Global.threatList, Array Contains(Global.dummyThreats, Current Array Element))), >=, 2));
-            Set Global Variable(threatList, Array Slice(Global.threatList, 0, Subtract(Count Of(Global.threatList), 1)));
-        End;
-        "threatList.append(THREATS.SUN)\nthreatList.append(THREATS.CAGE)"
-        Wait(0.016, Ignore Condition);
-        Set Global Variable(threatText, Custom String(""));
-        For Global Variable(i, 0, Count Of(Global.threatList), 1);
-            Set Global Variable(threatText, Custom String("{0}{1} {2}, ", Global.threatText, Value In Array(Global.threatIcons, Value In Array(Global.threatList, Global.i)), Value In Array(Global.threatNames, Value In Array(Global.threatList, Global.i))));
-            Wait(0.016, Ignore Condition);
-        End;
-        Set Global Variable(threatText, String Slice(Global.threatText, 0, Subtract(String Length(Global.threatText), 2)));
-        Modify Global Variable(roundNo, Add, 1);
-        Wait(0.016, Ignore Condition);
-        Set Global Variable(obj, Global.objGoal);
-        Set Global Variable(objGoal, Value In Array(Array(8, 3, 60, 1, 100), Global.obj));
-        Big Message(All Players(All Teams), Custom String("round start!"));
-        Press Button(Global.nipman, Button(Ability 2));
-        Wait(0.48, Ignore Condition);
-        "i forgot why this can't be 0. surely nothing bad happens :clueless:"
-        Set Damage Received(Global.nipman, 0.001);
-        "i rember now. it's to detect hook, punch, etc"
-        Set Status(Global.nipman, Null, Frozen, 99999);
-        Wait Until(Compare(Global.objProg, >=, Global.objGoal), 99999);
-        "for i in range(len(getPlayers(Team.2))):\nif getPlayersInSlot(i, Team.2) != nipman:\ndestroyDummy(Team.2, i)\nwait()\nnipman.setStatusEffect(null, Status.STUNNED, 0.5)"
-        Play Effect(All Players(All Teams), Sombra EMP Explosion Effect, Color(Team 1), Multiply(Forward, 18), 100);
-        Play Effect(All Players(All Teams), Ana Biotic Grenade Explosion Sound, Color(Team 1), Local Player, 200);
-        Big Message(All Players(All Teams), Custom String("objective complete! mauga is vulnerable!"));
-        Wait(0.016, Ignore Condition);
-        Respawn(All Dead Players(Team 1));
-        Loop;
-    }
-}
-
-rule ("Subroutine mobsInit") {
-    event {
-        Subroutine;
-        mobsInit;
-    }
-    actions {
-        Set Global Variable(mobs, Empty Array);
-        For Global Variable(i, 0, 10, 1);
-            "createDummy(enemies[i%len(enemies)], Team.2, -1, Vector.DOWN, Vector.BACKWARD)\ncan't split enemy heroes bc skin limit\ndo not put this above skybox in case enemies aren't killed"
-            Create Dummy Bot(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), Team 2, -1, Multiply(40, Up), Backward);
-            Modify Global Variable(mobs, Append To Array, Last Created Entity);
-            Wait(0.112, Ignore Condition);
-            "mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)"
-            If(Array Contains(Global.threatList, 14));
-                Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), Value In Array(Global.mobs, Evaluate Once(Global.i)), 1, Visible To Position and Radius);
-                Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            End;
-        End;
-        Wait(0.48, Ignore Condition);
-        Set Weapon(Players On Hero(Hero(Torbjörn), Team 2), 2);
-        Stop Holding Button(Global.mobs, Button(Primary Fire));
-        Start Forcing Throttle(Global.mobs, 1, 1, 0, 0, 0, 1);
-        Set Damage Dealt(Global.mobs, Value In Array(Global.mobDmg, Modulo(Global.roundNo, Count Of(Global.mobDmg))));
-        Set Move Speed(Global.mobs, 70);
-        Wait(0.016, Ignore Condition);
-        If(Compare(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), ==, Hero(Torbjörn)));
-            Set Damage Received(Global.mobs, 85);
-        Else;
-            Set Damage Received(Global.mobs, 100);
-        End;
-        "kill(mobs, null)\nmobs.resurrect()\nif obj == OBJ.KILL:\nobjProg -= len(mobs)"
-        If(Array Contains(Global.threatList, 14));
-            Start Damage Modification(All Players(Team 1), Global.mobs, 130, Receivers and Damagers);
-        End;
-    }
-}
-
-rule ("summon the horde") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Global.obj != 0;
-        Global.obj != 1;
-    }
-    actions {
-        Wait(0.64, Abort When False);
-        Disable Kill Feed(All Players(All Teams));
-        Wait(0.016, Ignore Condition);
-        "destroyAllInWorldTexts() # debug"
-        Call Subroutine(mobsInit);
-        Enable Kill Feed(All Players(All Teams));
-    }
-}
-
-rule ("slendy") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 0;
-    }
-    actions {
-        "destroyAllInWorldTexts() # debug\nbigMessage(hostPlayer, \"slendy spawn debug\")\nfor i in range(MaxBots-4-TreeNo):"
-        Create Dummy Bot(Hero(Reaper), Team 2, -1, Vector(0, 7, 99), Backward);
-        Modify Global Variable(mobs, Append To Array, Last Created Entity);
-        Wait(0.016, Ignore Condition);
-        "mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)"
-        Start Facing(Last Of(Global.mobs), Direction Towards(Eye Position(Last Of(Global.mobs)), (Last Of(Global.mobs)).mobTarget), 500, To World, Direction and Turn Rate);
-        Wait(0.016, Ignore Condition);
-        Create Effect(All Players(All Teams), Reaper Wraith Form Effect, Color(Team 2), Last Of(Global.mobs), 1, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        If(Array Contains(Global.threatList, 14));
-            Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), Last Of(Global.mobs), 1, Visible To Position and Radius);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        End;
-        Wait(0.48, Ignore Condition);
-        Start Forcing Throttle(Global.mobs, 1, 1, 0, 0, 0, 1);
-        Set Damage Dealt(Global.mobs, 500);
-        Set Move Speed(Global.mobs, 95);
-        Start Scaling Player(Global.mobs, 2, False);
-        Set Max Health(Global.mobs, Absolute Value(1200));
-        Disable Kill Feed(All Players(All Teams));
-        Kill(Global.mobs, Null);
-        Wait(0.016, Ignore Condition);
-        Enable Kill Feed(All Players(All Teams));
-        "set first page pos for clueless players"
-        Set Global Variable(objPos, Forward);
-        Resurrect(Global.mobs);
-        Start Modifying Hero Voice Lines(Global.mobs, 0.6, False);
-        Start Forcing Dummy Bot Name(Global.mobs, Custom String("slenderman"));
-        Wait(0.48, Ignore Condition);
-        Heal(Global.mobs, Null, 99999);
-        While(Compare(Global.obj, ==, 0));
-            Press Button(Global.mobs, Button(Melee));
-            Wait(1.2, Ignore Condition);
-            If(Compare(Random Real(0, 1), <, 0.05));
-                Small Message(All Players(All Teams), Custom String("remember to check inside mauga's guns for the pages."));
-            End;
-        End;
-    }
-}
-
-rule ("mob respawn") {
-    event {
-        Ongoing - Each Player;
-        All;
-        All;
-    }
-    conditions {
-        Is Dummy Bot(Event Player) == True;
-        Is Alive(Event Player) == True;
-        Array Contains(Global.mobs, Event Player) == True;
-    }
-    actions {
-        Teleport(Event Player, If-Then-Else(Compare(Random Integer(0, 1), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB));
-        Apply Impulse(Event Player, Vector(Random Real(-0.15, 0.15), Random Real(0.4, 0.66), -1), Random Real(50, 70), To World, Cancel Contrary Motion);
-        Start Facing(Event Player, Direction Towards(Eye Position(Event Player), (Event Player).mobTarget), 500, To World, Direction and Turn Rate);
-        Stop Holding Button(Event Player, Button(Primary Fire));
-        "torb is hammer only in settings\nif obj != OBJ.PAGES:\ngetPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)\nmobs.startForcingButton(Button.PRIMARY_FIRE)\nwait(0.24)"
-        Set Status(Event Player, Null, Knocked Down, 5);
-    }
-}
-
-rule ("knock mobs") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        All;
-    }
-    conditions {
-        Is Dummy Bot(Event Player) == True;
-        Y Component Of(Position Of(Event Player)) > 8.5;
-        Normalized Health(Event Player) == 1;
-        Has Status(Event Player, Knocked Down) == False;
-        Array Contains(Global.mobs, Event Player) == True;
-    }
-    actions {
-        Wait(1.5, Ignore Condition);
-        Wait Until(Compare(Y Component Of(Position Of(Event Player)), <, 1.8), 7);
-        Set Status(Event Player, Null, Knocked Down, 1.6);
-        If(Compare(Global.obj, !=, 0));
-            Start Holding Button(Event Player, Button(Primary Fire));
-    }
-}
-
-rule ("mob retarget") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.mobs != Empty Array;
-        Global.obj != -1;
-    }
-    actions {
-        If(Compare(Number Of Living Players(Team 1), ==, 0));
-            "mobs.mobTarget = null"
-            Stop Forcing Throttle(Global.mobs);
-            If(Compare(Global.obj, ==, 3));
-                Stop Forcing Throttle(Global.objPos);
-            End;
-        Else;
-            Start Forcing Throttle(Global.mobs, 1, 1, 0, 0, 0, 1);
-            If(Compare(Global.obj, ==, 3));
-                Start Forcing Throttle(Global.objPos, 1, 1, 0, 0, 0, 1);
-            End;
-            For Global Variable(i, 0, Count Of(Global.mobs), 1);
-                Wait(0.12, Ignore Condition);
-                "1st-3rd closest player"
-                If(Is Alive(Value In Array(Global.mobs, Global.i)));
-                    Set Player Variable(Value In Array(Global.mobs, Global.i), mobTarget, Value In Array(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Position Of(Value In Array(Global.mobs, Global.i)))), Modulo(Random Integer(0, 2), Number Of Living Players(Team 1))));
-                End;
-            End;
-            "change boss target"
-            If(Compare(Global.obj, ==, 3));
-                Set Player Variable(Global.objPos, mobTarget, (First Of(Global.mobs)).mobTarget);
-            End;
-        End;
-        Wait(1.6, Ignore Condition);
-        Loop If Condition Is True;
-    }
-}
-
-rule ("init weak spots") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Wrecking Ball;
-    }
-    conditions {
-        Is Dummy Bot(Event Player) == True;
-    }
-    actions {
-        Start Scaling Player(Event Player, 0.8, False);
-        Start Forcing Dummy Bot Name(Event Player, Custom String("sensitive spot"));
-        Create Icon(All Players(All Teams), Event Player, Warning, Visible To and Color, Custom Color(255, Add(205, Divide(Multiply(50, Sine From Radians(Multiply(Total Time Elapsed, 4))), 2)), 0, 255), True);
-        Modify Global Variable(weakSpots, Append To Array, Event Player);
-        Wait(0.16, Ignore Condition);
-        Create Effect(All Players(All Teams), Echo Cloning Effect, Color(Team 1), Event Player, 1, Visible To);
-        Communicate(Event Player, Hello);
-    }
-}
-
-rule ("more maugas charge attack") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 1;
-    }
-    actions {
-        Wait(2.4, Ignore Condition);
-        While(Compare(Global.obj, ==, 1));
-            Wait(8, Ignore Condition);
-            Set Global Variable(moreFx, Empty Array);
-            Abort If(Compare(Global.obj, !=, 1));
-            Set Global Variable(attackingClone, Random Value In Array(Global.objPos));
-            For Global Variable(iMores, 0, Count Of(Global.weakSpots), 1);
-                Destroy Dummy Bot(Team 2, Slot Of(Value In Array(Global.weakSpots, Global.iMores)));
-            End;
-            Set Global Variable(weakSpots, Empty Array);
-            "createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)"
-            Create Beam Effect(All Players(All Teams), Winston Tesla Cannon Beam, (Global.attackingClone).cacheA, (Global.nipman).cacheA, Color(Team 2), Visible To);
-            Modify Global Variable(moreFx, Append To Array, Last Created Entity);
-            "createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)"
-            Create Beam Effect(All Players(All Teams), Winston Tesla Cannon Beam, (Global.attackingClone).cacheB, (Global.nipman).cacheB, Color(Team 2), Visible To);
-            Modify Global Variable(moreFx, Append To Array, Last Created Entity);
-            Big Message(All Players(All Teams), Custom String("{0} deadly attack incoming! attack the sensitive spots! {1}", Icon String(Warning), Icon String(Warning)));
-            Communicate(Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))), Press the Attack);
-            "all hammond dummies get weak spot init"
-            Create Dummy Bot(Hero(Wrecking Ball), Team 2, -1, Up, Up);
-            "left"
-            Attach Players(Last Created Entity, Global.attackingClone, Vector(5.399999999999999, 20.1, 5.7));
-            Wait(0.016, Ignore Condition);
-            Create Dummy Bot(Hero(Wrecking Ball), Team 2, -1, Up, Up);
-            Attach Players(Last Created Entity, Global.attackingClone, Vector(-2.055, 20.1, 7.29));
-            Set Player Health(Global.weakSpots, 300);
-            Set Healing Received(Global.weakSpots, 0);
-            Wait(0.064, Ignore Condition);
-            Heal(Global.weakSpots, Null, 99999);
-            "wait until with less checking"
-            For Global Variable(iMores, 0, 12, 1);
-                Wait(0.96, Ignore Condition);
-                Abort If(Compare(Global.obj, !=, 1));
-                If(Or(Or(Is Dead(Global.attackingClone), Compare(Global.weakSpots, ==, Empty Array)), Not(Entity Exists(Global.attackingClone))));
-                    Break;
-                End;
-                Set Status(Global.attackingClone, Null, Burning, 1);
-            End;
-            Abort If(Compare(Global.obj, !=, 1));
-            If(Or(Or(Is Dead(Global.attackingClone), Not(Entity Exists(Global.attackingClone))), Compare(Global.weakSpots, ==, Empty Array)));
-                Clear Status(Global.attackingClone, Frozen);
-                Wait(0.112, Ignore Condition);
-                Set Status(Global.attackingClone, Null, Stunned, 1);
-                Destroy Effect(Global.moreFx);
-                Set Global Variable(moreFx, Empty Array);
-                Communicate(Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))), Yes);
-                Big Message(All Players(All Teams), Custom String("success! stopped the attack!"));
-                Wait(1.2, Ignore Condition);
-                Set Status(Global.attackingClone, Null, Frozen, 99999);
-                Set Global Variable(attackingClone, Null);
-                Skip(28);
-            End;
-            Big Message(All Players(All Teams), Custom String("{0} failed to stop the attack. brace for impact!", Icon String(Sad)));
-            For Global Variable(iMores, 0, Count Of(Global.weakSpots), 1);
-                Destroy Dummy Bot(Team 2, Slot Of(Value In Array(Global.weakSpots, Global.iMores)));
-            End;
-            Set Global Variable(weakSpots, Empty Array);
-            Communicate(Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))), Countdown);
-            Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Team 2), Eye Position(Global.nipman), 9999);
-            Wait(1, Ignore Condition);
-            Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Team 2), Eye Position(Global.nipman), 9999);
-            Wait(1, Ignore Condition);
-            Play Effect(All Players(All Teams), Ring Explosion Sound, Color(Team 2), Eye Position(Global.nipman), 9999);
-            Communicate(Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))), Incoming);
-            Wait(1, Ignore Condition);
-            Abort If(Compare(Global.obj, !=, 1));
-            Create Beam Effect(All Players(All Teams), Moira Coalescence Beam, (Global.nipman).cacheA, Vector(10, 0, Subtract(20, Multiply(22, Subtract(Total Time Elapsed, Evaluate Once(Total Time Elapsed))))), Color(Team 2), Visible To Position and Radius);
-            Modify Global Variable(moreFx, Append To Array, Last Created Entity);
-            Create Beam Effect(All Players(All Teams), Moira Coalescence Beam, (Global.nipman).cacheB, Vector(-10, 0, Subtract(20, Multiply(22, Subtract(Total Time Elapsed, Evaluate Once(Total Time Elapsed))))), Color(Team 2), Visible To Position and Radius);
-            Modify Global Variable(moreFx, Append To Array, Last Created Entity);
-            For Global Variable(iMores, 15, -17, -5);
-                Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Vector(10, 0, Global.iMores), 10);
-                Play Effect(All Players(All Teams), Bad Explosion, Color(Orange), Vector(-10, 0, Global.iMores), 10);
-                Create Projectile(Mercy Caduceus Blaster, Global.attackingClone, Vector(-10, 1, Global.iMores), Down, To World, Damage, Team 1, 300, 1, 10, DVa Self Destruct Explosion Effect, DVa Self Destruct Explosion Sound, 0, 99, 1, 20, 0, 0);
-                Create Projectile(Mercy Caduceus Blaster, Global.attackingClone, Vector(10, 1, Global.iMores), Down, To World, Damage, Team 1, 300, 1, 10, DVa Self Destruct Explosion Effect, DVa Self Destruct Explosion Sound, 0, 99, 1, 20, 0, 0);
-                Wait(0.336, Ignore Condition);
-            End;
-            Destroy Effect(Global.moreFx);
-            Set Global Variable(moreFx, Empty Array);
-            //__label_continue_2__:
-        End;
-    }
-}
-
-rule ("niplets + dupe") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 4) == True;
-        "or (eventPlayer in objPos)"
-        Event Player == Global.nipman;
-    }
-    actions {
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Down, Facing Direction Of(Event Player));
-        Set Player Variable(Event Player, botA, Last Created Entity);
-        Modify Global Variable(threatNiplets, Append To Array, Last Created Entity);
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Down, Facing Direction Of(Event Player));
-        Set Player Variable(Event Player, botB, Last Created Entity);
-        Modify Global Variable(threatNiplets, Append To Array, Last Created Entity);
-        Wait(0.128, Ignore Condition);
-        "threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)"
-        Set Status(Global.threatNiplets, Null, Phased Out, 99999);
-        Start Forcing Player Position((Event Player).botA, Add((Event Player).cacheA, Vector(-0.5, -3.5, -1)), False);
-        Start Forcing Player Position((Event Player).botB, Add((Event Player).cacheB, Vector(0.5, -3.5, -1)), False);
-        Start Scaling Player(Global.threatNiplets, 2, False);
-        Wait(0.24, Ignore Condition);
-        "eventPlayer.nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, eventPlayer.botB, Transform.ROTATION_AND_TRANSLATION))"
-        Wait(0.48, Ignore Condition);
-        Create Effect(All Players(All Teams), Lúcio Sound Barrier Protected Effect, Color(Team 2), (Event Player).botA, 1, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Effect(All Players(All Teams), Lúcio Sound Barrier Protected Effect, Color(Team 2), (Event Player).botB, 1, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Forcing Dummy Bot Name(Global.threatNiplets, Custom String("niplet"));
-        Disable Nameplates(Global.threatNiplets, All Players(All Teams));
-        "eventPlayer.iniplets = 0"
-        While(Compare(Global.obj, !=, -1));
-            Wait(0.24, Ignore Condition);
-            "createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, eventPlayer.nipletsPosList[eventPlayer.iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 3, 0, 35, 30)"
-            Create Projectile(Bastion A-36 Tactical Grenade, (Event Player).botA, Up, Vector(Random Real(-0.9, 0.9), Random Real(1, 2), 1), To Player, Damage, Team 1, 80, 1, 1, Sigma Hypersphere Implosion Effect, Sigma Hypersphere Implosion Sound, 0, 24, 6, 0, 15, 110);
-            Wait(0.24, Ignore Condition);
-            Create Projectile(Bastion A-36 Tactical Grenade, (Event Player).botB, Up, Vector(Random Real(-0.9, 0.9), Random Real(1, 2), 1), To Player, Damage, Team 1, 80, 1, 1, Sigma Hypersphere Implosion Effect, Sigma Hypersphere Implosion Sound, 0, 24, 6, 0, 15, 110);
-        End;
-    }
-}
-
-rule ("grab") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 3) == True;
-    }
-    actions {
-        Wait(0.096, Ignore Condition);
-        "grabplayer changes between player, position, list of players"
-        Create Beam Effect(All Players(All Teams), Moira Grasp Connected Beam, (Global.nipman).cacheA, Global.grabLeft, Color(Team 1), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Beam Effect(All Players(All Teams), Moira Grasp Connected Beam, (Global.nipman).cacheB, Global.grabRight, Color(Team 1), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Sigma Hypersphere, Null, Global.grabLeft, Down, 0.05, Visible To Position Direction and Size);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Sigma Hypersphere, Null, Global.grabRight, Down, 0.05, Visible To Position Direction and Size);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Effect(If-Then-Else(Compare(Z Component Of(Global.grabLeftPlayer), !=, Null), All Players(All Teams), Null), Bad Aura, Color(Team 2), Global.grabLeftPlayer, 2, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Effect(If-Then-Else(Compare(Z Component Of(Global.grabRightPlayer), !=, Null), All Players(All Teams), Null), Bad Aura, Color(Team 2), Global.grabRightPlayer, 2, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        While(Compare(Global.obj, !=, -1));
-            Set Global Variable(grabLeft, (Global.nipman).cacheA);
-            Set Global Variable(grabRight, (Global.nipman).cacheB);
-            "select"
-            Set Global Variable(grabLeftPlayer, Random Value In Array(Filtered Array(All Living Players(Team 1), Compare(X Component Of(Position Of(Current Array Element)), >, 0))));
-            Set Global Variable(grabRightPlayer, Random Value In Array(Filtered Array(All Living Players(Team 1), Compare(X Component Of(Position Of(Current Array Element)), <, 0))));
-            "attack"
-            If(Entity Exists(Global.grabLeftPlayer));
-                Set Global Variable(grabLeftPlayer, Add(Position Of(Global.grabLeftPlayer), Multiply(Up, 0.5)));
-                Chase Global Variable Over Time(grabLeft, Global.grabLeftPlayer, 4, None);
-            End;
-            If(And(Entity Exists(Global.grabRightPlayer), Compare(Global.grabLeftPlayer, !=, Global.grabRightPlayer)));
-                Set Global Variable(grabRightPlayer, Add(Position Of(Global.grabRightPlayer), Multiply(Up, 0.5)));
-                Chase Global Variable Over Time(grabRight, Global.grabRightPlayer, 4, None);
-            End;
-            Wait(4, Ignore Condition);
-            Stop Chasing Global Variable(grabLeft);
-            Stop Chasing Global Variable(grabRight);
-            Abort If(Compare(Global.obj, ==, -1));
-            "check landing"
-            Set Global Variable(grabLeftPlayer, Filtered Array(Players Within Radius(Global.grabLeft, 2, All Teams, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))));
-            Start Forcing Player Position(Global.grabLeftPlayer, Global.grabLeft, True);
-            Small Message(Global.grabLeftPlayer, Custom String("{0} you were grabbed!", Ability Icon String(Hero(Moira), Button(Secondary Fire))));
-            Play Effect(All Players(All Teams), Orisa Halt Implosion Sound, Color(Team 2), Global.grabLeft, 20);
-            Play Effect(All Players(All Teams), Orisa Halt Implosion Effect, Color(Team 2), Global.grabLeft, 20);
-            Set Global Variable(grabRightPlayer, Filtered Array(Players Within Radius(Global.grabRight, 2, All Teams, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))));
-            Start Forcing Player Position(Global.grabRightPlayer, Global.grabRight, True);
-            Small Message(Global.grabRightPlayer, Custom String("{0} you were grabbed!", Ability Icon String(Hero(Moira), Button(Secondary Fire))));
-            Play Effect(All Players(All Teams), Orisa Halt Implosion Sound, Color(Team 2), Global.grabRight, 20);
-            Play Effect(All Players(All Teams), Orisa Halt Implosion Effect, Color(Team 2), Global.grabRight, 20);
-            "playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)\nplayEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 1)\nelse:\ngrabRightPlayer = null\npull"
-            Chase Global Variable Over Time(grabLeft, (Global.nipman).cacheA, 1.2, None);
-            Chase Global Variable Over Time(grabRight, (Global.nipman).cacheB, 1.2, None);
-            Start Damage Over Time(Global.grabLeftPlayer, Null, 1.2, 10);
-            Start Damage Over Time(Global.grabRightPlayer, Null, 1.2, 10);
-            Wait(1.2, Ignore Condition);
-            Stop Chasing Global Variable(grabLeft);
-            Stop Chasing Global Variable(grabRight);
-            Wait(0.08, Ignore Condition);
-            Stop Forcing Player Position(Global.grabLeftPlayer);
-            Stop Forcing Player Position(Global.grabRightPlayer);
-        End;
-    }
-}
-
-rule ("cage") {
-    event {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions {
-        Global.obj != -1;
-        Is Dummy Bot(Event Player) == False;
-        Has Spawned(Event Player) == True;
-        Array Contains(Global.threatList, 5) == True;
-    }
-    actions {
-        "threatFx.append(getLastCreatedEntity())\nwait()"
-        Wait(0.16, Ignore Condition);
-        Create Beam Effect(All Players(All Teams), Junkrat Trap Chain Beam, Evaluate Once(If-Then-Else(Compare(Modulo(Slot Of(Event Player), 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB)), Event Player, Color(Team 1), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Wait(Multiply(Slot Of(Event Player), 0.016), Ignore Condition);
-        While(Compare(Global.obj, !=, -1));
-            If(And(Compare(Z Component Of(Position Of(Event Player)), <, -5), Not(Is Crouching(Event Player))));
-                Apply Impulse(Event Player, Direction Towards(Position Of(Event Player), If-Then-Else(Compare(Modulo(Slot Of(Event Player), 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB)), 20, To World, Cancel Contrary Motion);
-            End;
-            Wait(0.36, Ignore Condition);
-        End;
-    }
-}
-
-rule ("cage boundary") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 5) == True;
-    }
-    actions {
-        "threatFx.append(getLastCreatedEntity())\nwait()"
-        Create Beam Effect(All Players(All Teams), Bad Beam, Vector(-20, 0.1, -5), Vector(20, 0.1, -5), Color(Rose), Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-    }
-}
-
-rule ("milk wall + collision") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 10) == True;
-    }
-    actions {
-        Wait(0.32, Ignore Condition);
-        Set Global Variable(wallEffects, Empty Array);
-        While(Compare(Global.obj, !=, -1));
-            Set Global Variable(wallPos, Vector(Random Real(-20, 6.799999999999999), 0, 20));
-            For Global Variable(wallI, 0, 54, 1);
-                Create Projectile(Echo Sticky Bomb, Global.nipman, If-Then-Else(Compare(Modulo(Global.wallI, 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB), Direction Towards(If-Then-Else(Compare(Modulo(Global.wallI, 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB), Add(Global.wallPos, Multiply(Vector(Modulo(Global.wallI, 6), Round To Integer(Divide(Global.wallI, 6), Down), 0), 2.2))), To World, Damage, Team 1, 0, 0, 0.1, Brigitte Repair Pack Armor Effect, Brigitte Repair Pack Armor Sound, 0.1, 50, Divide(Magnitude Of(Add(Subtract(If-Then-Else(Compare(Modulo(Global.wallI, 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB), Global.wallPos), Multiply(Vector(Modulo(Global.wallI, 6), Round To Integer(Divide(Global.wallI, 6), Down), 0), 2.2))), 120), 0, 0, 0);
-                Wait(0.144, Ignore Condition);
-                Create Projectile Effect(All Players(All Teams), Echo Sticky Bomb, Null, Add(Global.wallPos, Evaluate Once(Multiply(Vector(Modulo(Global.wallI, 6), Round To Integer(Divide(Global.wallI, 6), Down), 0), 2.2))), Backward, 0.1, Visible To Position Direction and Size);
-                Modify Global Variable(wallEffects, Append To Array, Last Created Entity);
-            End;
-            For Global Variable(wallI, 0, 3, 1);
-                Play Effect(All Players(All Teams), Sombra Translocator Reappear Sound, Color(Team 2), Global.wallPos, 800);
-                Wait(Multiply(Subtract(3, Global.wallI), 0.16), Ignore Condition);
-            End;
-            Chase Global Variable Over Time(wallPos, Add(Global.wallPos, Multiply(90, Backward)), 3.5, None);
-            "collision"
-            For Global Variable(wallI, 0, 25, 1);
-                Wait(0.096, Ignore Condition);
-                Set Player Variable(Global.nipman, mobTarget, Filtered Array(All Living Players(Team 1), And(And(And(Compare(Absolute Value(Subtract(Z Component Of(Position Of(Current Array Element)), Z Component Of(Global.wallPos))), <, 1.3), Compare(X Component Of(Position Of(Current Array Element)), >, X Component Of(Global.wallPos))), Compare(X Component Of(Position Of(Current Array Element)), <, Add(X Component Of(Global.wallPos), 13.200000000000001))), Compare(Y Component Of(Position Of(Current Array Element)), <=, 19.8))));
-                "nipman.mobTarget.applyImpulse(Vector.BACKWARD + Vector.UP * 0.1, 100, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)"
-                Set Status((Global.nipman).mobTarget, Null, Knocked Down, 1.5);
-                "multihits except when it doesn't"
-                Damage((Global.nipman).mobTarget, Null, 90);
-            End;
-            "and p.getPosition().x > wallPos.x\nand p.getPosition().x < wallPos.x + WallWidth * WallGap\nand p.getPosition().y <= 60 / WallWidth].applyImpulse(Vector.BACKWARD + Vector.UP * 0.3, 360, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)\nwait(1)"
-            For Global Variable(wallI, 0, Count Of(Global.wallEffects), 1);
-                Destroy Effect(Value In Array(Global.wallEffects, Global.wallI));
-                Wait(0.016, Ignore Condition);
-            End;
-            Destroy Effect(Global.wallEffects);
-            Set Global Variable(wallEffects, Empty Array);
-            Stop Chasing Global Variable(wallPos);
-        End;
-    }
-}
-
-rule ("rain") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 7) == True;
-    }
-    actions {
-        Wait(0.224, Ignore Condition);
-        Create Effect(All Players(All Teams), Cloud, Color(Gray), Multiply(Up, 30), 40, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        For Global Variable(rainVar, 0, 5, 1);
-            Create Effect(All Players(All Teams), Light Shaft, Color(Purple), Add(Vector(Multiply(Multiply(Sine From Radians(Divide(Total Time Elapsed, 3)), 20), Evaluate Once(Subtract(Multiply(Modulo(Global.rainVar, 2), 2), 1))), 0, Evaluate Once(Subtract(16, Multiply(8, Global.rainVar)))), Multiply(Down, 18)), 4, Visible To Position and Radius);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Effect(All Players(All Teams), Ring, Color(Team 2), Vector(Multiply(Multiply(Sine From Radians(Divide(Total Time Elapsed, 3)), 20), Evaluate Once(Subtract(Multiply(Modulo(Global.rainVar, 2), 2), 1))), 0, Evaluate Once(Subtract(16, Multiply(8, Global.rainVar)))), 4, Visible To Position and Radius);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        End;
-        While(Compare(Global.obj, !=, -1));
-            For Global Variable(rainVar, 0, 5, 1);
-                Create Projectile(Echo Sticky Bomb, Null, If-Then-Else(Compare(Modulo(Global.rainVar, 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB), Direction Towards(Eye Position(Global.nipman), Vector(Random Real(-10, 10), 30, Random Real(-15, 19))), To World, Damage, Team 1, 1, 1, 0, Brigitte Whip Shot Heal Area Effect, Brigitte Whip Shot Heal Area Sound, 0.05, 30, 1, 0, 0, -5);
-                Wait(0.048, Ignore Condition);
-                Create Projectile(Mei Icicle, Null, Add(Add(Vector(Multiply(Multiply(Sine From Radians(Divide(Total Time Elapsed, 3)), 20), Evaluate Once(Subtract(Multiply(Modulo(Global.rainVar, 2), 2), 1))), 0, Evaluate Once(Subtract(16, Multiply(8, Global.rainVar)))), Multiply(Up, 30)), Vector(Random Real(-0.5, 0.5), 0, Random Real(-0.5, 0.5))), Down, To World, Damage, Team 1, 25, 1, 3.2, Brigitte Repair Pack Impact Effect, Brigitte Whip Shot Heal Area Sound, 0.07, 200, 1, 3, 0, 0);
-            End;
-        End;
-    }
-}
-
-rule ("twister") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 6) == True;
-    }
-    actions {
-        Wait(0.192, Ignore Condition);
-        For Global Variable(twisterCache, 3, 12, 2);
-            "smallMessage(getAllPlayers(), i)"
-            Create Effect(All Players(All Teams), Bad Aura, Color(Gray), Add(Multiply(Up, Evaluate Once(Subtract(Multiply(Global.twisterCache, 2.5), 6))), Global.twisterPos), Evaluate Once(Multiply(Global.twisterCache, 0.7)), Visible To Position and Radius);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Projectile Effect(All Players(All Teams), Echo Sticky Bomb, Null, Add(Global.twisterPos, Multiply(Multiply(Evaluate Once(Global.twisterCache), 0.8), Vector(Cosine From Radians(Add(Multiply(Total Time Elapsed, 7), Evaluate Once(Global.twisterCache))), Add(1, Multiply(0.4, Sine From Radians(Total Time Elapsed))), Sine From Radians(Add(Multiply(Total Time Elapsed, 7), Evaluate Once(Global.twisterCache)))))), Up, Evaluate Once(Random Real(0, 0.05)), Visible To Position Direction and Size);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Projectile Effect(All Players(All Teams), Zarya Particle Cannon, Null, Add(Global.twisterPos, Multiply(Multiply(Evaluate Once(Global.twisterCache), 0.8), Vector(Cosine From Radians(Add(Multiply(Total Time Elapsed, 9), Evaluate Once(Global.twisterCache))), Add(1.3, Multiply(0.4, Cosine From Radians(Total Time Elapsed))), Sine From Radians(Add(Multiply(Total Time Elapsed, 9), Evaluate Once(Global.twisterCache)))))), Up, Evaluate Once(Random Real(0, 0.05)), Visible To Position Direction and Size);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Wait(0.016, Ignore Condition);
-        End;
-        Create Effect(All Players(All Teams), Ring, Color(Team 2), Global.twisterPos, 5, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Effect(All Players(All Teams), Cloud, Color(Gray), Add(Global.twisterPos, Multiply(24, Up)), 30, Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Zarya Particle Cannon, Null, Add(Global.twisterPos, Multiply(7, Down)), Down, 1, Visible To Position Direction and Size);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Set Global Variable(twisterPos, Multiply((Global.nipman).cacheA, Vector(1, 0, 1)));
-        Chase Global Variable At Rate(twisterPos, Multiply(Position Of(First Of(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Global.twisterPos)))), Vector(1, 0, 1)), 1.6, Destination and Rate);
-        While(Compare(Global.obj, !=, -1));
-            Set Global Variable(twisterCache, Filtered Array(All Living Players(Team 1), And(Compare(Distance Between(Multiply(Position Of(Current Array Element), Vector(1, 0, 1)), Global.twisterPos), <, 5), Compare(Y Component Of(Position Of(Current Array Element)), <, 25))));
-            Apply Impulse(Global.twisterCache, Up, 7, To World, Incorporate Contrary Motion);
-            Damage(Global.twisterCache, Null, 35);
-            Wait(0.24, Ignore Condition);
-        End;
-    }
-}
-
-rule ("sun loop") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 17) == True;
-    }
-    actions {
-        While(Compare(Global.obj, !=, -1));
-            Wait(0.64, Ignore Condition);
-            Set Invisible(Global.threatSuns, Enemies);
-            Set Status(Global.threatSuns, Null, Phased Out, 99999);
-            Start Forcing Dummy Bot Name(Global.threatSuns, Custom String("sunkissed nips"));
-            Set Projectile Speed(Global.threatSuns, 30);
-            Disable Nameplates(Global.threatSuns, All Players(All Teams));
-            Set Damage Dealt(Global.threatSuns, Max(20, Divide(120, Count Of(Global.threatSuns))));
-            Start Modifying Hero Voice Lines(Global.threatSuns, 0, False);
-            Set Ultimate Charge(Global.threatSuns, 100);
-            Wait(4, Ignore Condition);
-            Press Button(Global.threatSuns, Button(Ultimate));
-            For Global Variable(isun, 0, Count Of(Global.threatSuns), 1);
-                If(Not(Entity Exists(Value In Array(Global.threatSuns, Global.isun))));
-                    Modify Global Variable(threatSuns, Remove From Array By Value, Value In Array(Global.threatSuns, Global.isun));
-                Else;
-                    Set Facing(Value In Array(Global.threatSuns, Global.isun), Direction Towards(Eye Position(Value In Array(Global.threatSuns, Global.isun)), Position Of(Random Value In Array(All Living Players(Team 1)))), To World);
-                End;
-                Wait(0.064, Ignore Condition);
-            End;
-            "threatSuns.slice(0,len(threatSuns)/2).setFacing(, Relativity.TO_PLAYER)\nthreatSuns.slice(len(threatSuns/2),len(threatSuns)).setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)"
-            Wait(2, Ignore Condition);
-            Press Button(Global.threatSuns, Button(Primary Fire));
-        End;
-    }
-}
-
-rule ("gravitatas") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 16) == True;
-    }
-    actions {
-        Create Projectile Effect(All Players(All Teams), Zarya Graviton, Null, (Global.nipman).cacheA, Backward, 0.27, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Zarya Graviton, Null, (Global.nipman).cacheB, Backward, 0.27, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        "there was an issue with players getting stuck on the bottom rocks opposite mauga\ngetPlayers(Team.1).startAcceleration(Vector.FORWARD + 0.15 * Vector.DOWN, 80, 15, Relativity.TO_WORLD, AccelReeval.NONE)"
-        While(Compare(Global.obj, !=, -1));
-            Set Gravity(All Players(Team 1), 300);
-            Wait(6, Ignore Condition);
-        End;
-    }
-}
-
-rule ("boolet") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 15) == True;
-    }
-    actions {
-        Wait(0.48, Ignore Condition);
-        While(Compare(Global.obj, !=, -1));
-            Create Projectile(Ramattra Ravenous Vortex Sphere, Null, (Global.nipman).cacheA, Vector(Multiply(Sine From Radians(Multiply(Total Time Elapsed, 2)), 0.5), Subtract(Multiply(Cosine From Radians(Total Time Elapsed), 0.1), 0.2), -1), To World, Damage, Team 1, 130, 1, 0, DVa Micro Missiles Explosion Effect, DVa Micro Missiles Explosion Sound, 0.04, 14, 4, 0, 0, 0);
-            Wait(0.08, Ignore Condition);
-            Create Projectile(Mercy Caduceus Blaster, Null, (Global.nipman).cacheB, Vector(Multiply(Sine From Radians(Multiply(Total Time Elapsed, 2)), -0.5), Subtract(Multiply(Cosine From Radians(Total Time Elapsed), -0.1), 0.2), -1), To World, Damage, Team 1, 130, 1, 0, DVa Micro Missiles Explosion Effect, DVa Micro Missiles Explosion Sound, 0.1, 14, 4, 0, 0, 0);
-            Wait(0.08, Ignore Condition);
-        End;
-    }
-}
-
-rule ("laser") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 18) == True;
-    }
-    actions {
-        Wait(0.576000000000000, Ignore Condition);
-        Set Global Variable(area1, Vector(10, 0, 20));
-        Set Global Variable(area2, Vector(-10, 0, 20));
-        Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, (Global.nipman).cacheA, Global.area1, Color(Team 2), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, (Global.nipman).cacheB, Global.area2, Color(Team 2), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Zarya Particle Cannon, Null, Add(Global.area1, Multiply(4, Down)), Down, 0.55, Visible To Position Direction and Size);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Zarya Particle Cannon, Null, Add(Global.area2, Multiply(4, Down)), Down, 0.55, Visible To Position Direction and Size);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Chase Global Variable At Rate(area1, Multiply(Position Of(First Of(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Global.area1)))), Vector(1, 0, 1)), 0.8, Destination and Rate);
-        Chase Global Variable At Rate(area2, Multiply(Position Of(First Of(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Global.area2)))), Vector(1, 0, 1)), 0.8, Destination and Rate);
-        While(Compare(Global.obj, !=, -1));
-            Create Projectile(Ramattra Ravenous Vortex Sphere, Global.nipman, Add(Global.area1, Multiply(0.5, Up)), Down, To World, Damage, Team 1, 20, 1, 3, Zarya Particle Cannon Explosion Effect, Orisa Halt Implosion Sound, 0, Total Time Elapsed, 10, 55, 0, 0);
-            Wait(0.08, Ignore Condition);
-            Create Projectile(Ramattra Ravenous Vortex Sphere, Global.nipman, Add(Global.area2, Multiply(0.5, Up)), Down, To World, Damage, Team 1, 20, 1, 3, Zarya Particle Cannon Explosion Effect, Orisa Halt Implosion Sound, 0, Total Time Elapsed, 3, 55, 0, 0);
-            Wait(0.8, Ignore Condition);
-        End;
-    }
-}
-
-rule ("discharge") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Or(Compare(Event Player, ==, Global.nipman), Array Contains(Global.objPos, Event Player)) == True;
-        Global.obj != -1;
-        Array Contains(Global.threatList, 12) == True;
-    }
-    actions {
-        Wait(0.384, Ignore Condition);
-        Create Dummy Bot(Hero(Torbjörn), Team 2, -1, Up, Backward);
-        Set Player Variable(Event Player, botA, Last Created Entity);
-        Modify Global Variable(threatLactaters, Append To Array, Last Created Entity);
-        Start Forcing Player Position(Last Created Entity, (Event Player).cacheA, False);
-        Create Dummy Bot(Hero(Torbjörn), Team 2, -1, Up, Backward);
-        Set Player Variable(Event Player, botB, Last Created Entity);
-        Modify Global Variable(threatLactaters, Append To Array, Last Created Entity);
-        Start Forcing Player Position(Last Created Entity, (Event Player).cacheB, False);
-        Wait(0.36, Ignore Condition);
-        Set Weapon(Global.threatLactaters, 2);
-        Start Scaling Player(Global.threatLactaters, 0.3, False);
-        Set Status(Global.threatLactaters, Null, Phased Out, 9999);
-        Set Invisible(Global.threatLactaters, All);
-        Start Holding Button(Global.threatLactaters, Button(Primary Fire));
-        Start Facing((Event Player).botA, Add(Add(Multiply(Evaluate Once(Direction Towards(Multiply((Event Player).cacheA, Vector(1, 0, 1)), Multiply(Left, 20))), Sine From Radians(Multiply(Total Time Elapsed, 33))), Multiply(0.5, Multiply(Up, Add(Sine From Radians(Multiply(Total Time Elapsed, 47)), 0.5)))), Facing Direction Of(Event Player)), 9999, To World, Direction and Turn Rate);
-        Start Facing((Event Player).botB, Add(Add(Multiply(Evaluate Once(Direction Towards(Multiply((Event Player).cacheB, Vector(1, 0, 1)), Multiply(Left, 20))), Sine From Radians(Multiply(Total Time Elapsed, 33))), Multiply(0.5, Multiply(Up, Add(Sine From Radians(Multiply(Total Time Elapsed, 47)), 0.5)))), Facing Direction Of(Event Player)), 9999, To World, Direction and Turn Rate);
-        "eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)"
-        Wait(0.36, Ignore Condition);
-        Start Modifying Hero Voice Lines(Global.threatLactaters, Add(1, Multiply(0.5, Sine From Radians(Multiply(Total Time Elapsed, 2)))), True);
-        Start Forcing Dummy Bot Name(Global.threatLactaters, Custom String("overheating glands"));
-        Disable Nameplates(Global.threatLactaters, All Players(All Teams));
-    }
-}
-
-rule ("everybody discharge") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 12) == True;
-    }
-    actions {
-        While(Array Contains(Global.threatList, 12));
-            Wait(10, Ignore Condition);
-            Set Ultimate Charge(Global.threatLactaters, 100);
-            Set Damage Dealt(Global.threatLactaters, Divide(80, Count Of(Global.threatLactaters)));
-            Disable Nameplates(Global.threatLactaters, All Players(All Teams));
-            Wait(0.12, Ignore Condition);
-            Press Button(Global.threatLactaters, Button(Ultimate));
-        End;
-    }
-}
-
-rule ("heal milk") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 11) == True;
-        "sure let the niplets also do this"
-        Is Alive(Event Player) == True;
-    }
-    actions {
-        Create Projectile Effect(All Players(All Teams), Moira Heal Orb, Null, (Event Player).cacheA, Facing Direction Of(Event Player), 0, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Moira Heal Orb, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        While(And(Compare(Global.obj, !=, -1), Is Alive(Event Player)));
-            Wait(0.8, Ignore Condition);
-            Create Homing Projectile(Echo Sticky Bomb, Event Player, Add((Event Player).cacheA, Multiply(Facing Direction Of(Event Player), 2)), Facing Direction Of(Event Player), To World, Heal, Team 2, 20, 1, 1, Echo Sticky Bomb Explosion Effect, Baptiste Biotic Launcher Explosion Sound, 0.05, 60, 10, 0, Random Value In Array(If-Then-Else(Compare(Global.obj, ==, 1), Remove From Array(Global.objPos, Event Player), Global.mobs)), 1);
-            Create Homing Projectile(Echo Sticky Bomb, Event Player, Add((Event Player).cacheB, Multiply(Facing Direction Of(Event Player), 2)), Facing Direction Of(Event Player), To World, Heal, Team 2, 20, 1, 1, Echo Sticky Bomb Explosion Effect, Baptiste Biotic Launcher Explosion Sound, 0.05, 60, 10, 0, Random Value In Array(If-Then-Else(Compare(Global.obj, ==, 1), Remove From Array(Global.objPos, Event Player), Global.mobs)), 1);
-        End;
-    }
-}
-
-rule ("nuke") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 8) == True;
-    }
-    actions {
-        Wait(0.256, Ignore Condition);
-        "debug\ncreateEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)"
-        While(Compare(Global.obj, !=, -1));
-            Set Global Variable(missileFx, Empty Array);
-            Set Global Variable(missilePos, Vector(0, 1, 20));
-            Chase Global Variable At Rate(missilePos, Add(Multiply(Position Of(First Of(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Global.missilePos)))), Vector(1, 0, 1)), Up), 4, Destination and Rate);
-            "chaser"
-            Create Projectile Effect(All Players(All Teams), Zarya Graviton, Null, Global.missilePos, Up, 0.1, Visible To Position Direction and Size);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Wait(0.016, Ignore Condition);
-            "closest player check, can't use wait until in case rule must break"
-            While(Compare(Global.missileFx, !=, Empty Array));
-                If(Compare(Global.obj, ==, -1));
-                    For Global Variable(missileTemp, 0, Count Of(Global.missileFx), 1);
-                        Destroy Effect(Value In Array(Global.missileFx, Global.missileTemp));
-                    End;
-                    Abort;
-                End;
-                "probably a bit more optimal since this stops checking on the first player found, instead of checking all players in radius"
-                For Global Variable(missileTemp, 0, Number Of Living Players(Team 1), 1);
-                    If(And(Has Spawned(Value In Array(All Living Players(Team 1), Global.missileTemp)), Compare(Distance Between(Position Of(Value In Array(All Living Players(Team 1), Global.missileTemp)), Global.missilePos), <, 3)));
-                        Play Effect(All Players(All Teams), Orisa Halt Implosion Sound, Color(Team 2), Global.missilePos, 100);
-                        Destroy Effect(First Of(Global.missileFx));
-                        Set Global Variable(missileFx, Empty Array);
-                        Break;
-                    End;
-                End;
-                Wait(0.24, Ignore Condition);
-            End;
-            //lbl_0:
-            Stop Chasing Global Variable(missilePos);
-            Modify Global Variable(missilePos, Subtract, Up);
-            Create Projectile Effect(All Players(All Teams), Zarya Graviton, Null, Add(Global.missilePos, Up), Up, Add(0.1, Multiply(0.1, Subtract(Total Time Elapsed, Global.missileTemp))), Visible To Position Direction and Size);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Wait(0.016, Ignore Condition);
-            Set Global Variable(missileTemp, Total Time Elapsed);
-            Wait(3, Ignore Condition);
-            "deto"
-            If(Compare(Global.obj, ==, -1));
-                For Global Variable(missileTemp, 0, Count Of(Global.missileFx), 1);
-                    Destroy Effect(Value In Array(Global.missileFx, Global.missileTemp));
-                End;
-                Abort;
-            End;
-            Create Projectile(Pharah Rocket, Global.nipman, (Global.nipman).cacheA, Direction Towards((Global.nipman).cacheA, Add(Global.missilePos, Multiply(Up, 2))), To World, Heal, Team 1, 0, 0, 0, DVa Self Destruct Explosion Effect, DVa Self Destruct Explosion Sound, 1, 100, 0.5, 70, 0, 0);
-            Create Projectile(Pharah Rocket, Global.nipman, (Global.nipman).cacheB, Direction Towards((Global.nipman).cacheB, Add(Global.missilePos, Multiply(Up, 2))), To World, Heal, Team 1, 0, 0, 0, DVa Self Destruct Explosion Effect, DVa Self Destruct Explosion Sound, 1, 100, 0.5, 70, 0, 0);
-            Wait(Multiply(0.012, Distance Between((Global.nipman).cacheA, Global.missilePos)), Ignore Condition);
-            "playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)\nplayEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)"
-            Play Effect(All Players(All Teams), DVa Self Destruct Explosion Effect, Color(Team 2), Global.missilePos, 1);
-            Play Effect(All Players(All Teams), DVa Self Destruct Explosion Sound, Color(Team 2), Global.missilePos, 400);
-            Destroy Effect(First Of(Global.missileFx));
-            Set Global Variable(missileFx, Empty Array);
-            Set Global Variable(missileTemp, Total Time Elapsed);
-            Wait(0.016, Ignore Condition);
-            Create Projectile Effect(All Players(All Teams), Zarya Particle Cannon, Null, Add(Global.missilePos, Multiply(Down, 10)), Up, 0.8, Visible To);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Create Effect(All Players(All Teams), Ring, Color(Team 2), Global.missilePos, 9, Visible To);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, Global.missilePos, Add(Global.missilePos, Multiply(Min(16, Multiply(20, Subtract(Total Time Elapsed, Global.missileTemp))), Up)), Color(Team 2), Visible To Position and Radius);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, Add(Global.missilePos, Multiply(Up, 12)), Add(Add(Global.missilePos, Multiply(Up, 12)), Multiply(Min(4, Max(0.01, Multiply(20, Subtract(Subtract(Total Time Elapsed, Global.missileTemp), 0.6)))), Left)), Color(Team 2), Visible To Position and Radius);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, Add(Global.missilePos, Multiply(Up, 12)), Add(Add(Global.missilePos, Multiply(Up, 12)), Multiply(Min(4, Max(0.01, Multiply(20, Subtract(Subtract(Total Time Elapsed, Global.missileTemp), 0.6)))), Right)), Color(Team 2), Visible To Position and Radius);
-            Modify Global Variable(missileFx, Append To Array, Last Created Entity);
-            "start damage while eva anim plays"
-            For Global Variable(missileTemp, 0, 20, 1);
-                Damage(Players Within Radius(Global.missilePos, 9, Team 1, Off), Null, 30);
-                Set Status(Players Within Radius(Global.missilePos, 9, Team 1, Off), Null, Burning, 0.16);
-                Wait(0.112, Ignore Condition);
-            End;
-            For Global Variable(missileTemp, 2, Count Of(Global.missileFx), 1);
-                Destroy Effect(Value In Array(Global.missileFx, Global.missileTemp));
-            End;
-            Set Global Variable(missileFx, Array Slice(Global.missileFx, 0, 2));
-            "dot"
-            For Global Variable(missileTemp, 0, 50, 1);
-                Damage(Players Within Radius(Global.missilePos, 9, Team 1, Off), Null, 30);
-                Set Status(Players Within Radius(Global.missilePos, 9, Team 1, Off), Null, Burning, 0.16);
-                Wait(0.112, Ignore Condition);
-            End;
-            For Global Variable(missileTemp, 0, Count Of(Global.missileFx), 1);
-                Destroy Effect(Value In Array(Global.missileFx, Global.missileTemp));
-            End;
-            Set Global Variable(missileFx, Empty Array);
-        End;
-    }
-}
-
-rule ("make ice") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 2) == True;
-    }
-    actions {
-        "createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, threatVar1, directionTowards(threatVar1, target1), 0.5, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)\nthreatFx.append(getLastCreatedEntity())"
-        While(Compare(Global.obj, !=, -1));
-            Wait(9, Ignore Condition);
-            Set Global Variable(target1, Random Value In Array(All Living Players(Team 1)));
-            Set Global Variable(target2, Random Value In Array(All Living Players(Team 1)));
-            Create Projectile(Mei Icicle, Global.nipman, (Global.nipman).cacheA, Direction Towards((Global.nipman).cacheA, Global.target1), To World, Damage, Team 1, 70, 1, 1, Tracer Recall Reappear Effect, Sigma Hypersphere Implosion Sound, 0.2, 20, 10, 0, 0, 0);
-            Wait(0.36, Ignore Condition);
-            Create Projectile(Mei Icicle, Global.nipman, (Global.nipman).cacheB, Direction Towards((Global.nipman).cacheB, Global.target2), To World, Damage, Team 1, 70, 1, 1, Tracer Recall Reappear Effect, Sigma Hypersphere Implosion Sound, 0.2, 20, 10, 0, 0, 0);
-        End;
-    }
-}
-
-rule ("ice impact") {
-    event {
-        Player Took Damage;
-        Team 1;
-        All;
-    }
-    conditions {
-        Event Ability == Null;
-        Attacker == Global.nipman;
-        Array Contains(Global.threatList, 2) == True;
-    }
-    actions {
-        Set Status(Victim, Global.nipman, Frozen, 1.2);
-    }
-}
-
-rule ("ice effect init") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 2) == True;
-        Or(Compare(Event Player, ==, Global.nipman), Array Contains(Global.objPos, Event Player)) == True;
-    }
-    actions {
-        Wait Until(Compare((Event Player).cacheA, !=, Null), 3);
-        Create Projectile Effect(All Players(All Teams), Mei Icicle, Null, (Event Player).cacheA, Facing Direction Of(Event Player), 0.5, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(All Players(All Teams), Mei Icicle, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0.5, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-    }
-}
-
-rule ("dupe ice") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 1;
-        Array Contains(Global.threatList, 2) == True;
-    }
-    actions {
-        While(Compare(Global.obj, !=, -1));
-            Wait(9, Ignore Condition);
-            "share target\nmust be owned by main mauga to apply freeze"
-            Create Projectile(Mei Icicle, Global.nipman, (Value In Array(Global.objPos, Modulo(Total Time Elapsed, Count Of(Global.objPos)))).cacheA, Direction Towards((Value In Array(Global.objPos, Modulo(Total Time Elapsed, Count Of(Global.objPos)))).cacheA, Global.target1), To World, Damage, Team 1, 20, 1, 1, Tracer Recall Reappear Effect, Sigma Hypersphere Implosion Sound, 0.2, 20, 10, 0, 0, 0);
-            Wait(0.36, Ignore Condition);
-            Create Projectile(Mei Icicle, Global.nipman, (Value In Array(Global.objPos, Modulo(Total Time Elapsed, Count Of(Global.objPos)))).cacheB, Direction Towards((Value In Array(Global.objPos, Modulo(Total Time Elapsed, Count Of(Global.objPos)))).cacheB, Global.target2), To World, Damage, Team 1, 20, 1, 1, Tracer Recall Reappear Effect, Sigma Hypersphere Implosion Sound, 0.2, 20, 10, 0, 0, 0);
-        End;
-    }
-}
-
-rule ("dupe boolet") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj == 1;
-        Array Contains(Global.threatList, 15) == True;
-        Array Contains(Global.objPos, Event Player) == True;
-    }
-    actions {
-        "print(\"bullet dupe run\")"
-        While(Compare(Global.obj, ==, 1));
-            Wait(0.36, Ignore Condition);
-            "smallMessage(hostPlayer, eventPlayer.smallRNip)"
-            Create Projectile(Mercy Caduceus Blaster, Event Player, Vector(5.399999999999999, 20.565, 3.99), Vector(Multiply(Sine From Radians(Total Time Elapsed), -12), -0.5, 9), To Player, Damage, Team 1, 50, 1, 0, Bad Explosion, Ashe Dynamite Explosion Sound, 0.03, 20, 3, 0, 0, 0);
-            Create Projectile(Ramattra Ravenous Vortex Sphere, Event Player, Vector(-2.055, 20.669999999999998, 6.99), Vector(Multiply(Sine From Radians(Total Time Elapsed), 12), -0.5, 9), To Player, Damage, Team 1, 50, 1, 0, Bad Explosion, Ashe Dynamite Explosion Sound, 0.03, 20, 3, 0, 0, 0);
-        End;
-    }
-}
-
-rule ("dupe + normal sniper") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 13) == True;
-        Or(Compare((Event Player).cacheA, ==, (Global.nipman).cacheA), Array Contains(Global.objPos, Event Player)) == True;
-    }
-    actions {
-        "wait(0.048 * objPos.index(eventPlayer))"
-        Create Dummy Bot(Hero(Widowmaker), Team 2, -1, Up, Facing Direction Of(Event Player));
-        Set Player Variable(Event Player, botA, Last Created Entity);
-        Start Facing((Event Player).botA, Direction Towards(Eye Position((Event Player).botA), Eye Position(((Event Player).botA).mobTarget)), 4, To World, Direction and Turn Rate);
-        Modify Global Variable(threatSnipers, Append To Array, (Event Player).botA);
-        Create Beam Effect(All Players(All Teams), Torbjörn Turret Sight Beam, Eye Position((Event Player).botA), Add(Eye Position((Event Player).botA), Multiply(80, Facing Direction Of((Event Player).botA))), Color(Team 2), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Dummy Bot(Hero(Widowmaker), Team 2, -1, Up, Backward);
-        Set Player Variable(Event Player, botB, Last Created Entity);
-        Start Facing((Event Player).botB, Direction Towards(Eye Position((Event Player).botB), Eye Position(((Event Player).botB).mobTarget)), 4, To World, Direction and Turn Rate);
-        Modify Global Variable(threatSnipers, Append To Array, (Event Player).botB);
-        Create Beam Effect(All Players(All Teams), Torbjörn Turret Sight Beam, Eye Position((Event Player).botB), Add(Eye Position((Event Player).botB), Multiply(80, Facing Direction Of((Event Player).botB))), Color(Team 2), Visible To Position and Radius);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Holding Button(Global.threatSnipers, Button(Secondary Fire));
-        Disable Nameplates(Global.threatSnipers, All Players(All Teams));
-        Start Forcing Dummy Bot Name(Global.threatSnipers, Custom String("s-nip-ers"));
-        Set Status(Global.threatSnipers, Null, Phased Out, 9999);
-        Start Scaling Player(Global.threatSnipers, 0.1, False);
-        Wait(0.48, Ignore Condition);
-        Start Forcing Player Position((Event Player).botB, (Event Player).cacheB, False);
-        Start Forcing Player Position((Event Player).botA, (Event Player).cacheA, False);
-    }
-}
-
-rule ("sniper change target") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        Widowmaker;
-    }
-    actions {
-        While(Compare(Global.obj, !=, -1));
-            Wait(4, Ignore Condition);
-            Set Player Variable(Event Player, mobTarget, Random Value In Array(All Living Players(Team 1)));
-            Set Ammo(Event Player, 0, 9999);
-        End;
-    }
-}
-
-rule ("sniper fire") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 13) == True;
-    }
-    actions {
-        Wait(2, Ignore Condition);
-        Set Damage Dealt(Global.threatSnipers, Divide(60, Number Of Heroes(Hero(Widowmaker), Team 2)));
-        Press Button(Global.threatSnipers, Button(Primary Fire));
-        Loop If Condition Is True;
-    }
-}
-
-rule ("init suns") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Mauga;
-    }
-    conditions {
-        Global.obj != -1;
-        Array Contains(Global.threatList, 17) == True;
-        Or(Compare((Event Player).cacheA, ==, (Global.nipman).cacheA), Array Contains(Global.objPos, Event Player)) == True;
-    }
-    actions {
-        Create Dummy Bot(Hero(Illari), Team 2, -1, (Event Player).cacheA, Down);
-        Modify Global Variable(threatSuns, Append To Array, Last Created Entity);
-        Set Player Variable(Event Player, botA, Last Created Entity);
-        Create Dummy Bot(Hero(Illari), Team 2, -1, (Event Player).cacheB, Down);
-        Modify Global Variable(threatSuns, Append To Array, Last Created Entity);
-        Set Player Variable(Event Player, botB, Last Created Entity);
-        Start Forcing Player Position((Event Player).botA, (Event Player).cacheA, False);
-        Start Forcing Player Position((Event Player).botB, (Event Player).cacheB, False);
-        Wait(0.64, Ignore Condition);
-        "eventPlayer.threatDecor = []"
-        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 17), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheA, Facing Direction Of(Event Player), 0, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 17), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0.02, Visible To);
-        Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-    }
-}
-
-rule ("missing mauga") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 1;
-        Is True For All(Global.objPos, Not(Entity Exists(Current Array Element))) == True;
-    }
-    actions {
-        Wait(2, Abort When False);
-        Small Message(All Players(All Teams), Custom String("something went wrong. skipping phase..."));
-        Set Global Variable(objProg, Global.objGoal);
-    }
-}
-
-rule ("NO BOTS?") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        "slendy is also a mob"
-        Global.obj == 2;
-        Number Of Players(Team 2) < 8;
-    }
-    actions {
-        Wait(3, Abort When False);
-        For Global Variable(i, 0, Count Of(Global.mobs), 1);
-            Destroy Dummy Bot(Team Of(Value In Array(Global.mobs, Global.i)), Slot Of(Value In Array(Global.mobs, Global.i)));
-        End;
-        Set Global Variable(mobs, Empty Array);
-        Call Subroutine(mobsInit);
-    }
-}
-
-rule ("more maugas") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 1;
-    }
-    actions {
-        "wait(0.016 * THREATS.MORE)"
-        Set Global Variable(objPos, Empty Array);
-        "need to keep them far away or the fingers block the weak spots"
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Multiply(Up, Max Health(Global.nipman)), Left);
-        Modify Global Variable(objPos, Append To Array, Last Created Entity);
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Multiply(Up, Max Health(Global.nipman)), Right);
-        Modify Global Variable(objPos, Append To Array, Last Created Entity);
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Multiply(Up, Max Health(Global.nipman)), Forward);
-        Modify Global Variable(objPos, Append To Array, Last Created Entity);
-        Set Gravity(Global.objPos, 0);
-        Wait(0.016, Ignore Condition);
-        Start Scaling Player(Global.objPos, 15, False);
-        Disable Movement Collision With Players(Global.objPos);
-        Disable Movement Collision With Environment(Global.objPos, True);
-        Set Knockback Received(Global.objPos, 0);
-        Set Max Health(Global.objPos, Absolute Value(2500));
-        Wait(0.12, Ignore Condition);
-        Heal(Global.objPos, Null, 99999);
-        Set Healing Dealt(Global.objPos, 0);
-        For Global Variable(iMores, 0, 3, 1);
-            Wait(0.016, Ignore Condition);
-            Start Forcing Player Position(Value In Array(Global.objPos, Global.iMores), Value In Array(Array(Vector(-31, -18, 0), Vector(31, -18, 0), Vector(0, -18, -31)), Global.iMores), False);
-            "LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST"
-            Wait(0.08, Ignore Condition);
-            Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheA, World Vector Of(Vector(5.399999999999999, 20.565, 3.99), Value In Array(Global.objPos, Global.iMores), Rotation And Translation));
-            Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheB, World Vector Of(Vector(-2.055, 20.669999999999998, 6.99), Value In Array(Global.objPos, Global.iMores), Rotation And Translation));
-            Start Forcing Dummy Bot Name(Value In Array(Global.objPos, Global.iMores), Custom String("mauga jr."));
-            "WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400"
-            Create Progress Bar In-World Text(All Players(All Teams), Multiply(Divide(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), 100), Custom String("{0} / {1} HP", Round To Integer(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Up), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), Add(Eye Position(Value In Array(Global.objPos, Global.iMores)), Multiply(Up, 2)), 1, Do Not Clip, Color(Red), Color(White), Visible To and Values, Default Visibility);
-            Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheC, Last Text ID);
-        End;
-        Wait(0.8, Ignore Condition);
-        Set Status(Global.objPos, Null, Frozen, 99999);
-        Wait(0.8, Ignore Condition);
-        Set Status(Global.objPos, Null, Frozen, 99999);
-        Heal(Global.objPos, Null, 99999);
-    }
-}
-
-rule ("miniboss") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 3;
-    }
-    actions {
-        "hero must be same as mobs for skin limit"
-        Wait(0.64, Ignore Condition);
-        Create Dummy Bot(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), Team 2, -1, Multiply(Up, 50), Backward);
-        Set Global Variable(objPos, Last Created Entity);
-        Set Knockback Received(Global.objPos, 10);
-        Set Move Speed(Global.objPos, 40);
-        Start Scaling Player(Global.objPos, 3, False);
-        If(Compare(Hero Of(Global.objPos), ==, Hero(Winston)));
-            Set Damage Dealt(Global.objPos, 55);
-        End;
-        Start Forcing Throttle(Global.objPos, 1, 1, 0, 0, 0, 1);
-        Start Forcing Dummy Bot Name(Global.objPos, Custom String("miniboss"));
-        Start Facing(Global.objPos, Direction Towards(Position Of(Global.objPos), Position Of((Global.objPos).mobTarget)), 400, To World, Direction and Turn Rate);
-        Set Max Health(Global.objPos, If-Then-Else(Array Contains(All Tank Heroes, Hero Of(Global.objPos)), 3500, 4500));
-        Wait(2, Ignore Condition);
-        Wait Until(Is On Ground(Global.objPos), 4);
-        Set Status(Global.objPos, Null, Knocked Down, 2);
-        Start Holding Button(Global.objPos, Button(Primary Fire));
-        While(Compare(Global.obj, ==, 3));
-            "objPos.getNormalizedHealth()"
-            Set Global Variable(objProg, Subtract(1, Divide(Health(Global.objPos), Max Health(Global.objPos))));
-            Wait(0.24, Ignore Condition);
-        End;
-    }
-}
-
-rule ("clean bots") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        All;
-    }
-    conditions {
-        Is Dummy Bot(Event Player) == True;
-        Event Player != Global.nipman;
-        Global.obj == -1;
-    }
-    actions {
-        If(Entity Exists((Event Player).cacheC));
-            Destroy Progress Bar In-World Text((Event Player).cacheC);
-        End;
-        Destroy Dummy Bot(Team 2, Slot Of(Event Player));
-    }
-}
-
-rule ("setup & refresh forest") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 0;
-    }
-    actions {
-        Wait(1.5, Abort When False);
-        For Global Variable(i, 0, 7, 1);
-            Create Dummy Bot(Hero(Lifeweaver), Team 2, -1, Up, Down);
-            Start Modifying Hero Voice Lines(Last Created Entity, Add(0.5, Multiply(Global.i, 0.142857142857142)), False);
-            Wait(0.032, Ignore Condition);
-            If(Compare(Number Of Heroes(Hero(Lifeweaver), Team 2), >, 7));
-                Break;
-            End;
-        End;
-        Set Status(Players On Hero(Hero(Lifeweaver), Team 2), Null, Phased Out, 9999);
-        Set Invisible(Players On Hero(Hero(Lifeweaver), Team 2), Enemies);
-        Set Healing Dealt(Players On Hero(Hero(Lifeweaver), Team 2), 30);
-        Wait(0.96, Ignore Condition);
-        While(Compare(Global.obj, ==, 0));
-            Set Ultimate Charge(All Players(Team 2), 100);
-            Wait(0.08, Ignore Condition);
-            Press Button(Players On Hero(Hero(Lifeweaver), Team 2), Button(Ultimate));
-            Set Facing(Players On Hero(Hero(Lifeweaver), Team 2), Down, To World);
-            Wait(0.016, Ignore Condition);
-            For Global Variable(i, 0, 7, 1);
-                Teleport(Value In Array(Players On Hero(Hero(Lifeweaver), Team 2), Global.i), Vector(Random Real(-18, 18), 6, Random Real(-18, 18)));
-                "while distance(objPos, getPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i]) < 4:\ngetPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i].teleport(vect(random.randint(-18,18),5,random.randint(-18,18)))\nwait()"
-                Wait(0.016, Ignore Condition);
-            End;
-            Wait(0.08, Ignore Condition);
-            Press Button(Players On Hero(Hero(Lifeweaver), Team 2), Button(Primary Fire));
-            Wait(0.55, Ignore Condition);
-            Set Status(Players On Hero(Hero(Lifeweaver), Team 2), Null, Hacked, 0.5);
-            Wait(14, Abort When False);
-        End;
-    }
-}
-
-rule ("place objective") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 4;
-    }
-    actions {
-        Set Global Variable(objPos, Vector(Random Integer(-13, 13), 0, Random Integer(-13, 13)));
-        Wait(0.016, Ignore Condition);
-        Loop If(And(Compare(Z Component Of(Global.objPos), <, -5), Array Contains(Global.threatList, 5)));
-    }
-}
-
-rule ("kill/obj prog/weak spot + respawn timer") {
-    event {
-        Player Died;
-        All;
-        All;
-    }
-    conditions {
-        Is Dummy Bot(Event Player) == True;
-        Event Player != Global.nipman;
-    }
-    actions {
-        If(Array Contains(Global.weakSpots, Event Player));
-            Modify Global Variable(weakSpots, Remove From Array By Value, Event Player);
-            Play Effect(All Players(All Teams), Sombra Translocator Reappear Effect, Color(Team 2), Event Player, 1);
-            Play Effect(All Players(All Teams), Ashe Dynamite Explosion Sound, Color(Team 2), Event Player, 50);
-            Wait(0.48, Ignore Condition);
-            Destroy Dummy Bot(Team Of(Event Player), Slot Of(Event Player));
-            Abort;
-        End;
-        Heal(Attacker, Event Player, 50);
-        If(Array Contains(Global.threatList, 9));
-            Play Effect(All Players(All Teams), Moira Fade Reappear Effect, Color(Team 2), Add(Position Of(Event Player), Up), 1);
-            Play Effect(All Players(All Teams), Echo Sticky Bomb Explosion Sound, Color(Team 2), Add(Position Of(Event Player), Up), 10);
-            Damage(Players Within Radius(Position Of(Event Player), 2, Team 1, Surfaces And Enemy Barriers), Event Player, 90);
-        End;
-        If(Compare(Global.obj, ==, 0));
-            Set Respawn Max Time(Event Player, 7);
-            Modify Global Variable(objProg, Add, 0.5);
-            Abort;
-        Else If(Compare(Global.obj, ==, 2));
-            Modify Global Variable(objProg, Add, 1);
-            Modify Team Score(Team 1, 1);
-            Set Team Score(Team 1, 0);
-            Set Respawn Max Time(Event Player, 2);
-            Abort;
-        Else If(And(Compare(Global.obj, ==, 3), Compare(Event Player, ==, Global.objPos)));
-            Set Global Variable(objProg, Global.objGoal);
-        Else If(And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player)));
-            If(Compare(Event Player, ==, Global.attackingClone));
-                Kill(Global.weakSpots, Null);
-                Destroy Effect(Global.moreFx);
-                Set Global Variable(moreFx, Empty Array);
-                Set Global Variable(attackingClone, Null);
-            End;
-            Modify Global Variable(objProg, Add, 1);
-            Destroy Dummy Bot(Team Of((Event Player).botA), Slot Of((Event Player).botA));
-            Destroy Dummy Bot(Team Of((Event Player).botB), Slot Of((Event Player).botB));
-            Modify Global Variable(objPos, Remove From Array By Value, Event Player);
-            Destroy Progress Bar In-World Text((Event Player).cacheC);
-            Disable Built-In Game Mode Respawning(Event Player);
-            Wait(1.2, Ignore Condition);
-            Destroy Dummy Bot(Team Of(Event Player), Slot Of(Event Player));
-        End;
-        Set Respawn Max Time(Event Player, 1.8);
-    }
-}
-
-rule ("point") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.obj == 4;
-    }
-    actions {
-        If(Compare(Players Within Radius(Global.objPos, 12, Team 1, Off), !=, Empty Array));
-            Modify Global Variable(objProg, Add, Multiply(Divide(Count Of(Players Within Radius(Global.objPos, 12, Team 1, Off)), Number Of Players(Team 1)), 3));
-            Play Effect(All Players(All Teams), Ring Explosion, Color(Team 1), Global.objPos, 25);
-            Play Effect(All Players(All Teams), Widowmaker Venom Mine Explosion Sound, Color(Team 1), Global.objPos, 150);
-        End;
-        Wait(0.64, Ignore Condition);
-        Loop If Condition Is True;
-    }
-}
-
-rule ("page found") {
-    event {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions {
-        Global.obj == 0;
-        Is Dummy Bot(Event Player) == False;
-        Distance Between(Event Player, Global.objPos) < 1.3;
-    }
-    actions {
-        Small Message(All Players(All Teams), Custom String(" {0} found a page!", Event Player));
-        Play Effect(All Players(All Teams), Buff Impact Sound, Color(White), Global.objPos, 65);
-        Play Effect(All Players(All Teams), Good Explosion, Color(Team 1), Global.objPos, 1);
-        "sound"
-        Modify Team Score(Team 1, 1);
-        Set Team Score(Team 1, 0);
-        Modify Global Variable(objProg, Add, 1);
-        While(And(Array Contains(Global.threatList, 5), Compare(Z Component Of(Global.objPos), <, -5)));
-            Set Global Variable(objPos, Vector(Random Integer(-18, 18), 0, Random Integer(-18, 16)));
-            Wait(0.016, Ignore Condition);
-        End;
-    }
-}
-
-disabled rule ("debug finish obj") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Custom String("{0}", Host Player) == Custom String("OMGIDIED");
-        Is Button Held(Host Player, Button(Interact)) == True;
-        Global.obj != -1;
-    }
-    actions {
-        Set Global Variable(objProg, Global.objGoal);
-    }
-}
-
-rule ("wrong mauga") {
-    event {
-        Player Dealt Damage;
-        All;
-        All;
-    }
-    conditions {
-        Victim == Global.nipman;
-        Global.obj != -1;
-    }
-    actions {
-        Communicate(Event Player, No);
-        Wait(10, Ignore Condition);
-    }
-}
-
-rule ("rez cd if not hardcore") {
-    event {
-        Ongoing - Global;
-    }
-    actions {
-        Wait(2, Ignore Condition);
-        If(Compare(Global.isHardcore, ==, False));
-            While(True);
-                Set Ability Cooldown(Players On Hero(Hero(Mercy), Team 1), Button(Ability 2), 0);
-                Wait(1, Ignore Condition);
-            End;
-    }
-}
-
-rule ("player count balancing, freeze & nip pos check") {
-    event {
-        Ongoing - Global;
-    }
-    actions {
-        While(True);
-            If(Workshop Setting Toggle(Custom String("gameplay"), Custom String("increase player damage per missing player"), True, 0));
-                "getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))"
-                Set Damage Dealt(All Players(Team 1), Min(400, Divide(900, Number Of Players(Team 1))));
-            End;
-            If(Compare(Global.obj, !=, -1));
-                Set Status(Players On Hero(Hero(Mauga), Team 2), Null, Frozen, 99999);
-                Set Damage Received(Global.nipman, 1);
-            End;
-            If(Compare(Y Component Of((Global.nipman).cacheA), <=, 4));
-                Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
-                Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
-            End;
-            Wait(10, Ignore Condition);
-        End;
-    }
-}
-
-rule ("wake up") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        Mauga;
-    }
-    conditions {
-        Has Status(Event Player, Knocked Down) == True;
-    }
-    actions {
-        Clear Status(Event Player, Knocked Down);
-        Wait(0.112, Ignore Condition);
-        Loop If Condition Is True;
-    }
-}
-
-rule ("get up") {
-    event {
-        Ongoing - Each Player;
-        Team 2;
-        Mauga;
-    }
-    conditions {
-        Has Status(Event Player, Asleep) == True;
-    }
-    actions {
-        Clear Status(Event Player, Asleep);
-        Wait(0.112, Ignore Condition);
-        Loop If Condition Is True;
-    }
-}
-
-rule ("anti crash on") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.antiCrashOn == False;
-        Server Load > 235;
-    }
-    actions {
-        Wait(0.8, Abort When False);
-        Set Slow Motion(50);
-        "smallMessage(getAllPlayers(), \"server load high. anti crash on.\")"
-        Set Global Variable(antiCrashOn, True);
-    }
-}
-
-rule ("anti crash off") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Global.antiCrashOn != False;
-        Server Load < 200;
-    }
-    actions {
-        Wait(0.16, Abort When False);
-        Set Slow Motion(100);
-        Set Global Variable(antiCrashOn, False);
-        Loop If Condition Is True;
-    }
-}
-
-rule ("where did he go") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Entity Exists(Global.nipman) == False;
-    }
-    actions {
-        Wait(2, Abort When False);
-        Create Dummy Bot(Hero(Mauga), Team 2, -1, Up, Backward);
-        Set Global Variable(nipman, Last Created Entity);
-        Start Forcing Player Position(Global.nipman, Vector(0, -17, 35), False);
-        Start Facing(Global.nipman, Backward, 999, To World, None);
-        Disable Movement Collision With Players(Global.nipman);
-        Start Scaling Player(Global.nipman, 50, False);
-        Set Global Variable(upto, Max Health(Global.nipman));
-        Wait(0.08, Ignore Condition);
-        Set Max Health(Global.nipman, Absolute Value(10000));
-        "kill(nipman, null) # this is to fill hp and reset his pose"
-        Set Knockback Received(Global.nipman, 0);
-        Disable Built-In Game Mode Completion;
-        Disable Built-In Game Mode Music;
-        Disable Built-In Game Mode Scoring;
-        Heal(Global.nipman, Null, 999999);
-        Wait(0.016, Ignore Condition);
-        Set Healing Received(Global.nipman, 0);
-        Wait(0.016, Ignore Condition);
-        Set Player Health(Global.nipman, 72500);
-    }
-}
-
-rule ("charge no breaky") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Reinhardt;
-    }
-    conditions {
-        Is Using Ability 1(Event Player) == True;
-        Z Component Of(Position Of(Event Player)) > 18;
-        Z Component Of(Facing Direction Of(Event Player)) > -0.7;
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Cancel Primary Action(Event Player);
-        Small Message(Event Player, Custom String("do not the mauga"));
-    }
-}
-
-rule ("charge no breaky more maugas") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Reinhardt;
-    }
-    conditions {
-        Global.obj == 1;
-        Is Using Ability 1(Event Player) == True;
-        Or(Or(And(Compare(Z Component Of(Position Of(Event Player)), <, -18), Compare(Z Component Of(Facing Direction Of(Event Player)), <, 0.7)), And(Compare(X Component Of(Position Of(Event Player)), <, -18), Compare(X Component Of(Facing Direction Of(Event Player)), <, 0.7))), And(Compare(X Component Of(Position Of(Event Player)), >, 18), Compare(X Component Of(Facing Direction Of(Event Player)), >, -0.7))) == True;
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Cancel Primary Action(Event Player);
-        Small Message(Event Player, Custom String("do not the mauga"));
-    }
-}
-
-disabled rule ("punch no breaky") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Doomfist;
-    }
-    conditions {
-        Global.obj != -1;
-        Is Firing Secondary(Event Player) == True;
-        Z Component Of(Position Of(Event Player)) > 15;
-        Z Component Of(Facing Direction Of(Event Player)) > 0;
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Small Message(Event Player, Custom String("do not the mauga"));
-    }
-}
-
-disabled rule ("hook no breaky") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Roadhog;
-    }
-    conditions {
-        Global.obj != -1;
-        Is Using Ability 1(Event Player) == True;
-        Ray Cast Hit Player(Eye Position(Event Player), Add(Eye Position(Event Player), Multiply(35, Facing Direction Of(Event Player))), All Players(Team 2), Players On Hero(Hero(Lifeweaver), Team 2), True) == Global.nipman;
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Small Message(Event Player, Custom String("do not the mauga"));
-    }
-}
-
-rule ("flux no breaky") {
-    event {
-        Player Dealt Damage;
-        All;
-        Sigma;
-    }
-    conditions {
-        Event Ability == Button(Ultimate);
-        Or(Compare(Victim, ==, Global.nipman), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Victim))) == True;
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Small Message(Event Player, Custom String("do not the mauga"));
-        Wait(0.8, Ignore Condition);
-        Set Ultimate Charge(Event Player, 100);
-    }
-}
-
-rule ("punch unbreaky") {
-    event {
-        Player Dealt Damage;
-        All;
-        Doomfist;
-    }
-    conditions {
-        Or(Compare(Victim, ==, Global.nipman), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Victim))) == True;
-        Global.obj != -1;
-        Event Ability == Button(Secondary Fire);
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Clear Status(Victim, Frozen);
-        Wait(0.48, Abort When False);
-        Set Status(Victim, Null, Frozen, 9999);
-    }
-}
-
-rule ("hook unbreaky") {
-    event {
-        Player Dealt Damage;
-        All;
-        Roadhog;
-    }
-    conditions {
-        Or(Compare(Victim, ==, Global.nipman), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Victim))) == True;
-        Global.obj != -1;
-        Event Ability == Button(Ability 1);
-    }
-    actions {
-        Set Status(Event Player, Null, Hacked, 0.5);
-        Clear Status(Victim, Frozen);
-        Wait(0.48, Abort When False);
-        Set Status(Victim, Null, Frozen, 9999);
-    }
-}
-
-disabled rule ("debug") {
-    event {
-        Ongoing - Global;
-    }
-    conditions {
-        Is Button Held(Host Player, Button(Ultimate)) == True;
-    }
-    actions {
-        Set Ultimate Charge(Host Player, 100);
-    }
-}
-
-rule ("win") {
-    event {
-        Player Died;
-        All;
-        All;
-    }
-    conditions {
-        Event Player == Global.nipman;
-        Attacker != Null;
-    }
-    actions {
-        Set Slow Motion(50);
-        Communicate(All Players(All Teams), Voice Line Up);
-        Wait(0.48, Ignore Condition);
-        Declare Team Victory(Team 1);
-        Destroy All Effects;
-        Set Slow Motion(100);
-        Wait(3, Ignore Condition);
-        Restart Match;
-    }
-}
-
-rule ("player init, cage add") {
-    event {
-        Ongoing - Each Player;
-        Team 1;
-        All;
-    }
-    conditions {
-        Has Spawned(Event Player) == True;
-    }
-    actions {
-        Disable Game Mode HUD(Event Player);
-        Set Player Allowed Heroes(Event Player, All Heroes);
-        If(Global.isHardcore);
-            Disable Built-In Game Mode Respawning(All Players(Team 1));
-    }
-}
-
-rule ("sombra aint slick") {
-    event {
-        Ongoing - Each Player;
-        All;
-        Sombra;
-    }
-    conditions {
-        Or(Is Using Ultimate(Event Player), And(Is Button Held(Event Player, Button(Ultimate)), Compare(Ultimate Charge Percent(Event Player), ==, 100))) == True;
-    }
-    actions {
-        Start Damage Modification(Players On Hero(Hero(Mauga), Team 2), Event Player, 2, None);
-        Set Player Variable(Event Player, mobTarget, Last Damage Modification ID);
-        Wait Until(Compare(Ultimate Charge Percent(Event Player), <, 100), 2);
-        Stop Damage Modification((Event Player).mobTarget);
-    }
-}
-
-disabled rule ("sombra was a little slick") {
-    event {
-        Player Dealt Damage;
-        All;
-        Sombra;
-    }
-    conditions {
-        Victim == Global.nipman;
-        Or(Compare(Event Ability, ==, Button(Ultimate)), Compare(Event Damage, >, 1000)) == True;
-    }
-    actions {
-        Set Player Health(Global.nipman, Add(Health(Global.nipman), Multiply(Event Damage, 0.7)));
-    }
-}
-
-rule ("you are dead, not big surprise") {
-    event {
-        Player Died;
-        Team 1;
-        All;
-    }
-    actions {
-        Modify Team Score(Team 2, 1);
-        "if getPlayersOnHero(Hero.MERCY, Team.1) == []:\neventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())"
-        If(Global.isHardcore);
-            "eventPlayer.setRespawnTime(99999)"
-            If(Compare(Filtered Array(All Players(Team 1), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), ==, Empty Array));
-                Big Message(All Players(All Teams), Custom String("game over. all players died."));
-                Set Slow Motion(50);
-                Wait(1, Ignore Condition);
-                Declare Team Victory(Team 2);
-                Destroy All Effects;
-                Set Slow Motion(100);
-                Wait(3, Ignore Condition);
-                Restart Match;
-    }
-}
 
+/*
+known issues
+- more maugas hp bar starts depleted (tank passive grrr)
+
+broken perks
+- zarya grav
+
+right -0.16, 1.32, 0.56 | left 0.43, 1.31, 0.31
+scaled at 0 -15 30: righ 4.46, 24.61, 21.40 | left -6.51, 24.36, 24.04
+
+horde pvp base
+-
+extra attacks
+- freeze explode nipple icicles
+- torb ult
+- snipers
+- lifeweaver forest -> slenderman find pages
+- knocking lazer
+*/
+
+enum OBJ:
+	INTERMISSION = -1,
+	PAGES, # keep as first
+	MORE,
+	KILL,
+	BOSS,
+	CAPTURE # keep as last
+
+enum THREATS:
+	SLENDY,
+	MORE,
+	ICE, # keep as first after slendy
+	GRAB,
+	FRACTAL,
+	CAGE,
+	TWISTER,
+	RAIN,
+	NUKE,
+	DD,
+	WALL,
+	HEAL,
+	COOM,
+	SNIPER,
+	BOOST,
+	DAKKA,
+	GRAV,
+	SUN,
+	LASER # keep as last
+
+#!extension spawnMoreDummyBots
+#!extension projectiles
+#!extension beamEffects
+#!extension energyExplosionEffects
+#!extension buffStatusEffects
+# !extension debuffStatusEffects
+#!extension explosionSounds
+
+#!define MaxBots 15-1
+#!define TreeNo 7
+#!define PlayerSlots 9
+
+globalvar nipman
+#!define LeftNip (nipman.smallLNip)
+#!define RightNip (nipman.smallRNip)
+# globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
+# globalvar RightNip = vect(-6.51, 22.1, 29.04)
+globalvar obj
+globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
+globalvar objWeights = [0.05, 0.20, 0.275, 0.275, 0.20]
+# globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
+
+globalvar objProg
+globalvar objGoal
+globalvar objPos # used for miniboss entity
+globalvar roundNo
+# globalvar kills
+globalvar threatList = []
+# threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL/*, THREATS.KITSUNIPS*/]
+# threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
+# globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
+
+# threats that have extra behavior in more maugas
+globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.FRACTAL,*/ THREATS.HEAL, THREATS.SNIPER, THREATS.SUN]
+# niplets can't be there because they block weak spots
+
+# keep lazer as last and frosty as 1st after slender
+globalvar threatNames = ["slenderman", "more maugas", "frosty nips", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+#kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
+# mini maugas have weak spots to shoot before attakc
+globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
+
+globalvar threatText = ""
+globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT]
+globalvar mobDmg = [90, 155, 75]
+globalvar i # used in horde
+globalvar upto # used in init, phase change, hp set on bug
+
+# for icicle threat
+globalvar target1 # players only
+globalvar target2 # players only
+# for laser threat
+globalvar area1
+globalvar area2
+globalvar twisterPos
+globalvar twisterCache
+# wall
+globalvar wallPos
+globalvar wallI
+globalvar wallEffects
+#!define WallGap 2.2
+#!define WallWidth 6
+
+globalvar missilePos
+globalvar missileFx
+globalvar missileTemp
+
+globalvar rainVar
+
+globalvar grabLeft
+globalvar grabLeftPlayer
+globalvar grabRight
+globalvar grabRightPlayer
+
+globalvar iMores
+globalvar moreFx
+globalvar attackingClone
+globalvar weakSpots = []
+
+globalvar isun
+
+globalvar threatSnipers
+globalvar threatLactaters
+globalvar threatSuns
+globalvar threatNiplets
+# globalvar threatTwinks
+globalvar mobs = []
+# persistent effects only (not destroyed until round end)
+globalvar threatFx
+globalvar antiCrashOn
+
+playervar mobTarget # also used for sniper target, milk wall victims (nipman.mobTarget)
+playervar cacheA
+playervar cacheB
+playervar cacheC
+playervar botA
+playervar botB
+# playervar threatDecor # persistent effects for a threat NVM just use threatFx. does the same thing
+
+#!define chainSetup nipman.cacheC
+
+# big and small maugas' nip pos. world vect
+#!define smallLNip cacheA
+#!define smallRNip cacheB
+#!define hpBar cacheC
+
+# event player.
+#!define nipletsPosList botA.cacheA
+playervar iniplets
+
+# choose 1 clone
+#!define cycledClone objPos[getTotalTimeElapsed() % len(objPos)]
+
+#!define MiniScale 15
+
+rule "init":
+	# print(len(getPlayers(Team.2)))
+	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudSubtext(getAllPlayers(), "use code DS2MD for the latest version", HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY)
+	disableInspector()
+
+	obj = OBJ.INTERMISSION
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	nipman = getLastCreatedEntity()
+	nipman.startForcingPosition(vect(0,-17-2.8,35), false)
+	nipman.startFacing(Vector.BACKWARD, 999, Relativity.TO_WORLD, FacingReeval.NONE)
+	nipman.disablePlayerCollision()
+	nipman.startScalingSize(20, false) # max size
+	upto = nipman.getMaxHealth()
+	wait(0.08)
+	nipman.setMaxHealth(10000)
+	kill(nipman, null) # this is to fill hp and reset his pose
+	nipman.setKnockbackReceived(0)
+	disableGamemodeCompletion()
+	disableMusic()
+	disableScoring()
+	heal(nipman, null, 999999)
+	wait()
+	nipman.setHealingReceived(0)
+	wait()
+	nipman.setHealth(72500)
+
+	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
+	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+
+	# score huds
+	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), "time elapsed", "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.FLAG), "rounds elapsed", roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers() if isHardcore else null, iconString(Icon.EXCLAMATION_MARK), "hardcore mode is on", "no respawning until round ends", HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+
+	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
+	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
+
+	# objective effects
+	createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.BAD_AURA, Color.GRAY, Vector.UP, 50, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	for i in range(6):
+		createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.CLOUD, Color.GRAY, Vector.UP * i * 0.1 - 0.7, 50, EffectReeval.VISIBILITY)
+		wait()
+	createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, objPos if obj == OBJ.PAGES else Vector.DOWN, 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers(), Effect.RING, Color.BLUE, objPos if obj == OBJ.CAPTURE else Vector.DOWN * getTotalTimeElapsed(), 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
+
+	# threat fx
+	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, LeftNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, RightNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, RightNip, Vector.BACKWARD, 0.02, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, RightNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
+
+	wait(0.16)
+	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
+	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "objective: {}! {} / {}".format(objDescs[obj], objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;threats: {}\&fullwidth_space;".format(threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+
+	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
+	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+
+	setMatchTime(5)
+
+rule "loop":
+	# start game when any player spawns for the first time
+	@Condition any([x.hasSpawned() for x in getPlayers(Team.1)])
+	# intermission
+	destroyEffect(threatFx)
+	destroyEffect(moreFx)
+	# destroyEffect(nipman.threatDecor)
+	threatFx = []
+	threatLactaters = []
+	threatSuns = []
+	threatSnipers = []
+	threatNiplets = []
+	# nipman.threatDecor = []
+	nipman.setDamageReceived(60)
+	nipman.clearStatusEffect(Status.FROZEN) # has to be unfroze early bc his hitbox desyncs with model
+	pauseMatchTime()
+	stopChasingVariable(area1)
+	stopChasingVariable(area2)
+	stopChasingVariable(twisterPos)
+	stopChasingVariable(missilePos)
+	stopAllDamageModifications()
+	# getPlayers(Team.1).stopAcceleration()
+	getPlayers(Team.1).setGravity(100)
+	obj = OBJ.INTERMISSION
+	objProg = 0
+	threatList = []
+	setMatchTime(11)
+	unpauseMatchTime()
+	wait(8)
+	bigMessage(getAllPlayers(), "next objective in 3 seconds!")
+	wait(2.5)
+	pauseMatchTime()
+	wait(0.5)
+	mobs = []
+
+	# pick objective. using objgoal instead of obj because rules check the obj var
+	objPos = Vector.DOWN * nipman.getMaxHealth()
+
+	objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
+	upto = 0
+	for i in range(len(objWeights)): # weighted rand from stackoverflow
+		if upto + objWeights[i] >= objGoal:
+			objGoal = i
+			break
+		upto += objWeights[i]
+		wait()
+
+	# objGoal = OBJ.PAGES
+
+	# threats
+	threatList = []
+	if objGoal == OBJ.PAGES:
+		threatList.append(THREATS.SLENDY)
+	elif objGoal == OBJ.MORE:
+		threatList.append(THREATS.MORE)
+
+	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+
+	wait(0.36)
+	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
+		# threatText is used as temp storage
+		# guarantee a threat that will get copied by mauga clones
+		if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
+			threatText = random.choice(moreFunThreats)
+		else:
+			threatText = random.randint(THREATS.ICE, THREATS.LASER)
+		if not threatText in threatList:
+			threatList.append(threatText)
+	# prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit.
+	if len([x for x in threatList if x in dummyThreats]) >= 2:
+		threatList = threatList.slice(0,len(threatList) - 1)
+
+	# threatList.append(THREATS.SUN)
+	# threatList.append(THREATS.CAGE)
+
+	wait()
+
+	threatText = ""
+	for i in range(len(threatList)):
+		threatText = "{}{} {}, ".format(threatText, threatIcons[threatList[i]], threatNames[threatList[i]])
+		wait()
+	threatText = threatText.substring(0, strLen(threatText)-2)
+	roundNo++
+
+	wait()
+
+	obj = objGoal
+	objGoal = [8, 3, 60, 1, 100][obj]
+
+	bigMessage(getAllPlayers(), "round start!")
+	nipman.forceButtonPress(Button.ABILITY_2)
+	wait(0.48)
+	nipman.setDamageReceived(0.001) # i forgot why this can't be 0. surely nothing bad happens :clueless:
+	# i rember now. it's to detect hook, punch, etc
+	nipman.setStatusEffect(null, Status.FROZEN, 99999)
+
+	waitUntil(objProg >= objGoal, 99999)
+
+	# for i in range(len(getPlayers(Team.2))):
+	# 	if getPlayersInSlot(i, Team.2) != nipman:
+	# 		destroyDummy(Team.2, i)
+	# 	wait()
+
+	# nipman.setStatusEffect(null, Status.STUNNED, 0.5)
+	playEffect(getAllPlayers(), DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, Color.TEAM_1, Vector.FORWARD * 18, 100)
+	playEffect(getAllPlayers(), DynamicEffect.ANA_BIOTIC_GRENADE_EXPLOSION_SOUND, Color.TEAM_1, localPlayer, 200)
+	bigMessage(getAllPlayers(), "objective complete! mauga is vulnerable!")
+	wait()
+	getDeadPlayers(Team.1).respawn()
+
+	goto RULE_START
+
+# mobs
+def mobsInit():
+	mobs = []
+	for i in range(MaxBots-4):
+		# createDummy(enemies[i%len(enemies)], Team.2, -1, Vector.DOWN, Vector.BACKWARD)
+		# can't split enemy heroes bc skin limit
+		# do not put this above skybox in case enemies aren't killed
+		createDummy(enemies[roundNo%len(enemies)], Team.2, -1, 40 * Vector.UP, Vector.BACKWARD)
+		mobs.append(getLastCreatedEntity())
+		wait(0.112)
+		# mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+		if THREATS.BOOST in threatList:
+			createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, mobs[evalOnce(i)], 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+			threatFx.append(getLastCreatedEntity())
+		# debug
+		# createInWorldText(getAllPlayers(), mobs[evalOnce(i)].mobTarget, mobs[evalOnce(i)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
+
+	wait(0.48)
+	getPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)
+	mobs.stopForcingButton(Button.PRIMARY_FIRE)
+	mobs.startForcingThrottle(1,1,0,0,0,1)
+	mobs.setDamageDealt(mobDmg[roundNo%len(mobDmg)])
+	mobs.setMoveSpeed(70)
+	wait()
+	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
+		mobs.setDamageReceived(85)
+	else:
+		mobs.setDamageReceived(100)
+
+	# kill(mobs, null)
+	# mobs.resurrect()
+	# if obj == OBJ.KILL:
+	# 	objProg -= len(mobs)
+
+	if THREATS.BOOST in threatList:
+		startDamageModification(getPlayers(Team.1), mobs, 130, DamageReeval.RECEIVERS_AND_DAMAGERS)
+
+rule "summon the horde":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition obj != OBJ.PAGES
+	@Condition obj != OBJ.MORE
+	wait(0.64, Wait.ABORT_WHEN_FALSE)
+	getAllPlayers().disableKillFeed()
+	wait()
+	# destroyAllInWorldTexts() # debug
+	mobsInit()
+	getAllPlayers().enableKillFeed()
+	# wait(5)
+
+rule "slendy":
+	@Condition obj == OBJ.PAGES
+	# destroyAllInWorldTexts() # debug
+	# bigMessage(hostPlayer, "slendy spawn debug")
+	# for i in range(MaxBots-4-TreeNo):
+	createDummy(Hero.REAPER, Team.2, -1, vect(0,7,99), Vector.BACKWARD)
+	mobs.append(getLastCreatedEntity())
+	wait()
+	# mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	mobs.last().startFacing(directionTowards(mobs.last().getEyePosition(), mobs.last().mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	wait()
+	createEffect(getAllPlayers(), Effect.REAPER_WRAITH_FORM, Color.TEAM_2, mobs.last(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	if THREATS.BOOST in threatList:
+		createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, mobs.last(), 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+		# debug
+		# createInWorldText(getAllPlayers(), mobs[evalOnce(i)].mobTarget, mobs[evalOnce(i)], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
+
+	wait(0.48)
+	mobs.startForcingThrottle(1,1,0,0,0,1)
+	mobs.setDamageDealt(500)
+	mobs.setMoveSpeed(95)
+	mobs.startScalingSize(2, false)
+	mobs.setMaxHealth(1200)
+	getAllPlayers().disableKillFeed()
+	kill(mobs, null)
+	wait()
+	getAllPlayers().enableKillFeed()
+	objPos = Vector.FORWARD # set first page pos for clueless players
+	mobs.resurrect()
+	mobs.startModifyingVoicelinePitch(0.6, false)
+	mobs.startForcingName("slenderman")
+	wait(0.48)
+	heal(mobs,null,99999)
+	while obj == OBJ.PAGES:
+		mobs.forceButtonPress(Button.MELEE)
+		wait(1.2)
+		if random.uniform(0,1) < 0.05:
+			smallMessage(getAllPlayers(), "remember to check inside mauga's guns for the pages.")
+
+rule "mob respawn":
+	@Event eachPlayer
+	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer.isAlive()
+	@Condition eventPlayer in mobs
+	eventPlayer.teleport(LeftNip if random.randint(0,1) == 0 else RightNip)
+	eventPlayer.applyImpulse(vect(random.uniform(-0.15, 0.15), random.uniform(0.4, 0.66), -1), random.uniform(50,70), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+	eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), eventPlayer.mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.stopForcingButton(Button.PRIMARY_FIRE)
+
+	# torb is hammer only in settings
+	# if obj != OBJ.PAGES:
+	# 	getPlayersOnHero(Hero.TORBJORN, Team.2).setWeapon(2)
+		# mobs.startForcingButton(Button.PRIMARY_FIRE)
+	# wait(0.24)
+	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 5)
+
+rule "knock mobs":
+	@Event eachPlayer
+	@Team 2
+	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer.getPosition().y > 8.5
+	@Condition eventPlayer.getNormalizedHealth() == 1
+	@Condition not eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN)
+	@Condition eventPlayer in mobs
+	wait(1.5)
+	waitUntil(eventPlayer.getPosition().y < 1.8, 7)
+	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 1.6)
+	if obj != OBJ.PAGES:
+		eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+	# wait(0.24)
+rule "mob retarget":
+	@Event global
+	@Condition mobs != []
+	@Condition obj != OBJ.INTERMISSION
+	if getNumberOfLivingPlayers(Team.1) == 0:
+		# mobs.mobTarget = null
+		mobs.stopForcingThrottle()
+		if obj == OBJ.BOSS:
+			objPos.stopForcingThrottle()
+	else:
+		mobs.startForcingThrottle(1,1,0,0,0,1)
+		if obj == OBJ.BOSS:
+			objPos.startForcingThrottle(1,1,0,0,0,1)
+		for i in range(len(mobs)):
+			wait(0.12)
+			# 1st-3rd closest player
+			if mobs[i].isAlive():
+				mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
+		# change boss target
+		if obj == OBJ.BOSS:
+			objPos.mobTarget = mobs[0].mobTarget
+			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
+	wait(1.6)
+	if ruleCondition:
+		loop()
+# threats
+rule "more maugas persistent attack":
+	@Disabled
+	@Condition obj == OBJ.MORE
+
+rule "init weak spots": # ALL hammond dummies are weak spots
+	@Event eachPlayer
+	@Hero wreckingBall
+	@Condition eventPlayer.isDummy()
+	eventPlayer.startScalingSize(0.8, false)
+	eventPlayer.startForcingName("sensitive spot")
+	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 205 + 50 * (sin(getTotalTimeElapsed() * 4)) / 2, 0), true)
+	weakSpots.append(eventPlayer)
+	wait(0.16)
+	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, eventPlayer, 1, EffectReeval.VISIBILITY)
+	eventPlayer.communicate(Comms.HELLO)
+
+rule "more maugas charge attack":
+	@Condition obj == OBJ.MORE
+	wait(2.4)
+	while obj == OBJ.MORE:
+		wait(8)
+		moreFx = []
+
+		if obj != OBJ.MORE:
+			return
+
+		attackingClone = random.choice(objPos)
+		for iMores in range(len(weakSpots)):
+			destroyDummy(Team.2, weakSpots[iMores].getSlot())
+		weakSpots = []
+
+		# createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip if attackingClone.smallLNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallLNip, LeftNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		moreFx.append(getLastCreatedEntity())
+		# createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
+		moreFx.append(getLastCreatedEntity())
+
+		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the sensitive spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
+
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.PRESS_THE_ATTACK)
+
+		# all hammond dummies get weak spot init
+		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+		getLastCreatedEntity().attachTo(attackingClone, vect(0.360, 1.34, 0.38)*MiniScale) # left
+		wait()
+		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
+		getLastCreatedEntity().attachTo(attackingClone, vect(-0.137, 1.34, 0.486)*MiniScale)
+		weakSpots.setHealth(300)
+		weakSpots.setHealingReceived(0)
+		wait(0.064)
+		heal(weakSpots, null, 99999)
+
+		for iMores in range(12): # wait until with less checking
+			wait(0.96)
+			if obj != OBJ.MORE:
+				return
+			if attackingClone.isDead() or (weakSpots == []) or (entityExists(attackingClone) == false):
+				break
+			attackingClone.setStatusEffect(null, Status.BURNING, 1)
+
+		# decide on logic
+
+		if obj != OBJ.MORE:
+			return
+		if attackingClone.isDead() or (entityExists(attackingClone) == false) or (weakSpots == []):
+			attackingClone.clearStatusEffect(Status.FROZEN)
+			wait(0.112)
+			attackingClone.setStatusEffect(null, Status.STUNNED, 1)
+			destroyEffect(moreFx)
+			moreFx = []
+			random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.YES)
+			bigMessage(getAllPlayers(), "success! stopped the attack!")
+			wait(1.2)
+			attackingClone.setStatusEffect(null, Status.FROZEN, 99999)
+			attackingClone = null
+			continue
+
+		bigMessage(getAllPlayers(), "{} failed to stop the attack. brace for impact!".format(iconString(Icon.SAD)))
+
+		for iMores in range(len(weakSpots)):
+			destroyDummy(Team.2, weakSpots[iMores].getSlot())
+		weakSpots = []
+
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.COUNTDOWN)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		wait(1)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		wait(1)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, nipman.getEyePosition(), 9999)
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.INCOMING)
+		wait(1)
+
+		if obj != OBJ.MORE:
+			return
+
+		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, LeftNip, vect(10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		moreFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.MOIRA_COALESCENCE, RightNip, vect(-10, 0, 20 - 22 * (getTotalTimeElapsed() - evalOnce(getTotalTimeElapsed()))), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		moreFx.append(getLastCreatedEntity())
+
+		for iMores in range(15, -17, -5):
+			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(10,0,iMores), 10)
+			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(-10,0,iMores), 10)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 300, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 300, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			wait(0.016*21)
+
+		destroyEffect(moreFx)
+		moreFx = []
+
+rule "niplets + dupe":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.FRACTAL in threatList
+	@Condition (eventPlayer == nipman) # or (eventPlayer in objPos)
+
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, eventPlayer.getFacingDirection())
+	eventPlayer.botA = getLastCreatedEntity()
+	threatNiplets.append(getLastCreatedEntity())
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.DOWN, eventPlayer.getFacingDirection())
+	eventPlayer.botB = getLastCreatedEntity()
+	threatNiplets.append(getLastCreatedEntity())
+
+	wait(THREATS.FRACTAL * 0.032)
+
+	# threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)
+	threatNiplets.setStatusEffect(null, Status.PHASED_OUT, 99999)
+
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip + vect(-0.5,-3.5, -1),false)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip + vect(0.5,-3.5, -1),false)
+	threatNiplets.startScalingSize(2, false)
+
+	wait(0.24)
+
+	# if len(eventPlayer.nipletsPosList) <= 0:
+	# 	eventPlayer.nipletsPosList = []
+	# 	wait()
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, eventPlayer.botA, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(0.360, 1.371, 0.266)*2, eventPlayer.botB, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, eventPlayer.botA, Transform.ROTATION_AND_TRANSLATION))
+	# 	eventPlayer.nipletsPosList.append(worldVector(vect(-0.137, 1.378, 0.466)*2, eventPlayer.botB, Transform.ROTATION_AND_TRANSLATION))
+
+	wait(0.48)
+
+	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botA, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botB, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	threatNiplets.startForcingName("niplet")
+	threatNiplets.disableNameplatesFor(getAllPlayers())
+
+	# eventPlayer.iniplets = 0
+	while obj != OBJ.INTERMISSION:
+		wait(0.24)
+		# eventPlayer.iniplets = (eventPlayer.iniplets + 1) % len(eventPlayer.nipletsPosList)
+		# createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, eventPlayer.nipletsPosList[eventPlayer.iniplets], vect(random.uniform(0,0.7),random.uniform(-0.5,1),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 20, 3, 0, 35, 30)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 24, 6, 0, 15, 110)
+		wait(0.24)
+		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0, 24, 6, 0, 15, 110)
+
+rule "grab":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.GRAB in threatList
+	wait(THREATS.GRAB * 0.032)
+
+	# grabplayer changes between player, position, list of players
+	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, LeftNip, grabLeft, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MOIRA_GRASP_CONNECTED, RightNip, grabRight, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabLeft,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.SIGMA_HYPERSPHERE, null, grabRight,Vector.DOWN, 0.05,ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers() if grabLeftPlayer.z != null else null, Effect.BAD_AURA, Color.TEAM_2, grabLeftPlayer, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers() if grabRightPlayer.z != null else null, Effect.BAD_AURA, Color.TEAM_2, grabRightPlayer, 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+
+	while obj != OBJ.INTERMISSION:
+		grabLeft = LeftNip
+		grabRight = RightNip
+		# select
+		grabLeftPlayer = random.choice([x for x in getLivingPlayers(Team.1) if x.getPosition().x > 0])
+		grabRightPlayer = random.choice([x for x in getLivingPlayers(Team.1) if x.getPosition().x < 0])
+
+		# attack
+		if entityExists(grabLeftPlayer):
+			grabLeftPlayer = grabLeftPlayer.getPosition() + Vector.UP * 0.5
+			chaseOverTime(grabLeft, grabLeftPlayer, 4, ChaseTimeReeval.NONE)
+		if entityExists(grabRightPlayer) and grabLeftPlayer != grabRightPlayer:
+			grabRightPlayer = grabRightPlayer.getPosition() + Vector.UP * 0.5
+			chaseOverTime(grabRight, grabRightPlayer, 4, ChaseTimeReeval.NONE)
+
+		wait(4)
+
+		stopChasingVariable(grabLeft)
+		stopChasingVariable(grabRight)
+
+		if obj == OBJ.INTERMISSION:
+			return
+
+		# check landing
+		grabLeftPlayer = getRealPlayersInRadius(grabLeft, 2)
+		grabLeftPlayer.startForcingPosition(grabLeft,true)
+		smallMessage(grabLeftPlayer, "{} you were grabbed!".format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
+
+		grabRightPlayer = getRealPlayersInRadius(grabRight, 2)
+		grabRightPlayer.startForcingPosition(grabRight,true)
+		smallMessage(grabRightPlayer, "{} you were grabbed!".format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 20)
+		# else:
+		# 	grabLeftPlayer = null
+		# if distance(grabRight, grabRightPlayer) < 2:
+		# 	grabRightPlayer.startForcingPosition(grabRight,true)
+		# 	playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
+		# 	playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 1)
+		# else:
+		# 	grabRightPlayer = null
+
+		# pull
+		chaseOverTime(grabLeft, LeftNip, 1.2, ChaseTimeReeval.NONE)
+		chaseOverTime(grabRight, RightNip, 1.2, ChaseTimeReeval.NONE)
+
+		grabLeftPlayer.startDamageOverTime(null, 1.2, 10)
+		grabRightPlayer.startDamageOverTime(null, 1.2, 10)
+
+		wait(1.2)
+		stopChasingVariable(grabLeft)
+		stopChasingVariable(grabRight)
+
+		wait(0.08)
+		grabLeftPlayer.stopForcingPosition()
+		grabRightPlayer.stopForcingPosition()
+
+	# createEffect
+	/*while obj != OBJ.INTERMISSION:
+		grabLeft = LeftNip
+		chaseAtRate(grabLeft, getRealClosestPlayer(grabLeft, Team.1).getEyePosition(), 2, ChaseRateReeval.DESTINATION_AND_RATE)
+		while true:
+			wait(0.096)
+			if obj == OBJ.INTERMISSION:
+				stopChasingVariable(grabLeft)
+				return
+			else:
+				for grabLeftPlayer in range(getNumberOfPlayers(Team.1)):
+					wait(0.096)
+					grabLeftPlayer = getPlayersInSlot(grabLeftPlayer, Team.1)
+					if grabLeftPlayer.hasSpawned() and grabLeftPlayer.isAlive() and distance(grabLeft, grabLeftPlayer) < 1:
+						break
+		stopChasingVariable(grabLeft)
+		grabLeftPlayer.startForcingPosition(grabLeft, true)
+		chaseAtRate(grabLeft, LeftNip, 20, ChaseRateReeval.NONE)
+		grabLeftPlayer.startDamageOverTime(null, 2, 30)
+		wait(2, Wait.ABORT_WHEN_FALSE)
+		grabLeftPlayer.stopForcingPosition()
+		stopChasingVariable(grabLeft)*/
+
+/*rule "grab right":
+	@Disabled
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.GRAB in threatList
+	wait()
+	while obj != OBJ.INTERMISSION:
+		grabLeft = RightNip
+		chaseAtRate(grabRight, getRealClosestPlayer(grabRight, Team.1).getPosition(), 2, ChaseRateReeval.DESTINATION_AND_RATE)
+		while true:
+			if obj == OBJ.INTERMISSION:
+				stopChasingVariable(grabRight)
+				return
+			else:
+				for grabRightPlayer in range(getNumberOfPlayers(Team.1)):
+					grabRightPlayer = getPlayersInSlot(grabRightPlayer, Team.1)
+					if grabRightPlayer.hasSpawned() and grabRightPlayer.isAlive() and distance(grabRight, grabRightPlayer) < 1:
+						break
+					wait(0.096)
+			wait(0.096)
+		stopChasingVariable(grabRight)
+		grabRightPlayer.startForcingPosition(grabRight, true)
+		chaseAtRate(grabRight, RightNip, 20, ChaseRateReeval.NONE)
+		grabRightPlayer.startDamageOverTime(null, 2, 30)
+		wait(2, Wait.ABORT_WHEN_FALSE)
+		grabRightPlayer.stopForcingPosition()
+		stopChasingVariable(grabRight)*/
+
+rule "cage":
+	@Event eachPlayer
+	@Team 1
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventPlayer.isDummy() == false
+	@Condition eventPlayer.hasSpawned()
+	@Condition THREATS.CAGE in threatList
+	# for nipman.chainSetup in range(9):
+	# 	createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(i),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if i % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# 	threatFx.append(getLastCreatedEntity())
+	# 	wait()
+
+	wait(THREATS.CAGE * 0.032)
+
+	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+
+	wait(eventPlayer.getSlot() * 0.016)
+
+	while obj != OBJ.INTERMISSION:
+		if eventPlayer.getPosition().z < -5 and (eventPlayer.isCrouching() == false):
+			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+		wait(0.36)
+
+rule "cage boundary":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.CAGE in threatList
+
+	# for chainSetup in range(9):
+	# 	createBeam(getAllPlayers() if entityExists(getPlayersInSlot(evalOnce(chainSetup),Team.1)) else null, Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if chainSetup % 2 == 0 else RightNip), getPlayersInSlot(evalOnce(i)), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# 	threatFx.append(getLastCreatedEntity())
+	# 	wait()
+
+	createBeam(getAllPlayers(), Beam.BAD, vect(-20,0.1,-5), vect(20,0.1,-5), Color.ROSE, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+rule "milk wall + collision":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.WALL in threatList
+	wait(THREATS.WALL * 0.032)
+	wallEffects = []
+	while obj != OBJ.INTERMISSION:
+		wallPos = vect(random.uniform(-20, 20 - WallGap * WallWidth), 0, 20)
+		for wallI in range(54):
+			createProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip if wallI % 2 == 0 else RightNip, directionTowards(LeftNip if wallI % 2 == 0 else RightNip, wallPos + vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 0, 0, 0.1, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR_SOUND, 0.1, 50,
+				magnitude((LeftNip if wallI % 2 == 0 else RightNip) - wallPos + (vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap)) / 120 /*0.6 - 0.002 * wallI ** 2*/, 0,0,0)
+			wait(0.144)
+			createProjectileEffect(getAllPlayers(), Projectile.ECHO_STICKY_BOMB, null, wallPos + evalOnce(vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Vector.BACKWARD, 0.1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+			wallEffects.append(getLastCreatedEntity())
+
+		for wallI in range(3):
+			playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR_SOUND, Color.TEAM_2, wallPos, 800)
+			wait((3 - wallI) * 0.16)
+		chaseOverTime(wallPos, wallPos + 90 * Vector.BACKWARD, 3.5, ChaseTimeReeval.NONE)
+		# collision
+		for wallI in range(25):
+			wait(0.096)
+			nipman.mobTarget = [p for p in getLivingPlayers(Team.1)
+				if abs(p.getPosition().z - wallPos.z) < 1.3
+				and p.getPosition().x > wallPos.x
+				and p.getPosition().x < wallPos.x + WallWidth * WallGap
+				and p.getPosition().y <= 54 / WallWidth * WallGap]
+			# nipman.mobTarget.applyImpulse(Vector.BACKWARD + Vector.UP * 0.1, 100, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+			nipman.mobTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.5)
+			damage(nipman.mobTarget, null, 90) # multihits except when it doesn't
+		# [p for p in getLivingPlayers(Team.1)
+		# 	if p.getPosition().z <= 20
+		# 	and p.getPosition().x > wallPos.x
+		# 	and p.getPosition().x < wallPos.x + WallWidth * WallGap
+		# 	and p.getPosition().y <= 60 / WallWidth].applyImpulse(Vector.BACKWARD + Vector.UP * 0.3, 360, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+		# wait(1)
+		for wallI in range(len(wallEffects)):
+			destroyEffect(wallEffects[wallI])
+			wait()
+		destroyEffect(wallEffects)
+		wallEffects = []
+		stopChasingVariable(wallPos)
+
+#!define RainPosFormula vect((sin(getTotalTimeElapsed() / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(16 - 8 * rainVar))
+rule "rain":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.RAIN in threatList
+	wait(THREATS.RAIN * 0.032)
+	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	for rainVar in range(5):
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.PURPLE, RainPosFormula + Vector.DOWN * 18, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+
+	while obj != OBJ.INTERMISSION:
+		for rainVar in range(5):
+			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
+			wait(0.048)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,3,0,0)
+
+rule "twister":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.TWISTER in threatList
+	wait(THREATS.TWISTER * 0.032)
+
+	for twisterCache in range(3,12,2):
+		# smallMessage(getAllPlayers(), i)
+		createEffect(getAllPlayers(), Effect.BAD_AURA, Color.GRAY, Vector.UP * evalOnce(twisterCache*2.5 - 6) + twisterPos, evalOnce(twisterCache * 0.7), EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+		createProjectileEffect(getAllPlayers(), Projectile.ECHO_STICKY_BOMB, null, twisterPos + evalOnce(twisterCache) * 0.8 * vect(cos(getTotalTimeElapsed() * 7 + evalOnce(twisterCache)), 1 + 0.4 * sin(getTotalTimeElapsed()), sin(getTotalTimeElapsed() * 7 + evalOnce(twisterCache))), Vector.UP, evalOnce(random.uniform(0,0.05)), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		threatFx.append(getLastCreatedEntity())
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, twisterPos + evalOnce(twisterCache) * 0.8 * vect(cos(getTotalTimeElapsed() * 9 + evalOnce(twisterCache)), 1.3 + 0.4 * cos(getTotalTimeElapsed()), sin(getTotalTimeElapsed() * 9 + evalOnce(twisterCache))), Vector.UP, evalOnce(random.uniform(0,0.05)), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		threatFx.append(getLastCreatedEntity())
+		wait()
+	createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, twisterPos, 5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, twisterPos + 24 * Vector.UP, 30, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, twisterPos + 7 * Vector.DOWN, Vector.DOWN, 1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+
+	twisterPos = LeftNip * vect(1,0,1)
+	chase(twisterPos, getRealClosestPlayer(twisterPos,Team.1).getPosition()*vect(1,0,1), rate=1.6, ChaseReeval.DESTINATION_AND_RATE)
+	while obj != OBJ.INTERMISSION:
+		twisterCache = [x for x in getLivingPlayers(Team.1) if distance(x.getPosition() * vect(1,0,1), twisterPos) < 5 and x.getPosition().y < 25]
+		twisterCache.applyImpulse(Vector.UP, 7, Relativity.TO_WORLD, Impulse.INCORPORATE_CONTRARY_MOTION)
+		damage(twisterCache, null, 35)
+		wait(0.24)
+
+rule "sun loop":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.SUN in threatList
+
+	while obj != OBJ.INTERMISSION:
+		wait(0.64)
+		threatSuns.setInvisibility(Invis.ENEMIES)
+		threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
+		threatSuns.startForcingName("sunkissed nips")
+		threatSuns.setProjectileSpeed(30)
+		threatSuns.disableNameplatesFor(getAllPlayers())
+		threatSuns.setDamageDealt(max(20,120 / len(threatSuns)))
+		threatSuns.startModifyingVoicelinePitch(0, false)
+		threatSuns.setUltCharge(100)
+		wait(4)
+		threatSuns.forceButtonPress(Button.ULTIMATE)
+		for isun in range(len(threatSuns)):
+			if entityExists(threatSuns[isun]) == false:
+				threatSuns.remove(threatSuns[isun])
+			else:
+				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
+			wait(0.064)
+		# threatSuns.slice(0,len(threatSuns)/2).setFacing(, Relativity.TO_PLAYER)
+		# threatSuns.slice(len(threatSuns/2),len(threatSuns)).setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
+		wait(2)
+		threatSuns.forceButtonPress(Button.PRIMARY_FIRE)
+
+rule "gravitatas":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.GRAV in threatList
+
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+	# there was an issue with players getting stuck on the bottom rocks opposite mauga
+	# getPlayers(Team.1).startAcceleration(Vector.FORWARD + 0.15 * Vector.DOWN, 80, 15, Relativity.TO_WORLD, AccelReeval.NONE)
+	while obj != OBJ.INTERMISSION:
+		getPlayers(Team.1).setGravity(300)
+		wait(6)
+rule "boolet":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.DAKKA in threatList
+	wait(THREATS.DAKKA * 0.032)
+	while obj != OBJ.INTERMISSION:
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, LeftNip,
+			vect(sin(getTotalTimeElapsed()*2)*0.5, cos(getTotalTimeElapsed()) * 0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 130, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.04, 14, 4, 0, 0,0)
+		wait(0.016 * 5)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, null, RightNip,
+			vect(sin(getTotalTimeElapsed()*2)*-0.5, cos(getTotalTimeElapsed()) * -0.1 - 0.2, -1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 130, 1, 0, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION, DynamicEffect.DVA_MICRO_MISSILES_EXPLOSION_SOUND, 0.1, 14, 4, 0, 0,0)
+		wait(0.016 * 5)
+rule "laser":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.LASER in threatList
+	wait(THREATS.LASER * 0.032)
+	area1 = vect(10,0,20)
+	area2 = vect(-10,0,20)
+	createBeam(getAllPlayers(), Beam.OMNIC_SLICER, LeftNip, area1, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.OMNIC_SLICER, RightNip, area2, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, area1 + 4 * Vector.DOWN, Vector.DOWN, 0.55, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, area2 + 4 * Vector.DOWN, Vector.DOWN, 0.55, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	threatFx.append(getLastCreatedEntity())
+
+	chase(area1, getRealClosestPlayer(area1,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
+	chase(area2, getRealClosestPlayer(area2,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
+
+	while obj != OBJ.INTERMISSION:
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, nipman, area1 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 10, 55, 0, 0)
+		wait(0.08)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, nipman, area2 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 3, 55, 0, 0)
+		wait(0.8)
+
+rule "discharge":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.COOM in threatList
+	wait(THREATS.COOM * 0.032)
+
+	createDummy(Hero.TORBJORN, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botA = getLastCreatedEntity()
+	threatLactaters.append(getLastCreatedEntity())
+	getLastCreatedEntity().startForcingPosition(eventPlayer.smallLNip, false)
+	createDummy(Hero.TORBJORN, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botB = getLastCreatedEntity()
+	threatLactaters.append(getLastCreatedEntity())
+	getLastCreatedEntity().startForcingPosition(eventPlayer.smallRNip, false)
+	wait(0.36)
+	threatLactaters.setWeapon(2)
+	threatLactaters.startScalingSize(0.3, false)
+	threatLactaters.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatLactaters.setInvisibility(Invis.ALL)
+	threatLactaters.startForcingButton(Button.PRIMARY_FIRE)
+	eventPlayer.botA.startFacing(evalOnce(directionTowards(eventPlayer.smallLNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.5 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.5)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(evalOnce(directionTowards(eventPlayer.smallRNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.5 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.5)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	# eventPlayer.botA.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	# eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	wait(0.36)
+	threatLactaters.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
+	threatLactaters.startForcingName("overheating glands")
+	threatLactaters.disableNameplatesFor(getAllPlayers())
+
+rule "everybody discharge":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.COOM in threatList
+	while THREATS.COOM in threatList:
+		wait(10)
+		threatLactaters.setUltCharge(100)
+		threatLactaters.setDamageDealt((80 / len(threatLactaters)))
+		threatLactaters.disableNameplatesFor(getAllPlayers())
+		wait(0.12)
+		threatLactaters.forceButtonPress(Button.ULTIMATE)
+
+rule "heal milk":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.HEAL in threatList
+	# sure let the niplets also do this
+	@Condition eventPlayer.isAlive()
+
+	createProjectileEffect(getAllPlayers(), Projectile.MOIRA_HEAL_ORB, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.MOIRA_HEAL_ORB, null, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+
+	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
+		wait(0.8)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
+
+rule "nuke":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.NUKE in threatList
+	wait(THREATS.NUKE * 0.032)
+
+	# debug
+	# createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	while obj != OBJ.INTERMISSION:
+		missileFx = []
+		missilePos = vect(0,1,20)
+		chaseAtRate(missilePos, getRealClosestPlayer(missilePos, Team.1).getPosition() * vect(1,0,1) + Vector.UP, 4, ChaseRateReeval.DESTINATION_AND_RATE)
+		# chaser
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos, Vector.UP, 0.1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		missileFx.append(getLastCreatedEntity())
+		wait()
+		# closest player check, can't use wait until in case rule must break
+		while missileFx != []:
+			if obj == OBJ.INTERMISSION:
+				for missileTemp in range(len(missileFx)):
+					destroyEffect(missileFx[missileTemp])
+				return
+			# probably a bit more optimal since this stops checking on the first player found, instead of checking all players in radius
+			for missileTemp in range(getNumberOfLivingPlayers(Team.1)):
+				if getLivingPlayers(Team.1)[missileTemp].hasSpawned() and distance(getLivingPlayers(Team.1)[missileTemp].getPosition(), missilePos) < 3:
+					playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, missilePos, 100)
+					destroyEffect(missileFx[0])
+					missileFx = []
+					break
+			wait(0.24)
+		# arming
+		lbl_0:
+		stopChasingVariable(missilePos)
+		missilePos -= Vector.UP
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos + Vector.UP, Vector.UP, 0.1 + 0.1 * (getTotalTimeElapsed() - missileTemp), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		missileFx.append(getLastCreatedEntity())
+		wait()
+		missileTemp = getTotalTimeElapsed()
+
+		wait(3)
+		# deto
+		if obj == OBJ.INTERMISSION:
+			for missileTemp in range(len(missileFx)):
+				destroyEffect(missileFx[missileTemp])
+			return
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
+		wait(0.012 * distance(LeftNip, missilePos))
+		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
+		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_2, missilePos, 1)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.TEAM_2, missilePos, 400)
+		destroyEffect(missileFx[0])
+		missileFx = []
+		missileTemp = getTotalTimeElapsed()
+		wait()
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, missilePos + Vector.DOWN * 10, Vector.UP, 0.8, ProjectileEffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, 9, EffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos, missilePos + min(16, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+
+		# start damage while eva anim plays
+		for missileTemp in range(20):
+			damage(getPlayersInRadius(missilePos, 9, Team.1, LosCheck.OFF), null, 30)
+			getPlayersInRadius(missilePos, 9, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
+			wait(0.112)
+
+		for missileTemp in range(2,len(missileFx)):
+			destroyEffect(missileFx[missileTemp])
+		missileFx = missileFx.slice(0,2)
+		# dot
+
+		for missileTemp in range(50):
+			damage(getPlayersInRadius(missilePos, 9, Team.1, LosCheck.OFF), null, 30)
+			getPlayersInRadius(missilePos, 9, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
+			wait(0.112)
+		for missileTemp in range(len(missileFx)):
+			destroyEffect(missileFx[missileTemp])
+		missileFx = []
+
+rule "make ice":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.ICE in threatList
+	# createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, threatVar1, directionTowards(threatVar1, target1), 0.5, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	# threatFx.append(getLastCreatedEntity())
+	# createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, threatVar1, directionTowards(threatVar1, target1), 0.5, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+	# threatFx.append(getLastCreatedEntity())
+
+	while obj != OBJ.INTERMISSION:
+		wait(9)
+		target1 = random.choice(getLivingPlayers(Team.1))
+		target2 = random.choice(getLivingPlayers(Team.1))
+		createProjectile(Projectile.MEI_ICICLE, nipman, LeftNip, directionTowards(LeftNip, target1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+		wait(0.36)
+		createProjectile(Projectile.MEI_ICICLE, nipman, RightNip, directionTowards(RightNip, target2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+
+rule "ice impact":
+	@Event playerTookDamage
+	@Team 1
+	@Condition eventAbility == null
+	@Condition attacker == nipman
+	@Condition THREATS.ICE in threatList
+	victim.setStatusEffect(nipman, Status.FROZEN, 1.2)
+
+rule "ice effect init":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.ICE in threatList
+	@Condition (eventPlayer == nipman) or (eventPlayer in objPos)
+	waitUntil(eventPlayer.smallLNip != null, 3)
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallLNip /*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, eventPlayer.smallRNip /*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+# more maugas threat duping
+rule "dupe ice":
+	@Condition obj == OBJ.MORE
+	@Condition THREATS.ICE in threatList
+	while obj != OBJ.INTERMISSION:
+		wait(9)
+		# share target
+		# must be owned by main mauga to apply freeze
+		createProjectile(Projectile.MEI_ICICLE, nipman, cycledClone.smallLNip, directionTowards(cycledClone.smallLNip, target1), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+		wait(0.36)
+		createProjectile(Projectile.MEI_ICICLE, nipman, cycledClone.smallRNip, directionTowards(cycledClone.smallRNip, target2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+
+rule "dupe boolet":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj == OBJ.MORE
+	@Condition THREATS.DAKKA in threatList
+	@Condition eventPlayer in objPos
+	# print("bullet dupe run")
+	while obj == OBJ.MORE:
+		wait(0.36)
+		# smallMessage(hostPlayer, eventPlayer.smallRNip)
+		createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, eventPlayer, vect(0.360, 1.371, 0.266)*MiniScale, vect(sin(getTotalTimeElapsed())*-12,-0.5,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 50, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0.03, 20, 3, 0,0,0)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, eventPlayer, vect(-0.137, 1.378, 0.466)*MiniScale, vect(sin(getTotalTimeElapsed()) * 12,-0.5,9), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 50, 1,0,DynamicEffect.BAD_EXPLOSION, DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, 0.03, 20, 3, 0,0,0)
+
+rule "dupe + normal sniper":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.SNIPER in threatList
+	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (eventPlayer in objPos)
+	# wait(0.048 * objPos.index(eventPlayer))
+	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
+	eventPlayer.botA = getLastCreatedEntity()
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	threatSnipers.append(eventPlayer.botA)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), (eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botB = getLastCreatedEntity()
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	threatSnipers.append(eventPlayer.botB)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), (eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+
+	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
+	threatSnipers.disableNameplatesFor(getAllPlayers())
+	threatSnipers.startForcingName("s-nip-ers")
+	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatSnipers.startScalingSize(0.1, false)
+
+	wait(0.48)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
+
+rule "sniper change target":
+	@Event eachPlayer
+	@Hero widowmaker
+	@Team 2
+	while obj != OBJ.INTERMISSION:
+		wait(4)
+		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
+		eventPlayer.setAmmo(0,9999)
+
+rule "sniper fire":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.SNIPER in threatList
+	wait(2)
+	threatSnipers.setDamageDealt(60 / len(getPlayersOnHero(Hero.WIDOWMAKER, Team.2)))
+	threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
+	if ruleCondition:
+		loop()
+
+rule "init suns":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.SUN in threatList
+	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (eventPlayer in objPos)
+
+	createDummy(Hero.ILLARI, Team.2, -1, eventPlayer.smallLNip, Vector.DOWN)
+	threatSuns.append(getLastCreatedEntity())
+	eventPlayer.botA = (getLastCreatedEntity())
+	createDummy(Hero.ILLARI, Team.2, -1, eventPlayer.smallRNip, Vector.DOWN)
+	threatSuns.append(getLastCreatedEntity())
+	eventPlayer.botB = (getLastCreatedEntity())
+
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
+
+	wait(0.64)
+	# eventPlayer.threatDecor = []
+	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), 0.02, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+# objective setup
+rule "missing mauga":
+	@Condition obj == OBJ.MORE
+	@Condition all([not entityExists(x) for x in objPos])
+	wait(2, Wait.ABORT_WHEN_FALSE)
+	smallMessage(getAllPlayers(), "something went wrong. skipping phase...")
+	objProg = objGoal
+rule "NO BOTS?":
+	@Condition obj == OBJ.KILL # slendy is also a mob
+	@Condition getNumberOfPlayers(Team.2) < 8
+	wait(3, Wait.ABORT_WHEN_FALSE)
+	for i in range(len(mobs)):
+		destroyDummy(mobs[i].getTeam(), mobs[i].getSlot())
+
+	mobs = []
+
+	mobsInit()
+
+rule "more maugas":
+	@Condition obj == OBJ.MORE
+	# wait(0.016 * THREATS.MORE)
+	objPos = []
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.LEFT) # need to keep them far away or the fingers block the weak spots
+	objPos.append(getLastCreatedEntity())
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.RIGHT)
+	objPos.append(getLastCreatedEntity())
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.FORWARD)
+	objPos.append(getLastCreatedEntity())
+	objPos.setGravity(0)
+	wait()
+	objPos.startScalingSize(MiniScale,false)
+	objPos.disablePlayerCollision()
+	objPos.disableEnvironmentCollision(true)
+	objPos.setKnockbackReceived(0)
+	objPos.setMaxHealth(2500)
+	wait(0.12)
+	heal(objPos, null, 99999)
+	objPos.setHealingDealt(0)
+	for iMores in range(0,3,1):
+		wait()
+		objPos[iMores].startForcingPosition([vect(-31,-18,0), vect(31,-18,0), vect(0,-18,-31)][iMores], false)
+		wait(0.08) # LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST
+		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
+		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
+		objPos[iMores].startForcingName("mauga jr.")
+		# createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getHealth() / evalOnce(ceill(objPos[iMores].getHealth()))evalOnce(objPos[iMores]).getNormalizedHealth()*/  * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		# WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400
+		createProgressBarInWorldText(getAllPlayers(), (evalOnce(objPos[iMores]).getHealth() / evalOnce(ceil(objPos[iMores].getMaxHealth()))) * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
+		objPos[iMores].hpBar = getLastCreatedText()
+	wait(0.8)
+	objPos.setStatusEffect(null, Status.FROZEN, 99999)
+	wait(0.8)
+	objPos.setStatusEffect(null, Status.FROZEN, 99999)
+	heal(objPos, null, 99999)
+
+rule "miniboss":
+	@Condition obj == OBJ.BOSS
+	# hero must be same as mobs for skin limit
+	wait(0.64)
+	createDummy(enemies[roundNo%len(enemies)], Team.2, -1, Vector.UP * 50, Vector.BACKWARD)
+	objPos = getLastCreatedEntity()
+	objPos.setKnockbackReceived(10)
+	objPos.setMoveSpeed(40)
+	objPos.startScalingSize(3, false)
+	if objPos.getCurrentHero() == Hero.WINSTON:
+		objPos.setDamageDealt(55)
+	objPos.startForcingThrottle(1,1,0,0,0,1)
+	objPos.startForcingName("miniboss")
+	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	objPos.setMaxHealth(3500 if objPos.getCurrentHero() in getTankHeroes() else 4500)
+
+	wait(2)
+	waitUntil(objPos.isOnGround(), 4)
+	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
+	objPos.startForcingButton(Button.PRIMARY_FIRE)
+
+	while obj == OBJ.BOSS:
+		objProg = 1 - objPos.getHealth()/objPos.getMaxHealth() # objPos.getNormalizedHealth()
+		wait(0.24)
+
+rule "clean bots":
+	@Event eachPlayer
+	@Team 2
+	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer != nipman
+	@Condition obj == OBJ.INTERMISSION
+	if entityExists(eventPlayer.hpBar):
+		destroyProgressBarInWorldText(eventPlayer.hpBar)
+	destroyDummy(Team.2, eventPlayer.getSlot())
+
+rule "setup & refresh forest":
+	@Condition obj == OBJ.PAGES
+	wait(1.5, Wait.ABORT_WHEN_FALSE)
+	for i in range(TreeNo):
+		createDummy(Hero.LIFEWEAVER, Team.2, -1, Vector.UP, Vector.DOWN)
+		getLastCreatedEntity().startModifyingVoicelinePitch(0.5 + i * (1/TreeNo), false)
+		wait(0.032)
+		if len(getPlayersOnHero(Hero.LIFEWEAVER, Team.2)) > TreeNo:
+			break
+
+	getPlayersOnHero(Hero.LIFEWEAVER, Team.2).setStatusEffect(null, Status.PHASED_OUT, 9999)
+	getPlayersOnHero(Hero.LIFEWEAVER, Team.2).setInvisibility(Invis.ENEMIES)
+	getPlayersOnHero(Hero.LIFEWEAVER, Team.2).setHealingDealt(30)
+
+	wait(0.96)
+
+	while obj == OBJ.PAGES:
+		getPlayers(Team.2).setUltCharge(100)
+		wait(0.08)
+		getPlayersOnHero(Hero.LIFEWEAVER, Team.2).forceButtonPress(Button.ULTIMATE)
+		getPlayersOnHero(Hero.LIFEWEAVER, Team.2).setFacing(Vector.DOWN, Relativity.TO_WORLD)
+		wait()
+		for i in range(TreeNo):
+			getPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i].teleport(vect(random.uniform(-18,18),6,random.uniform(-18,18)))
+			# while distance(objPos, getPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i]) < 4:
+			# 	getPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i].teleport(vect(random.randint(-18,18),5,random.randint(-18,18)))
+			# 	wait()
+			wait()
+		wait(0.08)
+		getPlayersOnHero(Hero.LIFEWEAVER, Team.2).forceButtonPress(Button.PRIMARY_FIRE)
+		wait(0.55)
+		getPlayersOnHero(Hero.LIFEWEAVER, Team.2).setStatusEffect(null, Status.HACKED, 0.5)
+		wait(14, Wait.ABORT_WHEN_FALSE)
+
+rule "place objective":
+	@Condition obj == OBJ.CAPTURE
+	objPos = vect(random.randint(-13,13),0,random.randint(-13,13))
+	wait()
+	if (objPos.z < -5) and THREATS.CAGE in threatList:
+		loop()
+# objective progress
+rule "kill/obj prog/weak spot + respawn timer":
+	@Event playerDied
+	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer != nipman
+
+	if eventPlayer in weakSpots:
+		weakSpots.remove(eventPlayer)
+		playEffect(getAllPlayers(), DynamicEffect.SOMBRA_TRANSLOCATOR_REAPPEAR, Color.TEAM_2, eventPlayer, 1)
+		playEffect(getAllPlayers(), DynamicEffect.ASHE_DYNAMITE_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer, 50)
+		wait(0.48)
+		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
+		return
+
+	heal(attacker, eventPlayer, 50)
+	if THREATS.DD in threatList:
+		playEffect(getAllPlayers(), DynamicEffect.MOIRA_FADE_REAPPEAR, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 1)
+		playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND, Color.TEAM_2, eventPlayer.getPosition() + Vector.UP, 10)
+		damage(getPlayersInRadius(eventPlayer.getPosition(), 2, Team.1, LosCheck.SURFACES_AND_ENEMY_BARRIERS),eventPlayer,90)
+		# createProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, Vector.UP + eventPlayer.getPosition(), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 90, 1, 4, DynamicEffect.MOIRA_FADE_REAPPEAR, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION_SOUND,0,0,0.5, 0,0,0)
+	if obj == OBJ.PAGES:
+		eventPlayer.setRespawnTime(7)
+		# objGoal -= 0.5
+		objProg += 0.5
+		return
+	elif obj == OBJ.KILL:
+		objProg++
+		addToTeamScore(Team.1, 1)
+		setTeamScore(Team.1, 0)
+		eventPlayer.setRespawnTime(2)
+		return
+	elif obj == OBJ.BOSS and eventPlayer == objPos:
+		objProg = objGoal
+	elif obj == OBJ.MORE and eventPlayer in objPos:
+		if eventPlayer == attackingClone:
+			kill(weakSpots, null)
+			destroyEffect(moreFx)
+			moreFx = []
+			attackingClone = null
+		objProg++
+		destroyDummy(eventPlayer.botA.getTeam(), eventPlayer.botA.getSlot())
+		destroyDummy(eventPlayer.botB.getTeam(), eventPlayer.botB.getSlot())
+		objPos.remove(eventPlayer)
+		destroyProgressBarInWorldText(eventPlayer.hpBar)
+		eventPlayer.disableRespawn()
+		wait(1.2)
+		destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
+	eventPlayer.setRespawnTime(1.8)
+	# kills++
+
+rule "point":
+	@Condition obj == OBJ.CAPTURE
+	if getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF) != []:
+		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 3
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos, 25)
+		playEffect(getAllPlayers(), DynamicEffect.WIDOWMAKER_VENOM_MINE_EXPLOSION_SOUND, Color.TEAM_1, objPos, 150)
+	wait(0.64)
+	if RULE_CONDITION:
+		goto RULE_START
+
+rule "page found":
+	@Event eachPlayer
+	@Team 1
+	@Condition obj == OBJ.PAGES
+	@Condition eventPlayer.isDummy() == false
+	@Condition distance(eventPlayer, objPos) < 1.3
+	smallMessage(getAllPlayers(), " {} found a page!".format(eventPlayer))
+	playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objPos, 65)
+	playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.TEAM_1, objPos, 1)
+	addToTeamScore(Team.1, 1) # sound
+	setTeamScore(Team.1, 0)
+	objProg++
+	if (THREATS.CAGE in threatList) and objPos.z < -5:
+		objPos = vect(random.randint(-18,18),0,random.randint(-5,16))
+	else:
+		objPos = vect(random.randint(-18,18),0,random.randint(-18,16))
+
+rule "debug finish obj":
+	@Disabled
+	@Condition "{}".format(hostPlayer) == "OMGIDIED"
+	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
+	@Condition obj != OBJ.INTERMISSION
+	objProg = objGoal
+
+# misc
+rule "wrong mauga":
+	@Event playerDealtDamage
+	@Condition victim == nipman
+	@Condition obj != OBJ.INTERMISSION
+	eventPlayer.communicate(Comms.NO)
+	wait(10)
+rule "rez cd if not hardcore":
+	wait(2)
+	if isHardcore == false:
+		while true:
+			getPlayersOnHero(Hero.MERCY, Team.1).setAbilityCooldown(Button.ABILITY_2, 0)
+			wait(1)
+
+rule "player count balancing, freeze & nip pos check":
+	while true:
+		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
+			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
+			getPlayers(Team.1).setDamageDealt(min(400,900 / getNumberOfPlayers(Team.1)))
+		if (obj != OBJ.INTERMISSION):
+			getPlayersOnHero(Hero.MAUGA, Team.2).setStatusEffect(null, Status.FROZEN, 99999)
+			nipman.setDamageReceived(1)
+		if nipman.smallLNip.y <= 4:
+			nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
+			nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+		wait(10)
+rule "wake up":
+	@Event eachPlayer
+	@Team 2
+	@Hero mauga
+	@Condition eventPlayer.hasStatusEffect(Status.KNOCKED_DOWN)
+	eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
+	wait(0.112)
+	if ruleCondition:
+		loop()
+
+rule "get up":
+	@Event eachPlayer
+	@Team 2
+	@Hero mauga
+	@Condition eventPlayer.hasStatusEffect(Status.ASLEEP)
+	eventPlayer.clearStatusEffect(Status.ASLEEP)
+	wait(0.112)
+	if ruleCondition:
+		loop()
+
+rule "anti crash on":
+    @Condition not antiCrashOn
+    @Condition getServerLoad() > 235
+    wait(0.8, Wait.ABORT_WHEN_FALSE)
+    setSlowMotion(50)
+    # smallMessage(getAllPlayers(), "server load high. anti crash on.")
+    antiCrashOn = true
+
+rule "anti crash off":
+    @Condition antiCrashOn
+    @Condition getServerLoad() < 200
+    do:
+        wait(0.16, Wait.ABORT_WHEN_FALSE)
+        setSlowMotion(100)
+        antiCrashOn = false
+    while RULE_CONDITION
+rule "where did he go":
+	@Condition not entityExists(nipman)
+	wait(2, Wait.ABORT_WHEN_FALSE)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	nipman = getLastCreatedEntity()
+	nipman.startForcingPosition(vect(0,-17,35), false)
+	nipman.startFacing(Vector.BACKWARD, 999, Relativity.TO_WORLD, FacingReeval.NONE)
+	nipman.disablePlayerCollision()
+	nipman.startScalingSize(50, false)
+	upto = nipman.getMaxHealth()
+	wait(0.08)
+	nipman.setMaxHealth(10000)
+	# kill(nipman, null) # this is to fill hp and reset his pose
+	nipman.setKnockbackReceived(0)
+	disableGamemodeCompletion()
+	disableMusic()
+	disableScoring()
+	heal(nipman, null, 999999)
+	wait()
+	nipman.setHealingReceived(0)
+	wait()
+	nipman.setHealth(72500)
+
+rule "charge no breaky":
+	@Event eachPlayer
+	@Hero reinhardt
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition eventPlayer.getPosition().z > 18
+	@Condition eventPlayer.getFacingDirection().z > -0.7
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
+	smallMessage(eventPlayer, "do not the mauga")
+
+rule "charge no breaky more maugas":
+	@Event eachPlayer
+	@Hero reinhardt
+	@Condition obj == OBJ.MORE
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition ((eventPlayer.getPosition().z < -18 and eventPlayer.getFacingDirection().z < 0.7)
+	or (eventPlayer.getPosition().x < -18 and eventPlayer.getFacingDirection().x < 0.7)
+	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
+	smallMessage(eventPlayer, "do not the mauga")
+
+rule "punch no breaky":
+	@Event eachPlayer
+	@Hero doomfist
+	@Disabled
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventPlayer.isFiringSecondaryFire()
+	@Condition eventPlayer.getPosition().z > 15
+	@Condition eventPlayer.getFacingDirection().z > 0
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	smallMessage(eventPlayer, "do not the mauga")
+
+rule "hook no breaky":
+	@Event eachPlayer
+	@Hero roadhog
+	@Disabled
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 35 * eventPlayer.getFacingDirection(), getPlayers(Team.2), getPlayersOnHero(Hero.LIFEWEAVER, Team.2), true).getPlayerHit() == nipman
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	smallMessage(eventPlayer, "do not the mauga")
+rule "flux no breaky":
+	@Event playerDealtDamage
+	@Hero sigma
+	@Condition eventAbility == Button.ULTIMATE
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	smallMessage(eventPlayer, "do not the mauga")
+	wait(0.8)
+	eventPlayer.setUltCharge(100)
+rule "punch unbreaky":
+	@Event playerDealtDamage
+	@Hero doomfist
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventAbility == Button.SECONDARY_FIRE
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	victim.clearStatusEffect(Status.FROZEN)
+	wait(0.48, Wait.ABORT_WHEN_FALSE)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
+rule "hook unbreaky":
+	@Event playerDealtDamage
+	@Hero roadhog
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventAbility == Button.ABILITY_1
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	victim.clearStatusEffect(Status.FROZEN)
+	wait(0.48, Wait.ABORT_WHEN_FALSE)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
+rule "debug":
+	@Disabled
+	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
+	hostPlayer.setUltCharge(100)
+	# hostPlayer.setDamageReceived(0)
+rule "win":
+	@Event playerDied
+	@Condition eventPlayer == nipman
+	@Condition attacker != null
+	setSlowMotion(50)
+	getPlayers(Team.ALL).communicate(Comms.VOICE_LINE_UP)
+	wait(0.48)
+	declareTeamVictory(Team.1)
+	destroyAllEffects()
+	setSlowMotion(100)
+	wait(3)
+	restartMatch()
+
+rule "player init, cage add":
+	@Event eachPlayer
+	@Team 1
+	@Condition eventPlayer.hasSpawned()
+	eventPlayer.disableGamemodeHud()
+	eventPlayer.setAllowedHeroes(getAllHeroes())
+	if isHardcore:
+		getPlayers(Team.1).disableRespawn()
+
+rule "sombra aint slick":
+	@Event eachPlayer
+	@Hero sombra
+	@Condition eventPlayer.isUsingUltimate() or (eventPlayer.isHoldingButton(Button.ULTIMATE) and eventPlayer.getUltCharge() == 100)
+	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
+	eventPlayer.mobTarget = getLastDamageModification()
+	waitUntil(eventPlayer.getUltCharge() < 100, 2)
+	stopDamageModification(eventPlayer.mobTarget)
+rule "sombra was a little slick":
+	@Event playerDealtDamage
+	@Disabled
+	@Hero sombra
+	@Condition victim == nipman
+	@Condition eventAbility == Button.ULTIMATE or eventDamage > 1000
+	nipman.setHealth(nipman.getHealth() + eventDamage * 0.7)
+
+rule "you are dead, not big surprise":
+	@Event playerDied
+	@Team 1
+	addToTeamScore(Team.2, 1)
+	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
+	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
+	if isHardcore:
+		# eventPlayer.setRespawnTime(99999)
+		if [x for x in getPlayers(Team.1) if x.isAlive() and x.hasSpawned()] == []:
+			bigMessage(getAllPlayers(), "game over. all players died.")
+			setSlowMotion(50)
+			wait(1)
+			declareTeamVictory(Team.2)
+			destroyAllEffects()
+			setSlowMotion(100)
+			wait(3)
+			restartMatch()

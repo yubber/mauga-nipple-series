@@ -14,7 +14,7 @@ settings {
     "gamemodes": {
         "skirmish": {
             "enabledMaps": [
-                "workshopExpanseNight"
+                "workshopChamber"
             ]
         },
         "general": {
@@ -53,7 +53,7 @@ enum MAUGA:
 	PLATFORM,
 	JUMP
 
-globalvar maugaIcons = [abilityIconString(Hero.ROADHOG, Button.ABILITY_1), abilityIconString(Hero.FREJA, Button.ABILITY_2, abilityIconString(Hero.GENJI, Button.ABILITY_2), abilityIconString(Hero.LIFEWEAVER, Button.ABILITY_1), abilityIconString(Hero.KIRIKO, Button.ABILITY_1))]
+globalvar maugaIcons = [abilityIconString(Hero.ROADHOG, Button.ABILITY_1), abilityIconString(Hero.FREJA, Button.ABILITY_2), abilityIconString(Hero.GENJI, Button.ABILITY_2), abilityIconString(Hero.LIFEWEAVER, Button.ABILITY_1), abilityIconString(Hero.KIRIKO, Button.ABILITY_1)]
 globalvar maugaPrompts = ["grapple", "geyser", "springboard", "platform", "double jump"]
 globalvar meleeMaugas = [MAUGA.PUSHOFF]
 
@@ -80,10 +80,10 @@ playervar _NoClip
 rule "init bot":
 	@Event eachPlayer
 	@Condition eventPlayer.isDummy()
-	eventPlayer.playerUseTimes = [null for x in getNumberOfSlots(Team.1)]
+	eventPlayer.playerUseTimes = [null for x in getNumberOfSlots(Team.1)] # can't use range but this is wrong
+
 rule "grapple":
 	@Event eachPlayer
-
 
 # core
 rule "set target":
@@ -99,7 +99,7 @@ rule "fx":
 	createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_1, localPlayer.lookingAt, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	waitUntil(hostPlayer.hasSpawned(), 999)
 
-	createInWorldText(getAllPlayers(), )
+	# createInWorldText(getAllPlayers(), )
 
 	pauseMatchTime()
 	hostPlayer.setUltEnabled(false)
@@ -107,14 +107,17 @@ rule "fx":
 	print("hold rclick set scale")
 	print("ult export")
 	print("lclick create/confirm")
+	print("rclick scale")
 	print("melee knock down/destroy")
+
+	editmode = true
 
 rule "theprinter":
 	@Event eachPlayer
 	@Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 	if baby == null:
 		eventPlayer.disablePlayerCollision()
-		createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.UP)
+		createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.UP)
 		baby = getLastCreatedEntity()
 		baby.attachTo(eventPlayer, vect(0,0,0))
 		baby.startFacing(eventPlayer.getFacingDirection(), Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
@@ -151,7 +154,7 @@ rule "edit bot facing/status":
 	@Condition hostPlayer.isHoldingButton(Button.RELOAD)
 	@Condition baby == null
 	baby = Chungus
-	baby.startFacing(eventPlayer.getFacingDirection(), Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	baby.startFacing(hostPlayer.getFacingDirection(), Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.64)
 	waitUntil(hostPlayer.isHoldingButton(Button.RELOAD), 99999)
 	baby.stopFacing()
@@ -180,25 +183,27 @@ rule "theshredder / theknocker":
 		kill(Chungus, hostPlayer)
 	else:
 		baby.type = (baby.type + 1) % len(maugaPrompts)
-		# if baby.hasStatus(Status.FROZEN):
-		# 	baby.clearStatusEffect(Status.FROZEN)
-		# else:
-		# 	baby.setStatusEffect(hostPlayer, Status.FROZEN, 99999)
+		if baby.hasStatus(Status.KNOCKED_DOWN):
+			baby.clearStatusEffect(Status.KNOCKED_DOWN)
+		else:
+			baby.setStatusEffect(hostPlayer, Status.KNOCKED_DOWN, 99999)
 
 rule "export & toggle edit mode":
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
 	if editmode:
-		floorgaPos = []
-		floorgaFacing = []
-		shelfgaPos = []
-		shelfgaFacing = []
+		maugaPos = []
+		maugaFacing = []
+		maugaType = []
 		for i in range(getNumberOfLivingPlayers(Team.2)):
-			if getLivingPlayers(Team.2)[i].hasStatus(Status.KNOCKED_DOWN):
-				floorgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
-				floorgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
-			else:
-				shelfgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
-				shelfgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+				maugaPos.append(getLivingPlayers(Team.2)[i].getPosition())
+				maugaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+			# if getLivingPlayers(Team.2)[i].hasStatus(Status.KNOCKED_DOWN):
+			# 	floorgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
+			# 	floorgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+			# else:
+			# 	shelfgaPos.append(getLivingPlayers(Team.2)[i].getPosition())
+			# 	shelfgaFacing.append(getLivingPlayers(Team.2)[i].getFacingDirection())
+		bigMessage(getAllPlayers(), "exported")
 	else:
 		kill(getPlayers(Team.2), null)
 
@@ -208,7 +213,7 @@ rule "export & toggle edit mode":
 
 rule "rip":
 	@Event playerDied
-	@Hero mauga
+	@Condition eventPlayer.isDummy()
 	# floorgaPos.remove(eventPlayer.getPosition())
 	# floorgaFacing.remove(eventPlayer.getFacingDirection())
 	destroyDummy(eventPlayer.getTeam(), eventPlayer.getSlot())
