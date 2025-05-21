@@ -804,13 +804,13 @@ rule "grab":
 			return
 
 		# check landing
-		grabLeftPlayer = getRealPlayersInRadius(grabLeft, 2)
+		grabLeftPlayer = getRealPlayersInRadius(grabLeft, 2, Team.1)
 		grabLeftPlayer.startForcingPosition(grabLeft,true)
 		smallMessage(grabLeftPlayer, "{} you were grabbed!".format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
 
-		grabRightPlayer = getRealPlayersInRadius(grabRight, 2)
+		grabRightPlayer = getRealPlayersInRadius(grabRight, 2, Team.1)
 		grabRightPlayer.startForcingPosition(grabRight,true)
 		smallMessage(grabRightPlayer, "{} you were grabbed!".format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
