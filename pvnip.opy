@@ -1691,6 +1691,30 @@ rule "charge no breaky more maugas":
 	eventPlayer.cancelPrimaryAction()
 	smallMessage(eventPlayer, "do not the mauga")
 
+rule "echo charge no breaky":
+	@Event eachPlayer
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.REINHARDT
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition eventPlayer.getPosition().z > 18
+	@Condition eventPlayer.getFacingDirection().z > -0.7
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
+	smallMessage(eventPlayer, "do not the mauga")
+
+rule "echo charge no breaky more maugas":
+	@Event eachPlayer
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.REINHARDT
+	@Condition obj == OBJ.MORE
+	@Condition eventPlayer.isUsingAbility1()
+	@Condition ((eventPlayer.getPosition().z < -18 and eventPlayer.getFacingDirection().z < 0.7)
+	or (eventPlayer.getPosition().x < -18 and eventPlayer.getFacingDirection().x < 0.7)
+	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	eventPlayer.cancelPrimaryAction()
+	smallMessage(eventPlayer, "do not the mauga")
+
 rule "punch no breaky":
 	@Event eachPlayer
 	@Hero doomfist
@@ -1730,9 +1754,32 @@ rule "punch unbreaky":
 	victim.clearStatusEffect(Status.FROZEN)
 	wait(0.48, Wait.ABORT_WHEN_FALSE)
 	victim.setStatusEffect(null, Status.FROZEN, 9999)
+
+rule "echo punch unbreaky":
+	@Event playerDealtDamage
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.DOOMFIST
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventAbility == Button.SECONDARY_FIRE
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	victim.clearStatusEffect(Status.FROZEN)
+	wait(0.48, Wait.ABORT_WHEN_FALSE)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
 rule "hook unbreaky":
 	@Event playerDealtDamage
 	@Hero roadhog
+	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition obj != OBJ.INTERMISSION
+	@Condition eventAbility == Button.ABILITY_1
+	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
+	victim.clearStatusEffect(Status.FROZEN)
+	wait(0.48, Wait.ABORT_WHEN_FALSE)
+	victim.setStatusEffect(null, Status.FROZEN, 9999)
+rule "echo hook unbreaky":
+	@Event playerDealtDamage
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.ROADHOG
 	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventAbility == Button.ABILITY_1
