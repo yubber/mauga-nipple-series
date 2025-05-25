@@ -1572,10 +1572,7 @@ rule "page found":
 	addToTeamScore(Team.1, 1) # sound
 	setTeamScore(Team.1, 0)
 	objProg++
-	if (THREATS.CAGE in threatList) and objPos.z < -5:
-		objPos = vect(random.randint(-18,18),0,random.randint(-5,16))
-	else:
-		objPos = vect(random.randint(-18,18),0,random.randint(-18,16))
+	objPos = vect(random.randint(-18,18),0,random.randint(-5 if THREATS.CAGE in threatList else -18,16))
 
 rule "debug finish obj":
 	@Disabled
