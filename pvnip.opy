@@ -38,17 +38,24 @@ settings {
             # "winston": {
             #     "ammoClipSize%": 40,
             # },
+            "lifeweaver": {
+                "primaryFireRange%": 200,
+                "ultHealth%": 300
+            },
+            "widowmaker": {
+                "ability2Cooldown%": 10
+            },
 			"venture": {
                 "ability1Cooldown%": 120
             },
 			"echo": {
                 "ability1Cooldown%": 120
             },
-			"roadhog": {
-                "ultGen%": 55
-            },
+			# "roadhog": {
+            #     "ultGen%":
+            # },
 			"zarya": {
-                "ultGen%": 30
+                "ultGen%": 40
             },
 			"cassidy":{
 				"damageDealt%": 85
@@ -652,7 +659,7 @@ rule "more maugas charge attack":
 		wait(0.064)
 		heal(weakSpots, null, 99999)
 
-		for iMores in range(12): # wait until with less checking
+		for iMores in range(15): # wait until with less checking
 			wait(0.96)
 			if obj != OBJ.MORE:
 				return
@@ -1554,7 +1561,7 @@ rule "point":
 	@Condition obj == OBJ.CAPTURE
 	if getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF) != []:
 		objProg += len(getPlayersInRadius(objPos, 12, Team.1, LosCheck.OFF)) / getNumberOfPlayers(Team.1) * 3
-		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos, 25)
+		playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, Color.TEAM_1, objPos + Vector.DOWN * 0.3, 25)
 		playEffect(getAllPlayers(), DynamicEffect.WIDOWMAKER_VENOM_MINE_EXPLOSION_SOUND, Color.TEAM_1, objPos, 150)
 	wait(0.64)
 	if RULE_CONDITION:
@@ -1744,7 +1751,7 @@ rule "flux no breaky":
 rule "punch unbreaky":
 	@Event playerDealtDamage
 	@Hero doomfist
-	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition victim == nipman # or (obj == OBJ.MORE and victim in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventAbility == Button.SECONDARY_FIRE
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
@@ -1756,7 +1763,7 @@ rule "echo punch unbreaky":
 	@Event playerDealtDamage
 	@Hero echo
 	@Condition eventPlayer.getHeroOfDuplication() == Hero.DOOMFIST
-	@Condition victim == nipman or (obj == OBJ.MORE and victim in objPos)
+	@Condition victim == nipman # or (obj == OBJ.MORE and victim in objPos)
 	@Condition obj != OBJ.INTERMISSION
 	@Condition eventAbility == Button.SECONDARY_FIRE
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
@@ -1784,6 +1791,24 @@ rule "echo hook unbreaky":
 	victim.clearStatusEffect(Status.FROZEN)
 	wait(0.48, Wait.ABORT_WHEN_FALSE)
 	victim.setStatusEffect(null, Status.FROZEN, 9999)
+
+rule "hog ult nerf":
+	@Event eachPlayer
+	@Hero roadhog
+	@Condition eventPlayer.isUsingUltimate()
+	eventPlayer.setDamageDealt(35)
+	waitUntil(eventPlayer.isUsingUltimate() == false, 8)
+	eventPlayer.setDamageDealt(100)
+
+rule "echo hog ult nerf":
+	@Event eachPlayer
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.ROADHOG
+	@Condition eventPlayer.isUsingUltimate()
+	eventPlayer.setDamageDealt(35)
+	waitUntil(eventPlayer.isUsingUltimate() == false, 8)
+	eventPlayer.setDamageDealt(100)
+
 rule "debug":
 	@Disabled
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)

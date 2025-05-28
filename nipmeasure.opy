@@ -73,8 +73,8 @@ settings {
 globalvar l = vect(0.360, 1.371, 0.266)
 globalvar r = vect(-0.137, 1.378, 0.466)
 
-globalvar lyingr = vect(-0.187, 0.698, -0.702);
-globalvar lyingl = vect(0.396, 0.602, -0.566);
+globalvar lyingr = vect(-0.187, 0.698, -0.702)
+globalvar lyingl = vect(0.396, 0.602, -0.566)
 
 globalvar ldummy
 globalvar rdummy
@@ -84,12 +84,12 @@ globalvar scale = 1
 
 rule "":
 	print(scale)
-	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
+	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
 	nip = getLastCreatedEntity()
-	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
+	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
     rdummy = getLastCreatedEntity()
     wait(1)
-	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
+	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
     ldummy = getLastCreatedEntity()
     createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, getLastCreatedEntity(), 1, EffectReeval.VISIBILITY)
 	nip.startScalingSize(scale,true)
@@ -109,19 +109,28 @@ rule "":
 
 	nip.setStatusEffect(null, Status.FROZEN, 99999)
 
-    createDummy(Hero.MAUGA, Team.1, -1, Vector.FORWARD * 15, Vector.FORWARD)
+    createDummy(Hero.SIGMA, Team.1, -1, Vector.FORWARD * 15, Vector.FORWARD)
     wait(3)
-    getPlayersOnHero(Hero.MAUGA, Team.1).setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+    getPlayersOnHero(Hero.SIGMA, Team.1).setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 
 rule "set r":
-    @Disabled
+    # @Disabled
 	@Condition hostPlayer.isFiringPrimaryFire()
 	r = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
 
 rule "set l":
-    @Disabled
+    # @Disabled
 	@Condition hostPlayer.isFiringSecondaryFire()
 	l = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
+
+rule "":
+    @Event playerTookDamage
+    @Condition eventPlayer.isDummy()
+    @Condition eventAbility == Button.MELEE
+    if eventPlayer.hasStatus(Status.KNOCKED_DOWN):
+        eventPlayer.clearStatusEffect(Status.KNOCKED_DOWN)
+    else:
+        eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 
 
 rule "refr valk":
@@ -144,4 +153,5 @@ rule "":
 
 rule "scale":
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
-	scale += 1 if hostPlayer.isHoldingButton(Button.MELEE) else -1
+	scale -= 1 if hostPlayer.isHoldingButton(Button.MELEE) else -1
+    hostPlayer.disablePlayerCollision()
