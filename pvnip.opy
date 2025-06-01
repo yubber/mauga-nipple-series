@@ -148,7 +148,7 @@ enum THREATS:
 	SLENDY,
 	MORE,
 	ICE, # keep as first after slendy
-	TOES,
+	# TOES,
 	GRAB,
 	FRACTAL,
 	CAGE,
@@ -195,26 +195,26 @@ globalvar roundNo
 # globalvar kills
 globalvar threatList = []
 # threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.TOES/*, THREATS.KITSUNIPS*/]
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, /*THREATS.TOES/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 
 # threats that have extra behavior in more maugas
-globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.FRACTAL,*/ THREATS.HEAL, THREATS.SNIPER, THREATS.SUN, THREATS.TOES]
+globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.FRACTAL,*/ THREATS.HEAL, THREATS.SNIPER, THREATS.SUN]
 # niplets can't be there because they block weak spots
 
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "more maugas", "frosty nips", "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"toepples",*/ "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), /*heroIcon(Hero.SIGMA),*/ abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 # mini maugas have weak spots to shoot before attakc
 globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
 
 globalvar threatText = ""
-# globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
-# globalvar mobDmg = [90, 155, 75, 100]
-globalvar enemies = [Hero.MAUGA]
-globalvar mobDmg = [100]
+globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
+globalvar mobDmg = [90, 155, 75, 50]
+# globalvar enemies = [Hero.MAUGA]
+# globalvar mobDmg = [100]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -299,6 +299,7 @@ rule "init":
 	nipman.startForcingPosition(vect(0,-17-2.8,35), false)
 	nipman.startFacing(Vector.BACKWARD, 999, Relativity.TO_WORLD, FacingReeval.NONE)
 	nipman.disablePlayerCollision()
+	nipman.disableEnvironmentCollision(true)
 	nipman.startScalingSize(20, false) # max size
 	upto = nipman.getMaxHealth()
 	wait(0.08)
@@ -407,7 +408,7 @@ rule "loop":
 		upto += objWeights[i]
 		wait()
 
-	objGoal = OBJ.BOSS
+	# objGoal = OBJ.BOSS
 
 	threatList = []
 	if objGoal == OBJ.PAGES:
@@ -496,7 +497,7 @@ def mobsInit():
 	if enemies[roundNo%len(enemies)] == Hero.TORBJORN:
 		mobs.setDamageReceived(85)
 	elif enemies[roundNo%len(enemies)] == Hero.MAUGA:
-		mobs.setMaxHealth(65)
+		mobs.setMaxHealth(55)
 		mobs.setMoveSpeed(40)
 	else:
 		mobs.setDamageReceived(100)
@@ -1503,6 +1504,7 @@ rule "miniboss":
 
 	if objPos.getHero() == Hero.MAUGA:
 		objPos.setMaxHealth(1200)
+		objPos.setDamageDealt(35)
 	else:
 		objPos.setMaxHealth(3500 if objPos.getCurrentHero() in getTankHeroes() else 4500)
 
