@@ -83,15 +83,28 @@ globalvar nip
 globalvar scale = 1
 
 rule "":
+    hudText(localPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+	hudText(localPlayer, abilityIconString(Hero.HAMMOND, Button.CROUCH), "player position", localPlayer.getPosition(), HudPosition.LEFT, 0, Color.LIME_GREEN, Color.LIME_GREEN, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+	hudText(localPlayer, abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), "facing direction", localPlayer.getFacingDirection(), HudPosition.LEFT, 0, Color.RED, Color.RED, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
+    r = vect(0.053, 0.189, 0.189)
+    l = vect(0.011, 0.186, -0.037)
+    lyingl = vect(-0.187, 0.698, -0.702)
+    lyingr = vect(0.396, 0.602, -0.566)
+    ldummy = [null]
+    rdummy = [null]
+    nip = [null]
+    scale = 147
+
 	print(scale)
-	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
+	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.FORWARD)
 	nip = getLastCreatedEntity()
 	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
     rdummy = getLastCreatedEntity()
     wait(1)
 	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, Vector.FORWARD)
     ldummy = getLastCreatedEntity()
-    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, getLastCreatedEntity(), 1, EffectReeval.VISIBILITY)
+    # createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, getLastCreatedEntity(), 1, EffectReeval.VISIBILITY)
 	nip.startScalingSize(scale,true)
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(l*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, worldVector(r*scale, nip, Transform.ROTATION_AND_TRANSLATION), 0.2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -99,13 +112,13 @@ rule "":
     rdummy.startForcingPosition(worldVector(r*scale, nip, Transform.ROTATION_AND_TRANSLATION), true)
 	rdummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 	rdummy.startScalingSize(scale / 12, true)
-    rdummy.startFacing(nip.getFacingDirection()*-1, Math.INFINITY, Relativity.TO_WORLD)
-    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, rdummy, 1, EffectReeval.VISIBILITY)
+    rdummy.setFacing(nip.getFacingDirection()*-1, Relativity.TO_WORLD)
+    # createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, rdummy, 1, EffectReeval.VISIBILITY)
     ldummy.startForcingPosition(worldVector(l*scale, nip, Transform.ROTATION_AND_TRANSLATION), true)
 	ldummy.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 	ldummy.startScalingSize(scale / 12, true)
-    ldummy.startFacing(nip.getFacingDirection()*-1, Math.INFINITY, Relativity.TO_WORLD)
-    createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, ldummy, 1, EffectReeval.VISIBILITY)
+    ldummy.setFacing(nip.getFacingDirection()*-1, Relativity.TO_WORLD)
+    # createEffect(getAllPlayers(), Effect.ECHO_CLONING, Color.TEAM_2, ldummy, 1, EffectReeval.VISIBILITY)
 
 	nip.setStatusEffect(null, Status.FROZEN, 99999)
 
@@ -113,15 +126,24 @@ rule "":
     wait(3)
     getPlayersOnHero(Hero.SIGMA, Team.1).setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 
+    ldummy.setFacing(vect(0.07, 0.18, 0.98), Relativity.TO_WORLD)
+    print(ldummy.getFacingDirection())
+    print(nip.getPosition())
+
+
 rule "set r":
     # @Disabled
-	@Condition hostPlayer.isFiringPrimaryFire()
+	@Condition hostPlayer.isFiringSecondaryFire()
 	r = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
+    wait(0.064)
+    rdummy.setFacing(hostPlayer.getFacingDirection(), Relativity.TO_WORLD)
 
 rule "set l":
     # @Disabled
-	@Condition hostPlayer.isFiringSecondaryFire()
+	@Condition hostPlayer.isFiringPrimaryFire()
 	l = localVector(hostPlayer.getEyePosition(), nip, Transform.ROTATION_AND_TRANSLATION) / scale
+    wait(0.064)
+    ldummy.setFacing(hostPlayer.getFacingDirection(), Relativity.TO_WORLD)
 
 rule "":
     @Event playerTookDamage
@@ -147,7 +169,7 @@ rule "refr valk":
 
 rule "":
 	@Condition hostPlayer.isCrouching()
-	nip.startFacing(directionFromAngles(getTotalTimeElapsed(), 0))
+	nip.startFacing(directionFromAngles(getTotalTimeElapsed()*30, 0))
 	waitUntil(not hostPlayer.isCrouching(), 360)
 	nip.stopFacing()
 

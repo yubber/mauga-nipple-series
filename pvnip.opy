@@ -148,7 +148,8 @@ enum THREATS:
 	SLENDY,
 	MORE,
 	ICE, # keep as first after slendy
-	# TOES,
+	NIPACT,
+	TOES,
 	GRAB,
 	FRACTAL,
 	CAGE,
@@ -204,8 +205,8 @@ globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.
 # niplets can't be there because they block weak spots
 
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"toepples",*/ "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), /*heroIcon(Hero.SIGMA),*/ abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatNames = ["slenderman", "more maugas", "frosty nips", "the third nipact", "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.JUNO, Button.ABILITY_1), heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 # mini maugas have weak spots to shoot before attakc
 globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
@@ -270,7 +271,10 @@ playervar botA
 playervar botB
 # playervar threatDecor # persistent effects for a threat NVM just use threatFx. does the same thing
 
-#!define chainSetup nipman.cacheC
+#!define chainSetup (nipman.cacheC)
+
+# feetpples
+#!define feetSlow cacheA
 
 # big and small maugas' nip pos. world vect
 #!define smallLNip cacheA
@@ -633,6 +637,75 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
+rule "nipvangelion":
+	@Event eachPlayer
+	@Hero mauga
+	@Team 2
+	@Condition eventPlayer == nipman
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.NIPACT in threatList
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, LeftNip, LeftNip + vect(0,5,-1), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, LeftNip + vect(0,4,-0.8), LeftNip + vect(1,4,-0.8), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, LeftNip + vect(0,4,-0.8), LeftNip + vect(-1,4,-0.8), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, RightNip, RightNip + vect(0,5,-1), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, RightNip + vect(0,4,-0.8), RightNip + vect(1,4,-0.8), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(getAllPlayers(), Beam.MERCY_HEAL, RightNip + vect(0,4,-0.8), RightNip + vect(-1,4,-0.8), Color.TEAM_2, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+rule "TOES":
+	@Event eachPlayer
+	@Hero mauga
+	@Team 2
+	@Condition eventPlayer == nipman
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.TOES in threatList
+	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP * 999, eventPlayer.getFacingDirection())
+	threatToes.append(getLastCreatedEntity())
+	threatToes.startScalingSize(147/12)
+	threatToes.setStatusEffect(null, Status.PHASED_OUT, 99999)
+	threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, eventPlayer, Transform.ROTATION_AND_TRANSLATION), true)
+	wait(0.048)
+	threatToes.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
+
+	createBeam(localPlayer if localPlayer.feetSlow != 0 else null, Beam.GOOD, LeftNip, eventPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+	createBeam(localPlayer if localPlayer.feetSlow != 0 else null, Beam.GOOD, RightNip, eventPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	threatFx.append(getLastCreatedEntity())
+
+	threatToes.startForcingName("toepples")
+
+rule "toe medusa":
+	@Event eachPlayer
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.TOES in threatList
+	@Condition eventPlayer.isDummy() == false
+	eventPlayer.feetSlow = 0
+
+	wait(0.08 * eventPlayer.getSlot())
+
+	while obj != OBJ.INTERMISSION:
+		wait(0.16)
+		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 60:
+			eventPlayer.feetSlow += 0.1
+			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 10)
+			if eventPlayer.feetSlow >= 1:
+				smallMessage(eventPlayer, "petrified! don't stare at the feet too long!")
+				eventPlayer.feetSlow = 1
+				eventPlayer.setStatusEffect(threatToes[0], Status.FROZEN, 1)
+				wait(2.4)
+		else:
+			eventPlayer.feetSlow = 0
+			eventPlayer.setMoveSpeed(100)
+
+	eventPlayer.feetSlow = 0
+	eventPlayer.setMoveSpeed(100)
+
 rule "more maugas persistent attack":
 	@Disabled
 	@Condition obj == OBJ.MORE
