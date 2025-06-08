@@ -101,7 +101,8 @@ settings {
                 "enableRollOnly": true
             },
 			"general": {
-                "passiveHealthRegen": false
+                "passiveHealthRegen": false,
+				"healingDealt%": 10
             }
         },
         "allTeams": {
@@ -420,7 +421,8 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	threatList.append(THREATS.TOES)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
@@ -437,8 +439,6 @@ rule "loop":
 		threatList = threatList.slice(0,len(threatList) - 1)
 
 	wait()
-
-	# threatList = [THREATS.TOES]
 
 	threatText = ""
 	for i in range(len(threatList)):
@@ -661,17 +661,17 @@ rule "mauga mob behavior":
 	threatFx.append(getLastCreatedEntity())*/
 
 rule "TOES":
-	@Event eachPlayer
-	@Hero mauga
-	@Team 2
-	@Condition eventPlayer == nipman
+	# @Event eachPlayer
+	# @Hero mauga
+	# @Team 2
+	# @Condition eventPlayer == nipman
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.TOES in threatList
-	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP * 999, eventPlayer.getFacingDirection())
+	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP * 999, nipman.getFacingDirection())
 	threatToes.append(getLastCreatedEntity())
 	threatToes.startScalingSize(147/12)
 	# threatToes.setStatusEffect(null, Status.PHASED_OUT, 99999)
-	threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, eventPlayer, Transform.ROTATION_AND_TRANSLATION), true)
+	threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), false)
 	wait(0.24)
 
 	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, LeftNip, localPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -712,10 +712,10 @@ rule "toe medusa":
 				eventPlayer.feetSlow = 1
 				eventPlayer.setStatusEffect(threatToes[0], Status.FROZEN, 1.2)
 				damage(eventPlayer, threatToes[0], 80)
-				wait(2.4)
+				wait(1)
 				eventPlayer.feetSlow = 0
 				eventPlayer.setMoveSpeed(100)
-				wait()
+				wait(0.48)
 		else:
 			eventPlayer.feetSlow = 0
 			eventPlayer.setMoveSpeed(100)
@@ -1100,7 +1100,7 @@ rule "rain":
 	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	for rainVar in range(5):
-		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.PURPLE, RainPosFormula + Vector.DOWN * 18, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula + Vector.DOWN * 18, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
 		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
@@ -1266,6 +1266,8 @@ rule "heal milk":
 	# sure let the niplets also do this
 	@Condition eventPlayer.isAlive()
 	@Condition (eventPlayer in mobs) == false
+	@Condition eventPlayer.hasSpawned()
+	@Condition eventPlayer.getMaxHealth() > 2000
 
 	createProjectileEffect(getAllPlayers(), Projectile.MOIRA_HEAL_ORB, null, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), 0, ProjectileEffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
