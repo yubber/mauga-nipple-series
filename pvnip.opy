@@ -421,8 +421,8 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	threatList.append(THREATS.TOES)
+	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	# threatList.append(THREATS.TOES)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
@@ -671,7 +671,6 @@ rule "TOES":
 	threatToes.append(getLastCreatedEntity())
 	threatToes.startScalingSize(147/12)
 	# threatToes.setStatusEffect(null, Status.PHASED_OUT, 99999)
-	threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), false)
 	wait(0.24)
 
 	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, LeftNip, localPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -689,6 +688,7 @@ rule "TOES":
 	threatFx.append(getLastCreatedEntity())
 
 	while threatToes[0].hasStatus(Status.KNOCKED_DOWN) == false:
+		threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), true)
 		wait(0.48)
 		threatToes.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 
@@ -704,7 +704,7 @@ rule "toe medusa":
 	while obj != OBJ.INTERMISSION:
 		wait(0.096)
 		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 40:
-			eventPlayer.feetSlow += 0.05
+			eventPlayer.feetSlow += 0.025
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
 			damage(eventPlayer, threatToes[0], 2)
 			if eventPlayer.feetSlow >= 1:
@@ -1771,9 +1771,9 @@ rule "player count balancing, freeze & nip pos check":
 			nipman.setDamageReceived(1)
 			if obj == OBJ.MORE:
 				objPos.setStatusEffect(null, Status.FROZEN, 99999)
-		if nipman.smallLNip.y <= 4:
-			nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
-			nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+		# if nipman.smallLNip.y <= 4 or nipman.smallRNip.y <= 4:
+		nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
+		nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
 		wait(10)
 rule "wake up":
 	@Event eachPlayer
