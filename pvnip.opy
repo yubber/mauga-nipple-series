@@ -673,9 +673,9 @@ rule "TOES":
 	# threatToes.setStatusEffect(null, Status.PHASED_OUT, 99999)
 	wait(0.24)
 
-	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, LeftNip, localPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, LeftNip, localPlayer.getEyePosition() + Vector.DOWN, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, RightNip, localPlayer.getEyePosition(), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, RightNip, localPlayer.getEyePosition() + Vector.DOWN, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	threatToes.setDamageReceived(0)
 
@@ -1407,6 +1407,7 @@ rule "feetpples":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
 	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
+	wait(0.48, Wait.ABORT_WHEN_FALSE)
 	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
 	eventPlayer.botA.setFacing(eventPlayer.getFacingDirection(), Relativity.TO_WORLD)
