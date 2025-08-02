@@ -198,7 +198,7 @@ globalvar roundNo
 # globalvar kills
 globalvar threatList = []
 # threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, /*THREATS.TOES/*, THREATS.KITSUNIPS*/]
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON/*THREATS.TOES/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 
@@ -459,8 +459,8 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	# threatList.append(THREATS.TOES)
+	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	threatList.append(THREATS.TOES)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
@@ -674,7 +674,7 @@ rule "mauga mob behavior":
 	if eventPlayer in mobs or (obj == OBJ.BOSS and eventPlayer == objPos):
 		while true:
 			wait(0.64)
-			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1):
+			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive():
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
 rule "dragon change target":
@@ -684,6 +684,7 @@ rule "dragon change target":
 	while obj != OBJ.INTERMISSION:
 		wait(2)
 		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
+
 rule "dragon init":
 	@Event eachPlayer
 	@Hero mauga
@@ -692,12 +693,12 @@ rule "dragon init":
 	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botA)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botB)
 	threatFx.append(getLastCreatedEntity())
 
@@ -705,31 +706,42 @@ rule "dragon init":
 	threatDragons.startForcingName("dragoniррles")
 	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatDragons.startScalingSize(0.1, false)
+	if obj == OBJ.MORE:
+		threatDragons.setDamageDealt(65 if obj == OBJ.MORE else 200)
 
 	wait(0.48)
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
 	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
+	threatDragons.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
+
 rule "dragon stimulation":
 	@Event playerTookDamage
 	@Hero mauga
-	@Condition victim == nipman
+	@Team 2
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.DRAGON in threatList
+	@Condition (victim == nipman) or (obj == OBJ.MORE and eventPlayer in objPos)
 
-	if threatDragons[0].tickleCounter >= 18:
+	if victim.botA.tickleCounter >= 18:
 		smallMessage(getAllPlayers(), "{} heehee, stop tickling me! dragon lactation initation!".format(heroIcon(Hero.MAUGA)))
-		for threatDragons.last().iDragon in range(3):
+		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
+		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
+		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallRNip, true)
+		victim.botA.setFacing(victim.botA.mobTarget, Relativity.TO_WORLD)
+		victim.botB.setFacing(victim.botB.mobTarget, Relativity.TO_WORLD)
+		for victim.botB.iDragon in range(3):
 			threatDragons.setUltCharge(100)
-			wait(0.8)
-			threatDragons.forceButtonPress(Button.ULTIMATE)
+			wait(1.12)
+			victim.botA.forceButtonPress(Button.ULTIMATE)
+			victim.botB.forceButtonPress(Button.ULTIMATE)
 			# threatDragons[0].setFacing(directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD)
 			# threatDragons.last().setFacing(directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD)
-
+		victim.botA.tickleCounter = 0
 	else:
-		threatDragons[0].tickleCounter += 1
-		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, LeftNip, true)
-		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, RightNip, true)
-		wait(0.128)
+		victim.botA.tickleCounter += 1
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, eventPlayer.smallLNip + Vector.BACKWARD * 1.1, true)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, eventPlayer.smallRNip + Vector.BACKWARD * 1.1, true)
+		wait(0.096)
 
 /*rule "nipvangelion":
 	@Event eachPlayer
@@ -753,13 +765,14 @@ rule "dragon stimulation":
 	threatFx.append(getLastCreatedEntity())*/
 
 rule "TOES":
+	@Event global
 	# @Event eachPlayer
 	# @Hero mauga
 	# @Team 2
 	# @Condition eventPlayer == nipman
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.TOES in threatList
-	wait(0.64, Wait.ABORT_WHEN_FALSE)
+	wait(1.2, Wait.ABORT_WHEN_FALSE)
 	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP * 999, nipman.getFacingDirection())
 	threatToes.append(getLastCreatedEntity())
 	threatToes.startScalingSize(147/12)
@@ -777,16 +790,14 @@ rule "TOES":
 
 	threatToes.startForcingName("toepples")
 
-	createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, threatToes[0], true, EffectReeval.VISIBILITY)
-	threatFx.append(getLastCreatedEntity())
-
 	while threatToes[0].hasStatus(Status.KNOCKED_DOWN) == false:
-		threatToes.startForcingPosition(worldVector(vect(0.011, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), true)
+		threatToes.startForcingPosition(worldVector(vect(0.017, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), true)
 		wait(0.48)
 		threatToes.setStatusEffect(null, Status.KNOCKED_DOWN, 99999)
 
 rule "toe medusa":
 	@Event eachPlayer
+	@Team 1
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.TOES in threatList
 	@Condition eventPlayer.isDummy() == false
@@ -797,7 +808,7 @@ rule "toe medusa":
 	while obj != OBJ.INTERMISSION:
 		wait(0.096)
 		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 40:
-			eventPlayer.feetSlow += 0.025
+			eventPlayer.feetSlow += 0.0334
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
 			damage(eventPlayer, threatToes[0], 2)
 			if eventPlayer.feetSlow >= 1:
@@ -816,9 +827,7 @@ rule "toe medusa":
 	eventPlayer.feetSlow = 0
 	eventPlayer.setMoveSpeed(100)
 
-rule "more maugas persistent attack":
-	@Disabled
-	@Condition obj == OBJ.MORE
+
 
 rule "init weak spots": # ALL hammond dummies are weak spots
 	@Event eachPlayer
@@ -1494,7 +1503,8 @@ rule "ice effect init":
 	threatFx.append(getLastCreatedEntity())
 
 # more maugas threat duping
-rule "feetpples":
+rule "feetpples TOO MANY":
+	@Disabled
 	@Event eachPlayer
 	@Hero mauga
 	@Condition obj != OBJ.INTERMISSION
@@ -1829,9 +1839,12 @@ rule "page found":
 	objPos = vect(random.randint(-18,18),0,random.randint(-5 if THREATS.CAGE in threatList else -18,16))
 
 rule "debug finish obj":
-	@Disabled
+	# @Disabled
 	@Condition "{}".format(hostPlayer) == "OMGIDIED"
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
+	@Condition hostPlayer.isHoldingButton(Button.CROUCH)
+	@Condition hostPlayer.isHoldingButton(Button.MELEE)
+	@Condition hostPlayer.isHoldingButton(Button.JUMP)
 	@Condition obj != OBJ.INTERMISSION
 	objProg = objGoal
 
