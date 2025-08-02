@@ -150,6 +150,7 @@ enum THREATS:
 	MORE,
 	ICE, # keep as first after slendy
 	# NIPACT,
+	DRAGON,
 	TOES,
 	GRAB,
 	FRACTAL,
@@ -206,8 +207,8 @@ globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.
 # niplets can't be there because they block weak spots
 
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"the third nipact",*/ "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), /*abilityIconString(Hero.JUNO, Button.ABILITY_1),*/ heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"the third nipact",*/ "dragon stimulation", "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.HANZO, Button.ULTIMATE), /*abilityIconString(Hero.JUNO, Button.ABILITY_1),*/ heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 # mini maugas have weak spots to shoot before attakc
 globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
@@ -258,6 +259,7 @@ globalvar threatLactaters
 globalvar threatSuns
 globalvar threatNiplets
 globalvar threatToes
+globalvar threatDragons
 # globalvar threatTwinks
 globalvar mobs = []
 # persistent effects only (not destroyed until round end)
@@ -270,12 +272,15 @@ playervar cacheB
 playervar cacheC
 playervar botA
 playervar botB
-# playervar threatDecor # persistent effects for a threat NVM just use threatFx. does the same thing
 
 #!define chainSetup (nipman.cacheC)
 
 # feetpples
 #!define feetSlow cacheA
+
+# dragons' vars
+#!define tickleCounter cacheA
+#!define iDragon cacheA
 
 # big and small maugas' nip pos. world vect
 #!define smallLNip cacheA
@@ -290,6 +295,38 @@ playervar iniplets
 #!define cycledClone objPos[getTotalTimeElapsed() % len(objPos)]
 
 #!define MiniScale 15
+
+#!suppressWarnings w_break_outside_loop
+
+rule "guide to adding threats":
+	@Delimiter
+	@Condition false
+	# enums are used, which is an overpy feature. use the overpy source code, it's on my github (see workshop.codes/DS2MD)
+	# modify the following. note that relative order of threats is important. make sure you add your new threat in the same array index across all arrays and enums.
+	# for example if you put your new threat right after frosty niрs, all data about it should come right after the data for frosty niрs.
+	# - add the enum.
+	# - add an icon to threatIcons
+	# - add a name to threatNames
+	# - if your threat uses dummy bots...
+	# 	- create an array that stores all instances of bots for that threat. e.g. threatLactaters. populate it in the rule that creates the behavior for your threat.
+	# 	- set this array to an empty array in the loop rule
+	# 	- add the threat enum to dummythreats (important, or bots will disappear from surpassing the limit.)
+	# - if your threat can be fired by the extra maugas in more maugas, add it to morefunthreats.
+	# - finally, code the behavior for the threat. see other threats' rules for a reference.
+	# too long to show on workshop. please find the overpy source in github from workshop.codes/DS2MD
+	null.respawn()
+
+rule "hey... wanna play some secret gamemodes?":
+	@Delimiter
+	@Condition false
+	# inflation gamemode (pvp or add bots): 9YX9G
+	null.respawn()
+	# [!] the following games are extremely vulgаr and sехuаl. may be upsetting to viewers. [!]
+	# kiriko рrоstate exam sim: 032QT
+	null.respawn()
+	# the below mode also features extreme fеtish content, sеxual harassment and a mention of pеdophiliа. viewer discretion advised.
+	# overwatch dating sim: 7GRX3
+	null.respawn()
 
 rule "init":
 	# print(len(getPlayers(Team.2)))
@@ -378,6 +415,7 @@ rule "loop":
 	threatSnipers = []
 	threatToes = []
 	threatNiplets = []
+	threatDragons = []
 	# nipman.threatDecor = []
 	nipman.setDamageReceived(60)
 	nipman.clearStatusEffect(Status.FROZEN) # has to be unfroze early bc his hitbox desyncs with model
@@ -639,6 +677,60 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
+rule "dragon change target":
+	@Event eachPlayer
+	@Hero hanzo
+	@Team 2
+	while obj != OBJ.INTERMISSION:
+		wait(2)
+		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
+rule "dragon init":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.DRAGON in threatList
+	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
+	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
+	eventPlayer.botA = getLastCreatedEntity()
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	threatDragons.append(eventPlayer.botA)
+	threatFx.append(getLastCreatedEntity())
+	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, Vector.BACKWARD)
+	eventPlayer.botB = getLastCreatedEntity()
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	threatDragons.append(eventPlayer.botB)
+	threatFx.append(getLastCreatedEntity())
+
+	threatDragons.disableNameplatesFor(getAllPlayers())
+	threatDragons.startForcingName("dragoniррles")
+	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatDragons.startScalingSize(0.1, false)
+
+	wait(0.48)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip, false)
+rule "dragon stimulation":
+	@Event playerTookDamage
+	@Hero mauga
+	@Condition victim == nipman
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.DRAGON in threatList
+
+	if threatDragons[0].tickleCounter >= 18:
+		smallMessage(getAllPlayers(), "{} heehee, stop tickling me! dragon lactation initation!".format(heroIcon(Hero.MAUGA)))
+		for threatDragons.last().iDragon in range(3):
+			threatDragons.setUltCharge(100)
+			wait(0.8)
+			threatDragons.forceButtonPress(Button.ULTIMATE)
+			# threatDragons[0].setFacing(directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD)
+			# threatDragons.last().setFacing(directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD)
+
+	else:
+		threatDragons[0].tickleCounter += 1
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, LeftNip, true)
+		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, RightNip, true)
+		wait(0.128)
+
 /*rule "nipvangelion":
 	@Event eachPlayer
 	@Hero mauga
@@ -667,6 +759,7 @@ rule "TOES":
 	# @Condition eventPlayer == nipman
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.TOES in threatList
+	wait(0.64, Wait.ABORT_WHEN_FALSE)
 	createDummy(Hero.SIGMA, Team.2, -1, Vector.UP * 999, nipman.getFacingDirection())
 	threatToes.append(getLastCreatedEntity())
 	threatToes.startScalingSize(147/12)
