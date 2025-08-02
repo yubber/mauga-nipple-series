@@ -369,6 +369,8 @@ rule "init":
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
+	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), "spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)", HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
+
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
 
@@ -460,7 +462,7 @@ rule "loop":
 		threatList.append(THREATS.MORE)
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	# threatList.append(THREATS.TOES)
+	# threatList.append(THREATS.DRAGON)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
