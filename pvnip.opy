@@ -459,8 +459,8 @@ rule "loop":
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
 
-	# threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	threatList.append(THREATS.TOES)
+	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
+	# threatList.append(THREATS.TOES)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
@@ -1839,7 +1839,7 @@ rule "page found":
 	objPos = vect(random.randint(-18,18),0,random.randint(-5 if THREATS.CAGE in threatList else -18,16))
 
 rule "debug finish obj":
-	# @Disabled
+	@Disabled
 	@Condition "{}".format(hostPlayer) == "OMGIDIED"
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
 	@Condition hostPlayer.isHoldingButton(Button.CROUCH)
