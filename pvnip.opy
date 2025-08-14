@@ -138,16 +138,17 @@ globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players 
 # leave the {} there. these are for warning icons.
 #!define STR_MAUGASCHARGING "{} deadly attack incoming! attack the sensitive spots! {}"
 #!define STR_MAUGASFAILED "{} failed to stop the attack. brace for impact!"
-# here, {} is the player who found the page.
+# here, {} is the player who found the page. this is for the slenderman objective.
 #!define STR_PAGEFOUND " {} found a page!"
 #!define STR_ALLDEAD "game over. all players died."
-# this string is for players that try to hook/charge the mauga
+# this string is for players that try to hook/charge the mauga. write whatever's funniest in the target language.
 #!define STR_CHIDING "do not the mauga"
-# if you are translating the petrified text, delete the next line and use the line after it instead. get rid of the "# " at the start.
+# if you are translating the petrified text, delete the next line and use the line after it instead. also get rid of the "# " at the start.
 #!define STR_PETRIFIED "{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA)
 # #!define STR_PETRIFIED "petrified! avoid facing sigma.".format(iconString(Icon.EYE))
 # {} is mauga's icon
 #!define STR_DRAGONTRIGGER "{} heehee, stop tickling me! dragon lactation initation!"
+#!define STR_PAGEGUNS "remember to check inside mauga's guns for the pages."
 
 # these are names for the dummy bots used in threats, e.g. overheating glands (torbjorn), slenderman
 #!define BOTNAME_SLENDY "slenderman"
@@ -158,7 +159,17 @@ globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players 
 #!define BOTNAME_TOEPPLES "toepples"
 #!define BOTNAME_DRAGONIPS "dragoniррles"
 
+# total deaths in the team.
+#!define HUD_TEAMDEATHS "team deaths"
+#!define HUD_ROUNDS "rounds elapsed"
+#!define HUD_TIME "time elapsed"
+#!define HUD_HC "hardcore mode is on"
+#!define HUD_HCDESC "no respawning until round ends"
+# \n is a newline, because text doesn't wrap automatically i think
+#!define HUD_SPECTATORS "spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)"
+
 # these are descriptions for custom settings.
+# gameplay category of settings
 #!define SETTING_GAMEPLAY "gameplay"
 #!define SETTING_PLAYERSCALE "increase player damage per missing player"
 
@@ -394,15 +405,15 @@ rule "init":
 	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
 
 	# score huds
-	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), "time elapsed", "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.SKULL), "team deaths", teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.FLAG), "rounds elapsed", roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), HUD_TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.SKULL), HUD_TEAMDEATHS, teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.FLAG), HUD_ROUNDS, roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers() if isHardcore else null, iconString(Icon.EXCLAMATION_MARK), "hardcore mode is on", "no respawning until round ends", HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers() if isHardcore else null, iconString(Icon.EXCLAMATION_MARK), HUD_HC, HUD_HCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
-	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), "spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)", HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
+	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), HUD_SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
 
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
@@ -429,8 +440,8 @@ rule "init":
 	wait(0.16)
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "objective: {}! {} / {}".format(objDescs[obj], objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;threats: {}\&fullwidth_space;".format(threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(l"Objective", objDescs[obj], objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}\&fullwidth_space;".format(l"Threats", threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
 	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
 	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
@@ -639,8 +650,8 @@ rule "slendy":
 	while obj == OBJ.PAGES:
 		mobs.forceButtonPress(Button.MELEE)
 		wait(1.2)
-		if random.uniform(0,1) < 0.05:
-			smallMessage(getAllPlayers(), "remember to check inside mauga's guns for the pages.")
+		if random.uniform(0,1) < 0.03:
+			smallMessage(getAllPlayers(), STR_PAGEGUNS)
 
 rule "mob respawn":
 	@Event eachPlayer

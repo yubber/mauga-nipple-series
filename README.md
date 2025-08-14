@@ -13,6 +13,8 @@ https://workshop.codes/u/_yubz
 
 **mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/pvnip.opy)
 
+all text that needs translation is near the top of the file. no need to go digging around for strings.
+
 the code in this repository is **not** workshop code. to compile this to workshop code, you can send me the edited file, or:
 
 1. go to https://zezombye.github.io/overpy/demo
