@@ -113,6 +113,57 @@ settings {
     }
 }
 
+rule "want to contribute a translation? please visit https://github.com/yubber/mauga-nipple-series/, it's easier to make translations for the overpy source file.":
+	@Delimiter
+
+### TRANSLATORS' SECTION
+# refer to README.MD for a guide.
+# general pointers:
+# - please only edit stuff inside quotation marks. if you add double quote " characters they must be escaped, like: \"
+# - to avoid censors, you can use zero-width spaces "​". cyrillic characters also work for the latin script, but they will cause the font to change.
+
+# the mode name and description are in settings -> main, at the very top of this file.
+
+# please preserve the order of these lists.
+globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
+globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"the third nipact",*/ "dragon stimulation", "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
+
+globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
+
+# these are references to strings in other parts of the program. i've moved them here for your convenience.
+# if you would like context for where these strings are used, you can CTRL+F the PART_AFTER_DEFINE.
+#!define STR_OBJCOUNTDOWN "next objective in 3 seconds!"
+#!define STR_ROUNDSTART "round start!"
+#!define STR_MAUGAVULNERABLE "objective complete! mauga is vulnerable!"
+# leave the {} there. these are for warning icons.
+#!define STR_MAUGASCHARGING "{} deadly attack incoming! attack the sensitive spots! {}"
+#!define STR_MAUGASFAILED "{} failed to stop the attack. brace for impact!"
+# here, {} is the player who found the page.
+#!define STR_PAGEFOUND " {} found a page!"
+#!define STR_ALLDEAD "game over. all players died."
+# this string is for players that try to hook/charge the mauga
+#!define STR_CHIDING "do not the mauga"
+# if you are translating the petrified text, delete the next line and use the line after it instead. get rid of the "# " at the start.
+#!define STR_PETRIFIED "{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA)
+# #!define STR_PETRIFIED "petrified! avoid facing sigma.".format(iconString(Icon.EYE))
+# {} is mauga's icon
+#!define STR_DRAGONTRIGGER "{} heehee, stop tickling me! dragon lactation initation!"
+
+# these are names for the dummy bots used in threats, e.g. overheating glands (torbjorn), slenderman
+#!define BOTNAME_SLENDY "slenderman"
+#!define BOTNAME_TORBS "overheating glands"
+#!define BOTNAME_SNIPERS "s-nip-ers"
+#!define BOTNAME_NIPLETS "niplets"
+#!define BOTNAME_ILLARIS "sunkissed nips"
+#!define BOTNAME_TOEPPLES "toepples"
+#!define BOTNAME_DRAGONIPS "dragoniррles"
+
+# these are descriptions for custom settings.
+#!define SETTING_GAMEPLAY "gameplay"
+#!define SETTING_PLAYERSCALE "increase player damage per missing player"
+
+### END. thank you for translating!
+
 /*
 TODO
 - sigma threat: black hole?
@@ -187,15 +238,12 @@ globalvar nipman
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objDescs = ["collect pages", "defeat the mini maugas", "slay enemies", "slay the miniboss", "capture the point"] # keep point as last
 globalvar objWeights = [0.05, 0.20, 0.275, 0.275, 0.20]
-# globalvar objWeights = [0.01, 0.96, 0.01, 0.01, 0.01]
 
 globalvar objProg
 globalvar objGoal
 globalvar objPos # used for miniboss entity
 globalvar roundNo
-# globalvar kills
 globalvar threatList = []
 # threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
 globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON/*THREATS.TOES/*, THREATS.KITSUNIPS*/]
@@ -207,11 +255,8 @@ globalvar moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.
 # niplets can't be there because they block weak spots
 
 # keep lazer as last and frosty as 1st after slender
-globalvar threatNames = ["slenderman", "more maugas", "frosty nips", /*"the third nipact",*/ "dragon stimulation", "toepples", "grabbyteats", "niplets", "cup fight", "tiddy twister", "lactose hail", "n!pple nuke", "dairy deaths", "milk wall", "mending milk", "scalding discharge", "s-nip-ers", "boobsted mobs", "booblet hell", "gravitatas", "sun exposure", "lazer"]
 globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.HANZO, Button.ULTIMATE), /*abilityIconString(Hero.JUNO, Button.ABILITY_1),*/ heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
-# mini maugas have weak spots to shoot before attakc
-globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players only when round ends", false, 0)
 
 globalvar threatText = ""
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
@@ -435,7 +480,7 @@ rule "loop":
 	setMatchTime(11)
 	unpauseMatchTime()
 	wait(8)
-	bigMessage(getAllPlayers(), "next objective in 3 seconds!")
+	bigMessage(getAllPlayers(), STR_OBJCOUNTDOWN)
 	wait(2.5)
 	pauseMatchTime()
 	wait(0.5)
@@ -492,7 +537,7 @@ rule "loop":
 	obj = objGoal
 	objGoal = [8, 3, 60, 1, 100][obj]
 
-	bigMessage(getAllPlayers(), "round start!")
+	bigMessage(getAllPlayers(), STR_ROUNDSTART)
 	nipman.forceButtonPress(Button.ABILITY_2)
 	wait(0.48)
 	nipman.setDamageReceived(0.001) # i forgot why this can't be 0. surely nothing bad happens :clueless:
@@ -509,7 +554,7 @@ rule "loop":
 	# nipman.setStatusEffect(null, Status.STUNNED, 0.5)
 	playEffect(getAllPlayers(), DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, Color.TEAM_1, Vector.FORWARD * 18, 100)
 	playEffect(getAllPlayers(), DynamicEffect.ANA_BIOTIC_GRENADE_EXPLOSION_SOUND, Color.TEAM_1, localPlayer, 200)
-	bigMessage(getAllPlayers(), "objective complete! mauga is vulnerable!")
+	bigMessage(getAllPlayers(), STR_MAUGAVULNERABLE)
 	wait()
 	getDeadPlayers(Team.1).respawn()
 
@@ -600,7 +645,7 @@ rule "slendy":
 	objPos = Vector.FORWARD # set first page pos for clueless players
 	mobs.resurrect()
 	mobs.startModifyingVoicelinePitch(0.6, false)
-	mobs.startForcingName("slenderman")
+	mobs.startForcingName(BOTNAME_SLENDY)
 	wait(0.48)
 	heal(mobs,null,99999)
 	while obj == OBJ.PAGES:
@@ -705,7 +750,7 @@ rule "dragon init":
 	threatFx.append(getLastCreatedEntity())
 
 	threatDragons.disableNameplatesFor(getAllPlayers())
-	threatDragons.startForcingName("dragoniррles")
+	threatDragons.startForcingName(BOTNAME_DRAGONIPS)
 	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatDragons.startScalingSize(0.1, false)
 	if obj == OBJ.MORE:
@@ -725,7 +770,7 @@ rule "dragon stimulation":
 	@Condition (victim == nipman) or (obj == OBJ.MORE and eventPlayer in objPos)
 
 	if victim.botA.tickleCounter >= 18:
-		smallMessage(getAllPlayers(), "{} heehee, stop tickling me! dragon lactation initation!".format(heroIcon(Hero.MAUGA)))
+		smallMessage(getAllPlayers(), STR_DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
 		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallRNip, true)
@@ -790,7 +835,7 @@ rule "TOES":
 	createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, threatToes[0], true, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 
-	threatToes.startForcingName("toepples")
+	threatToes.startForcingName(BOTNAME_TOEPPLES)
 
 	while threatToes[0].hasStatus(Status.KNOCKED_DOWN) == false:
 		threatToes.startForcingPosition(worldVector(vect(0.017, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), true)
@@ -814,7 +859,7 @@ rule "toe medusa":
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
 			damage(eventPlayer, threatToes[0], 2)
 			if eventPlayer.feetSlow >= 1:
-				smallMessage(eventPlayer, "{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA))
+				smallMessage(eventPlayer, STR_PETRIFIED)
 				eventPlayer.feetSlow = 1
 				eventPlayer.setStatusEffect(threatToes[0], Status.FROZEN, 1.2)
 				damage(eventPlayer, threatToes[0], 80)
@@ -865,7 +910,7 @@ rule "more maugas charge attack":
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		moreFx.append(getLastCreatedEntity())
 
-		bigMessage(getAllPlayers(), "{} deadly attack incoming! attack the sensitive spots! {}".format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
+		bigMessage(getAllPlayers(), STR_MAUGASCHARGING.format(iconString(Icon.WARNING), iconString(Icon.WARNING)))
 
 		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.PRESS_THE_ATTACK)
 
@@ -905,7 +950,7 @@ rule "more maugas charge attack":
 			attackingClone = null
 			continue
 
-		bigMessage(getAllPlayers(), "{} failed to stop the attack. brace for impact!".format(iconString(Icon.SAD)))
+		bigMessage(getAllPlayers(), STR_MAUGASFAILED.format(iconString(Icon.SAD)))
 
 		for iMores in range(len(weakSpots)):
 			destroyDummy(Team.2, weakSpots[iMores].getSlot())
@@ -978,7 +1023,7 @@ rule "niplets + dupe":
 	threatFx.append(getLastCreatedEntity())
 	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botB, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	threatNiplets.startForcingName("niplet")
+	threatNiplets.startForcingName(BOTNAME_NIPLETS)
 	threatNiplets.disableNameplatesFor(getAllPlayers())
 
 	# eventPlayer.iniplets = 0
@@ -1252,7 +1297,7 @@ rule "sun loop":
 		wait(0.64)
 		threatSuns.setInvisibility(Invis.ENEMIES)
 		threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
-		threatSuns.startForcingName("sunkissed nips")
+		threatSuns.startForcingName(BOTNAME_ILLARIS)
 		threatSuns.setProjectileSpeed(30)
 		threatSuns.disableNameplatesFor(getAllPlayers())
 		threatSuns.setDamageDealt(max(20,120 / len(threatSuns)))
@@ -1348,7 +1393,7 @@ rule "discharge":
 	# eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.36)
 	threatLactaters.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
-	threatLactaters.startForcingName("overheating glands")
+	threatLactaters.startForcingName(BOTNAME_TORBS)
 	threatLactaters.disableNameplatesFor(getAllPlayers())
 
 rule "everybody discharge":
@@ -1580,7 +1625,7 @@ rule "dupe + normal sniper":
 
 	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
 	threatSnipers.disableNameplatesFor(getAllPlayers())
-	threatSnipers.startForcingName("s-nip-ers")
+	threatSnipers.startForcingName(BOTNAME_SNIPERS)
 	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatSnipers.startScalingSize(0.1, false)
 
@@ -1832,7 +1877,7 @@ rule "page found":
 	@Condition obj == OBJ.PAGES
 	@Condition eventPlayer.isDummy() == false
 	@Condition distance(eventPlayer, objPos) < 1.3
-	smallMessage(getAllPlayers(), " {} found a page!".format(eventPlayer))
+	smallMessage(getAllPlayers(), STR_PAGEFOUND.format(eventPlayer))
 	playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objPos, 65)
 	playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.TEAM_1, objPos, 1)
 	addToTeamScore(Team.1, 1) # sound
@@ -1872,7 +1917,7 @@ rule "rez cd if not hardcore":
 
 rule "player count balancing, freeze & nip pos check":
 	while true:
-		if createWorkshopSettingBool("gameplay", "increase player damage per missing player",true,0):
+		if createWorkshopSettingBool(SETTING_GAMEPLAY, SETTING_PLAYERSCALE,true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
 			getPlayers(Team.1).setDamageDealt(min(400,900 / getNumberOfPlayers(Team.1)))
 		if (obj != OBJ.INTERMISSION):
@@ -1951,7 +1996,7 @@ rule "charge no breaky":
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 
 rule "charge no breaky more maugas":
 	@Event eachPlayer
@@ -1963,7 +2008,7 @@ rule "charge no breaky more maugas":
 	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 
 rule "echo charge no breaky":
 	@Event eachPlayer
@@ -1974,7 +2019,7 @@ rule "echo charge no breaky":
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 
 rule "echo charge no breaky more maugas":
 	@Event eachPlayer
@@ -1987,7 +2032,7 @@ rule "echo charge no breaky more maugas":
 	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 
 rule "punch no breaky":
 	@Event eachPlayer
@@ -1998,7 +2043,7 @@ rule "punch no breaky":
 	@Condition eventPlayer.getPosition().z > 15
 	@Condition eventPlayer.getFacingDirection().z > 0
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 
 rule "hook no breaky":
 	@Event eachPlayer
@@ -2008,7 +2053,7 @@ rule "hook no breaky":
 	@Condition eventPlayer.isUsingAbility1()
 	@Condition raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 35 * eventPlayer.getFacingDirection(), getPlayers(Team.2), getPlayersOnHero(Hero.LIFEWEAVER, Team.2), true).getPlayerHit() == nipman
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	smallMessage(eventPlayer, "do not the mauga")
+	smallMessage(eventPlayer, STR_CHIDING)
 rule "flux no breaky":
 	@Event playerDealtDamage
 	@Hero sigma
@@ -2131,7 +2176,7 @@ rule "you are dead, not big surprise":
 	if isHardcore:
 		# eventPlayer.setRespawnTime(99999)
 		if [x for x in getPlayers(Team.1) if x.isAlive() and x.hasSpawned()] == []:
-			bigMessage(getAllPlayers(), "game over. all players died.")
+			bigMessage(getAllPlayers(), STR_ALLDEAD)
 			setSlowMotion(50)
 			wait(1)
 			declareTeamVictory(Team.2)
