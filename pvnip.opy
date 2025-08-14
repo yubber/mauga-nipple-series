@@ -346,18 +346,6 @@ playervar iniplets
 rule "guide to adding threats":
 	@Delimiter
 	@Condition false
-	# enums are used, which is an overpy feature. use the overpy source code, it's on my github (see workshop.codes/DS2MD)
-	# modify the following. note that relative order of threats is important. make sure you add your new threat in the same array index across all arrays and enums.
-	# for example if you put your new threat right after frosty niрs, all data about it should come right after the data for frosty niрs.
-	# - add the enum.
-	# - add an icon to threatIcons
-	# - add a name to threatNames
-	# - if your threat uses dummy bots...
-	# 	- create an array that stores all instances of bots for that threat. e.g. threatLactaters. populate it in the rule that creates the behavior for your threat.
-	# 	- set this array to an empty array in the loop rule
-	# 	- add the threat enum to dummythreats (important, or bots will disappear from surpassing the limit.)
-	# - if your threat can be fired by the extra maugas in more maugas, add it to morefunthreats.
-	# - finally, code the behavior for the threat. see other threats' rules for a reference.
 	# too long to show on workshop. please find the overpy source in github from workshop.codes/DS2MD
 	null.respawn()
 
