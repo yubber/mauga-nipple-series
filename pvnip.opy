@@ -167,6 +167,8 @@ globalvar isHardcore = createWorkshopSettingBool("difficulty", "respawn players 
 #!define HUD_HCDESC "no respawning until round ends"
 # \n is a newline, because text doesn't wrap automatically i think
 #!define HUD_SPECTATORS "spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)"
+# supposed to show the korean flag but no worky
+#!define HUD_KR_MODE ("\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
 
 # these are descriptions for custom settings.
 # gameplay category of settings
@@ -243,6 +245,7 @@ enum THREATS:
 #!define TreeNo 7
 #!define PlayerSlots 9
 
+globalvar bracket
 globalvar nipman
 #!define LeftNip (nipman.smallLNip)
 #!define RightNip (nipman.smallRNip)
@@ -352,8 +355,6 @@ playervar iniplets
 
 #!define MiniScale 15
 
-#!suppressWarnings w_break_outside_loop
-
 rule "guide to adding threats":
 	@Delimiter
 	@Condition false
@@ -373,6 +374,18 @@ rule "hey... wanna play some secret gamemodes?":
 	null.respawn()
 
 rule "init":
+	# set up TX bracket
+
+    #Script Created By Zezombye.
+    #More Info: https://workshop.codes/wiki/articles/tx-reference-sheet
+    createDummy(getAllHeroes(), Team.1 if getNumberOfSlots(Team.1) else Team.2 if getNumberOfSlots(Team.2) else true, false, null, null)
+    getLastCreatedEntity().startForcingName("\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z〼")
+    bracket = getLastCreatedEntity()[0].split([])
+    getLastCreatedEntity().startForcingName("\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\zࡀ")
+    bracket = "\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z\z〼".replace(bracket, getLastCreatedEntity()[0]).substring(63, true)
+    destroyAllDummies()
+
+	wait()
 	# print(len(getPlayers(Team.2)))
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), "server load: {}\n".format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
@@ -402,7 +415,7 @@ rule "init":
 	nipman.setHealth(72500)
 
 	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
-	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+	nipman.smallRNip = vect(-7.19, 10.8-2.8, 30.27)
 
 	# score huds
 	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), HUD_TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
@@ -414,6 +427,8 @@ rule "init":
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), HUD_SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
+	hudSubtext(getAllPlayers() if obj == OBJ.INTERMISSION else null, HUD_KR_MODE, HudPosition.LEFT, 10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+
 
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
@@ -589,6 +604,8 @@ def mobsInit():
 	elif enemies[roundNo%len(enemies)] == Hero.MAUGA:
 		mobs.setMaxHealth(55)
 		mobs.setMoveSpeed(40)
+		mobs.setKnockbackDealt(40)
+		mobs.setDamageReceived(130)
 	else:
 		mobs.setDamageReceived(100)
 
