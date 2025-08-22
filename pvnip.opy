@@ -369,7 +369,7 @@ rule "hey... wanna play some secret gamemodes?":
 	# [!] the following games are extremely vulgаr and sехuаl. may be upsetting to viewers. [!]
 	# kiriko рrоstate exam sim: 032QT
 	null.respawn()
-	# the below mode also features extreme fеtish content, sеxual harassment and a mention of pеdophiliа. viewer discretion advised.
+	# the below mode also features extreme fеtish content, sеxually aggressive behavior and a mention of pеdophiliа. viewer discretion advised.
 	# overwatch dating sim: 7GRX3
 	null.respawn()
 
