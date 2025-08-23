@@ -1,7 +1,9 @@
 settings {
     "main": {
-        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
-        "modeName": "mauga n!pple pve"
+        # "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
+        # "modeName": "mauga n!pple pve"
+		"description": "마우가의 찌!찌!를 공략하는 보스레이드\nK08WD\n\nyubz 제작, Lonepier 번역",
+        "modeName": "마우가 찌!찌! pve"
     },
     "lobby": {
         "allowPlayersInQueue": true,
@@ -129,20 +131,38 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 
 # these are names for the dummy bots used in threats, e.g. overheating glands (torbjorn), slenderman
 # since they're in bot names i can't use the translation features
-#!define BOTNAME_SLENDY ("slenderman")
-#!define BOTNAME_TORBS ("overheating glands")
-#!define BOTNAME_SNIPERS ("s-nip-ers")
-#!define BOTNAME_NIPLETS ("niplets")
-#!define BOTNAME_ILLARIS ("sunkissed nips")
-#!define BOTNAME_TOEPPLES ("toepples")
-#!define BOTNAME_DRAGONIPS ("dragoniррles")
+# #!define BOTNAME_SLENDY ("slenderman")
+# #!define BOTNAME_TORBS ("overheating glands")
+# #!define BOTNAME_SNIPERS ("s-nip-ers")
+# #!define BOTNAME_NIPLETS ("niplets")
+# #!define BOTNAME_ILLARIS ("sunkissed nips")
+# #!define BOTNAME_TOEPPLES ("toepples")
+# #!define BOTNAME_DRAGONIPS ("dragoniррles")
+# #!define BOTNAME_WEAK_SPOT ("sensitive spot")
+# #!define BOTNAME_MAUGA_JR ("mauga jr.")
+# #!define BOTNAME_MINIBOSS ("miniboss")
+
+#!define BOTNAME_SLENDY ("슬렌더맨")
+#!define BOTNAME_TORBS ("과열된 돌출부")
+#!define BOTNAME_SNIPERS ("젖-격수")
+#!define BOTNAME_NIPLETS ("젖먹이")
+#!define BOTNAME_ILLARIS ("아침에젖스")
+#!define BOTNAME_TOEPPLES ("발꼭지")
+#!define BOTNAME_DRAGONIPS ("용의 일겨헉♥")
+#!define BOTNAME_WEAK_SPOT ("약점♥")
+#!define BOTNAME_MAUGA_JR ("마우가 JR.")
+#!define BOTNAME_MINIBOSS ("미니보스")
 
 # these are descriptions for custom settings.
 # gameplay category of settings
-#!define SETTING_GAMEPLAY "gameplay"
-#!define SETTING_PLAYERSCALE "increase player damage per missing player"
-#!define SETTING_DIFFICULTY "difficulty"
-#!define SETTING_HARDCORE "respawn players only when round ends"
+# #!define SETTING_GAMEPLAY "gameplay"
+# #!define SETTING_PLAYERSCALE "increase player damage per missing player"
+# #!define SETTING_DIFFICULTY "difficulty"
+# #!define SETTING_HARDCORE "respawn players only when round ends"
+#!define SETTING_GAMEPLAY "게임플레이"
+#!define SETTING_PLAYERSCALE "없는 플레이어당 주는 대미지 증가"
+#!define SETTING_DIFFICULTY "난이도"
+#!define SETTING_HARDCORE "라운드가 끝난 이후에만 리스폰"
 
 ### END. the following strings are already translated in the .po file.
 # thank you for translating!
@@ -916,7 +936,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	@Hero wreckingBall
 	@Condition eventPlayer.isDummy()
 	eventPlayer.startScalingSize(0.8, false)
-	eventPlayer.startForcingName("sensitive spot")
+	eventPlayer.startForcingName(BOTNAME_WEAK_SPOT)
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 205 + 50 * (sin(getTotalTimeElapsed() * 4)) / 2, 0), true)
 	weakSpots.append(eventPlayer)
 	wait(0.16)
@@ -1765,7 +1785,7 @@ rule "more maugas":
 		wait(0.08) # LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
-		objPos[iMores].startForcingName("mauga jr.")
+		objPos[iMores].startForcingName(BOTNAME_MAUGA_JR)
 		# createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getHealth() / evalOnce(ceill(objPos[iMores].getHealth()))evalOnce(objPos[iMores]).getNormalizedHealth()*/  * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		# WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400
 		createProgressBarInWorldText(getAllPlayers(), (evalOnce(objPos[iMores]).getHealth() / evalOnce(ceil(objPos[iMores].getMaxHealth()))) * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
@@ -1788,7 +1808,7 @@ rule "miniboss":
 	if objPos.getCurrentHero() == Hero.WINSTON:
 		objPos.setDamageDealt(55)
 	objPos.startForcingThrottle(1,1,0,0,0,1)
-	objPos.startForcingName("miniboss")
+	objPos.startForcingName(BOTNAME_MINIBOSS)
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 
 	if objPos.getHero() == Hero.MAUGA:
