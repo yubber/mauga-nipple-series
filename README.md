@@ -11,25 +11,45 @@ https://workshop.codes/u/_yubz
 
 ## translations
 
-**mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/pvnip.opy)
+**mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/pvnip.opy) and create a `.po` file.
 
-all text that needs translation is near the top of the file. no need to go digging around for strings.
+there are 2 files to create translations for.
 
-the code in this repository is **not** workshop code. to compile this to workshop code, you can send me the edited file, or:
+- `pvnip.opy`
 
-1. go to https://zezombye.github.io/overpy/demo
+- create a `.po` file
 
-2. paste all the code in the *middle* box (Overpy text)
+### pvnip.opy
 
-3. select the language of your *overwatch installation* in the dropdown
+all text that needs translation is near the top. no need to go digging around for strings.
 
-4. click compile, and copy the contents of "compiled text".
+you will need to link the .po file if you want to compile the code yourself. or you can just send me the files and i'll handle everything from there.
+
+to do this, add a [language code](https://github.com/Zezombye/overpy#translations) to the line `#!translations en ko`
+
+there are some strings that must be translated in `pvnip.opy` itself. i've marked them at the top.
+
+### .po file
+
+you can copy and rename an existing `.po` file for a template. replace the XX in `pvnip.XX.po` with the matching [language code](https://github.com/Zezombye/overpy#translations). it should hopefully be obvious from there.
+
+### compiling
+
+if you don't want to bother with this, you can send me your edited files. i'll credit you in the mode description and the workshop.codes page.
+
+that would be the better option so that your translation will be updated as soon as i update mauga nipple pve.
+
+the code in this repository is **not** workshop code. it has to be compiled, and you need to download and configure the tools for that.
+
+1. install visual studio **code** and the overpy extension.
+
+2. open the extensions menu, then open overpy's settings
+
+3. select the language of your *overwatch installation* in the extension settings
+
+4. ctrl+shift+p in `pvnip.opy` and select compile. the code will be copied.
 
 5. you can now paste in the code (**not** an import code. on the same screen, click the orange paste icon instead. if you can't find it, press L to open the lobby and click settings on the top right. it's on the right column at the top.)
-
-you can upload the code under your account, or ask me to upload it.
-
-the former is easier for you to update, the latter is easier for me to update whenever i change mauga nipple pve (rarely).
 
 thank you for translating!
 
