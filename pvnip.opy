@@ -131,17 +131,19 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 
 # these are names for the dummy bots used in threats, e.g. overheating glands (torbjorn), slenderman
 # since they're in bot names i can't use the translation features
-# #!define BOTNAME_SLENDY ("slenderman")
-# #!define BOTNAME_TORBS ("overheating glands")
-# #!define BOTNAME_SNIPERS ("s-nip-ers")
-# #!define BOTNAME_NIPLETS ("niplets")
-# #!define BOTNAME_ILLARIS ("sunkissed nips")
-# #!define BOTNAME_TOEPPLES ("toepples")
-# #!define BOTNAME_DRAGONIPS ("dragoniррles")
-# #!define BOTNAME_WEAK_SPOT ("sensitive spot")
-# #!define BOTNAME_MAUGA_JR ("mauga jr.")
-# #!define BOTNAME_MINIBOSS ("miniboss")
-
+/*
+#!define BOTNAME_SLENDY ("slenderman")
+#!define BOTNAME_TORBS ("overheating glands")
+#!define BOTNAME_SNIPERS ("s-nip-ers")
+#!define BOTNAME_NIPLETS ("niplets")
+#!define BOTNAME_ILLARIS ("sunkissed nips")
+#!define BOTNAME_TOEPPLES ("toepples")
+#!define BOTNAME_DRAGONIPS ("dragoniррles")
+#!define BOTNAME_WEAK_SPOT ("sensitive spot")
+#!define BOTNAME_MAUGA_JR ("mauga jr.")
+#!define BOTNAME_MINIBOSS ("miniboss")
+*/
+# /*
 #!define BOTNAME_SLENDY ("슬렌더맨")
 #!define BOTNAME_TORBS ("과열된 돌출부")
 #!define BOTNAME_SNIPERS ("젖-격수")
@@ -152,17 +154,22 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 #!define BOTNAME_WEAK_SPOT ("약점♥")
 #!define BOTNAME_MAUGA_JR ("마우가 JR.")
 #!define BOTNAME_MINIBOSS ("미니보스")
+# */
 
 # these are descriptions for custom settings.
 # gameplay category of settings
-# #!define SETTING_GAMEPLAY "gameplay"
-# #!define SETTING_PLAYERSCALE "increase player damage per missing player"
-# #!define SETTING_DIFFICULTY "difficulty"
-# #!define SETTING_HARDCORE "respawn players only when round ends"
+/*
+#!define SETTING_GAMEPLAY "gameplay"
+#!define SETTING_PLAYERSCALE "increase player damage per missing player"
+#!define SETTING_DIFFICULTY "difficulty"
+#!define SETTING_HARDCORE "respawn players only when round ends"
+*/
+# /*
 #!define SETTING_GAMEPLAY "게임플레이"
 #!define SETTING_PLAYERSCALE "없는 플레이어당 주는 대미지 증가"
 #!define SETTING_DIFFICULTY "난이도"
 #!define SETTING_HARDCORE "라운드가 끝난 이후에만 리스폰"
+# */
 
 ### END. the following strings are already translated in the .po file.
 # thank you for translating!

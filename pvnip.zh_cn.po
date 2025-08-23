@@ -175,8 +175,8 @@ msgid "{0} petrified! {1} {2} {3}"
 msgstr "{0} 석화됨! 시그마의 발을 쳐다보지 마세요, 이 변태♥"
 
 #. file pvnip.opy, line 968, rule "more maugas charge attack"
-msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
-msgstr "{0} 자, 치명적인 공격이 옵니다! 약점♥을 공격하세요! {0}"
+msgid "{0} deadly attack incoming! attack the sensitive spots! {1}"
+msgstr ""
 
 #. file pvnip.opy, line 1008, rule "more maugas charge attack"
 msgid "{0} failed to stop the attack. brace for impact!"
