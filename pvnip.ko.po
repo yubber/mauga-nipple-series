@@ -114,7 +114,7 @@ msgstr "server load: {0}"
 
 #. file pvnip.opy, line 416, rule "init"
 msgid "use code DS2MD for the latest version"
-msgstr ""
+msgstr "워크샵 코드: K08WD가 항상 최신 버전입니다"
 
 #. file pvnip.opy, line 445, rule "init"
 msgid "time elapsed"
