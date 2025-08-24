@@ -279,7 +279,7 @@ globalvar bracket
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objWeights = [0.1, 0.15, 0.275, 0.275, 0.20]
+globalvar objWeights = [0.08, 0.12, 0.3, 0.3, 0.20]
 globalvar lastObj
 
 globalvar objProg
@@ -586,33 +586,25 @@ rule "loop":
 
 	wait()
 
-	# threatText = ""
-	# for i in range(len(threatList)):
-	# 	threatText = "{}{} {}, ".format(threatText, threatIcons[threatList[i]], threatNames[threatList[i]])
-	# 	wait()
-	# threatText = threatText.substring(0, strLen(threatText)-2)
 	roundNo++
 
 	wait()
+	getDeadPlayers(Team.1).respawn()
+	bigMessage(getAllPlayers(), STR_ROUNDSTART)
+
+	nipman.forceButtonPress(Button.ABILITY_2)
+	wait(0.48)
 
 	obj = objGoal
 	objGoal = [8, 3, 60, 1, 100][obj]
 
-	getDeadPlayers(Team.1).respawn()
-
-	bigMessage(getAllPlayers(), STR_ROUNDSTART)
-	nipman.forceButtonPress(Button.ABILITY_2)
-	wait(0.48)
 	nipman.setDamageReceived(0.001) # i forgot why this can't be 0. surely nothing bad happens :clueless:
 	# i rember now. it's to detect hook, punch, etc. now also for dragonipples
 	nipman.setStatusEffect(null, Status.FROZEN, 99999)
 
-	waitUntil(objProg >= objGoal, 99999)
-
-	# for i in range(len(getPlayers(Team.2))):
-	# 	if getPlayersInSlot(i, Team.2) != nipman:
-	# 		destroyDummy(Team.2, i)
-	# 	wait()
+	waitUntil(objProg >= objGoal, 10*60) # timeout
+	if objProg < objGoal:
+		bigMessage(getAllPlayers(), MESSAGE_TIMEOUT)
 
 	# nipman.setStatusEffect(null, Status.STUNNED, 0.5)
 	playEffect(getAllPlayers(), DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, Color.TEAM_1, Vector.FORWARD * 18, 100)
@@ -749,6 +741,7 @@ rule "knock mobs":
 	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 1.6)
 	if obj != OBJ.PAGES and eventPlayer.getHero() != Hero.MAUGA:
 		eventPlayer.startForcingButton(Button.PRIMARY_FIRE)
+	eventPlayer.communicate(Comms.HELLO)
 	# wait(0.24)
 rule "mob retarget":
 	@Event global
@@ -806,12 +799,12 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 7, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botA)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 9, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 7, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botB)
 	threatFx.append(getLastCreatedEntity())
 
@@ -820,11 +813,11 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatDragons.startScalingSize(0.1, false)
 
-	threatDragons.setDamageDealt(75 if obj == OBJ.MORE else 150)
+	threatDragons.setDamageDealt(55 if obj == OBJ.MORE else 120)
 
 	wait(0.48)
-	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip + Vector.FORWARD * 4, false)
-	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip + Vector.FORWARD * 4, false)
+	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip + eventPlayer.getFacingDirection() * -6, false)
+	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip + eventPlayer.getFacingDirection() * -6, false)
 	threatDragons.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*4), true)
 
 rule "dragon stimulation":
@@ -832,11 +825,17 @@ rule "dragon stimulation":
 	@Hero mauga
 	@Team 2
 	@Condition obj != OBJ.INTERMISSION
-	@Condition THREATS.DRAGON in threatList
+	# @Condition THREATS.DRAGON in threatList
 	@Condition (victim == nipman) or (obj == OBJ.MORE and eventPlayer in objPos)
 	@Condition victim != attackingClone
 
-	if victim.botA.tickleCounter >= 18:
+	waitUntil(len(threatList) > 0, 5)
+
+	if THREATS.DRAGON in threatList == false: # don't check again
+		waitUntil(obj == OBJ.INTERMISSION, 99999)
+		return
+
+	if victim.botA.tickleCounter >= 24:
 		smallMessage(getAllPlayers(), STR_DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
 		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
@@ -1048,10 +1047,12 @@ rule "more maugas charge attack":
 			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
 			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
 			wait(0.016*21)
+			if obj == OBJ.INTERMISSION:
+				break
 
 		destroyEffect(moreFx)
 		moreFx = []
-		nipman.communicate(Comms.VOICE_LINE_UP)
+		nipman.communicate(Comms.GOODBYE)
 
 rule "niplets + dupe":
 	@Event eachPlayer
@@ -1261,7 +1262,7 @@ rule "rain":
 	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	for rainVar in range(5):
-		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula + Vector.DOWN * 24, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula + Vector.DOWN * 21, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
 		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
@@ -1633,13 +1634,13 @@ rule "dupe + normal sniper":
 	wait(0.048 * objPos.index(eventPlayer))
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botA)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), (eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 4, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botB)
 	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), (eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
@@ -1706,11 +1707,6 @@ rule "init suns":
 	threatFx.append(getLastCreatedEntity())
 
 # objective setup
-rule "skip if possible bug":
-	@Condition obj != OBJ.INTERMISSION
-	wait(60*10, Wait.ABORT_WHEN_FALSE)
-	bigMessage(getAllPlayers(), MESSAGE_TIMEOUT)
-	objProg = objGoal
 rule "missing mauga":
 	@Condition obj == OBJ.MORE
 	@Condition all([not entityExists(x) for x in objPos])
@@ -1817,7 +1813,7 @@ rule "clean bots":
 
 rule "setup & refresh forest":
 	@Condition obj == OBJ.PAGES
-	wait(0.92, Wait.ABORT_WHEN_FALSE)
+	wait(1.5, Wait.ABORT_WHEN_FALSE)
 	for i in range(TreeNo):
 		createDummy(Hero.LIFEWEAVER, Team.2, -1, Vector.UP, Vector.DOWN)
 		getLastCreatedEntity().startModifyingVoicelinePitch(0.5 + i * (1/TreeNo), false)
@@ -1969,7 +1965,7 @@ rule "player count balancing, freeze & nip pos check":
 	while true:
 		if createWorkshopSettingBool(SETTING_GAMEPLAY, SETTING_PLAYERSCALE,true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
-			getPlayers(Team.1).setDamageDealt(min(400,900 / getNumberOfPlayers(Team.1)))
+			getPlayers(Team.1).setDamageDealt(min(400,900 / len([x for x in getPlayers(Team.1) if x.hasSpawned()])))
 		if (obj != OBJ.INTERMISSION):
 			nipman.setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(0.001)
@@ -2212,6 +2208,17 @@ rule "sombra aint slick":
 	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
 	eventPlayer.mobTarget = getLastDamageModification()
 	waitUntil(eventPlayer.getUltCharge() < 100, 2)
+	wait(0.48)
+	stopDamageModification(eventPlayer.mobTarget)
+rule "echo sombra aint slick":
+	@Event eachPlayer
+	@Hero echo
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.SOMBRA
+	@Condition eventPlayer.isUsingUltimate() or (eventPlayer.isHoldingButton(Button.ULTIMATE) and eventPlayer.getUltCharge() == 100)
+	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
+	eventPlayer.mobTarget = getLastDamageModification()
+	waitUntil(eventPlayer.getUltCharge() < 100, 2)
+	wait(0.48)
 	stopDamageModification(eventPlayer.mobTarget)
 rule "sombra was a little slick":
 	@Event playerDealtDamage

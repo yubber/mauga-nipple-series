@@ -154,70 +154,70 @@ msgstr "목표"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 540, rule "loop"
+#. file pvnip.opy, line 541, rule "loop"
 msgid "next objective in 3 seconds!"
 msgstr "3초 후에 다음 목표가 적용됩니다!"
 
-#. file pvnip.opy, line 602, rule "loop"
+#. file pvnip.opy, line 593, rule "loop"
 msgid "round start!"
 msgstr "라운드 시작!"
 
-#. file pvnip.opy, line 619, rule "loop"
+#. file pvnip.opy, line 607, rule "loop"
+msgid "timeout exceeded, skipping phase in case of softlock."
+msgstr ""
+
+#. file pvnip.opy, line 612, rule "loop"
 msgid "objective complete! mauga is vulnerable!"
 msgstr "목표 달성! 마우가가 약해집니다!"
 
 # TODO: check if all occurrences have the same translation
 #. 6 occurrences:
-#.  - file pvnip.opy, line 712, rule "charge no breaky"
-#.  - file pvnip.opy, line 712, rule "charge no breaky more maugas"
-#.  - file pvnip.opy, line 712, rule "echo charge no breaky"
-#.  - file pvnip.opy, line 712, rule "echo charge no breaky more maugas"
-#.  - file pvnip.opy, line 712, rule "punch no breaky"
-#.  - file pvnip.opy, line 712, rule "hook no breaky"
+#.  - file pvnip.opy, line 705, rule "charge no breaky"
+#.  - file pvnip.opy, line 705, rule "charge no breaky more maugas"
+#.  - file pvnip.opy, line 705, rule "echo charge no breaky"
+#.  - file pvnip.opy, line 705, rule "echo charge no breaky more maugas"
+#.  - file pvnip.opy, line 705, rule "punch no breaky"
+#.  - file pvnip.opy, line 705, rule "hook no breaky"
 #, hasMultipleOccurrencesNotification
 msgid "do not the mauga"
 msgstr "마우가 끌고우가지 마시오"
 
-#. file pvnip.opy, line 712, rule "dragon stimulation"
+#. file pvnip.opy, line 705, rule "dragon stimulation"
 msgid "{0} heehee, stop tickling me! dragon lactation initation!"
 msgstr "{0} 헤으응, 그만 간지럽혀♥ 용의 분출 활성화!"
 
 # TODO: check if all occurrences have the same translation
 #. 2 occurrences:
-#.  - file pvnip.opy, line 712, rule "grab"
-#.  - file pvnip.opy, line 712, rule "grab"
+#.  - file pvnip.opy, line 705, rule "grab"
+#.  - file pvnip.opy, line 705, rule "grab"
 #, hasMultipleOccurrencesNotification
 msgid "{0} you were grabbed!"
 msgstr "{0} 잡혔습니다!"
 
-#. file pvnip.opy, line 712, rule "missing mauga"
+#. file pvnip.opy, line 705, rule "missing mauga"
 msgid "something went wrong. skipping phase..."
 msgstr "무언가가 잘못되었다, 페이즈 스킵 중..."
 
-#. file pvnip.opy, line 712, rule "more maugas charge attack"
+#. file pvnip.opy, line 705, rule "more maugas charge attack"
 msgid "{0} failed to stop the attack. brace for impact!"
 msgstr "{0} 실패... 충격을 조심하세요!"
 
-#. file pvnip.opy, line 712, rule "more maugas charge attack"
+#. file pvnip.opy, line 705, rule "more maugas charge attack"
 msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
 msgstr "{0} 자, 치명적인 공격이 옵니다! 약점♥을 공격하세요! {0}"
 
-#. file pvnip.opy, line 712, rule "page found"
+#. file pvnip.opy, line 705, rule "page found"
 msgid "{0} found a page!"
 msgstr " {0}(이)가 페이지를 찾았다!"
 
-#. file pvnip.opy, line 712, rule "skip if possible bug"
-msgid "timeout exceeded, skipping phase in case of softlock."
-msgstr ""
-
-#. file pvnip.opy, line 712, rule "slendy"
+#. file pvnip.opy, line 705, rule "slendy"
 msgid "remember to check inside mauga's guns for the pages."
 msgstr "마우가의 총 안을 확인해 보자."
 
-#. file pvnip.opy, line 712, rule "toe medusa"
+#. file pvnip.opy, line 705, rule "toe medusa"
 msgid "{0} petrified! {1} {2} {3}"
 msgstr "{0} 석화됨! 시그마의 발을 쳐다보지 마세요, 이 변태♥"
 
-#. file pvnip.opy, line 712, rule "you are dead, not big surprise"
+#. file pvnip.opy, line 705, rule "you are dead, not big surprise"
 msgid "game over. all players died."
 msgstr "게임 오버. 모든 플레이어가 사망했습니다."
