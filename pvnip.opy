@@ -1,9 +1,9 @@
 settings {
     "main": {
-        # "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
-        # "modeName": "mauga n!pple pve"
-		"description": "마우가의 찌!찌!를 공략하는 보스레이드\nK08WD\n\nyubz 제작, Lonepier 번역",
-        "modeName": "마우가 찌!찌! pve"
+        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it",
+        "modeName": "mauga n!pple pve"
+		# "description": "마우가의 찌!찌!를 공략하는 보스레이드\nK08WD\n\nyubz 제작, Lonepier 번역",
+        # "modeName": "마우가 찌!찌! pve"
     },
     "lobby": {
         "allowPlayersInQueue": true,
@@ -124,38 +124,30 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 # - please only edit stuff inside quotation marks. if you add double quote " characters they must be escaped, like: \"
 # - to avoid censors, you can use zero-width spaces "​". cyrillic characters also work for the latin script, but they will cause the font to change.
 
+# ! add language code here, and the translation workshop uses for white. maintain the same order!
 #!translations en ko
+#!define LANG_LIST ["White", "흰색"]
+
 #!translateWithPlayerVar
+globalvar nipman
+#!define serverSideTranslate(x) x[nipman.__languageIndex__]
 
 # the mode name and description are in settings -> main, at the very top of this file.
 
 # these are names for the dummy bots used in threats, e.g. overheating glands (torbjorn), slenderman
 # since they're in bot names i can't use the translation features
-/*
-#!define BOTNAME_SLENDY ("slenderman")
-#!define BOTNAME_TORBS ("overheating glands")
-#!define BOTNAME_SNIPERS ("s-nip-ers")
-#!define BOTNAME_NIPLETS ("niplets")
-#!define BOTNAME_ILLARIS ("sunkissed nips")
-#!define BOTNAME_TOEPPLES ("toepples")
-#!define BOTNAME_DRAGONIPS ("dragoniррles")
-#!define BOTNAME_WEAK_SPOT ("sensitive spot")
-#!define BOTNAME_MAUGA_JR ("mauga jr.")
-#!define BOTNAME_MINIBOSS ("miniboss")
-*/
-# /*
-#!define BOTNAME_SLENDY ("슬렌더맨")
-#!define BOTNAME_TORBS ("과열된 돌출부")
-#!define BOTNAME_SNIPERS ("젖-격수")
-#!define BOTNAME_NIPLETS ("젖먹이")
-#!define BOTNAME_ILLARIS ("아침에젖스")
-#!define BOTNAME_TOEPPLES ("발꼭지")
-#!define BOTNAME_DRAGONIPS ("용의 일겨헉♥")
-#!define BOTNAME_WEAK_SPOT ("약점♥")
-#!define BOTNAME_MAUGA_JR ("마우가 JR.")
-#!define BOTNAME_MINIBOSS ("미니보스")
+# ! add translated names here, in the same format and following the order of the language codes
+#!define BOTNAME_SLENDY serverSideTranslate(["slenderman", "슬렌더맨"])
+#!define BOTNAME_TORBS serverSideTranslate(["overheating glands", "과열된 돌출부"])
+#!define BOTNAME_SNIPERS serverSideTranslate(["s-nip-ers", "젖-격수"])
+#!define BOTNAME_NIPLETS serverSideTranslate(["niplets", "젖먹이"])
+#!define BOTNAME_ILLARIS serverSideTranslate(["sunkissed nips", "아침에젖스"])
+#!define BOTNAME_TOEPPLES serverSideTranslate(["toepples", "발꼭지"])
+#!define BOTNAME_DRAGONIPS serverSideTranslate(["dragoniррles", "용의 일겨헉♥"])
+#!define BOTNAME_WEAK_SPOT serverSideTranslate(["sensitive spot", "약점♥"])
+#!define BOTNAME_MAUGA_JR serverSideTranslate(["mauga jr.", "마우가 JR."])
+#!define BOTNAME_MINIBOSS serverSideTranslate(["miniboss", "미니보스"])
 # */
-
 # these are descriptions for custom settings.
 # gameplay category of settings
 /*
@@ -274,13 +266,12 @@ enum THREATS:
 #!define PlayerSlots 9
 
 globalvar bracket
-globalvar nipman
 #!define LeftNip (nipman.smallLNip)
 #!define RightNip (nipman.smallRNip)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objWeights = [0.06, 0.20, 0.27, 0.27, 0.20]
+globalvar objWeights = [0.05, 0.20, 0.275, 0.275, 0.20]
 globalvar lastObj
 
 globalvar objProg
@@ -486,21 +477,23 @@ rule "init":
 	wait(0.16)
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(l"Objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(t"objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
     # hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}\&fullwidth_space;".format(l"Threats", threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(l"Threats",
-		threatIcons[threatList[0]],
+    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
+		f"{threatIcons[threatList[0]]} ",
 		_(threatNames[threatList[0]]),
 		", " if len(threatList) > 1 else "",
-		threatIcons[threatList[1]] if len(threatList) > 1 else "",
+		f"{threatIcons[threatList[1]]} " if len(threatList) > 1 else "",
 		_(threatNames[threatList[1]]) if len(threatList) > 1 else "",
 		", " if len(threatList) > 2 else "",
-		threatIcons[threatList[2]] if len(threatList) > 2 else "",
+		f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else "",
 		_(threatNames[threatList[2]]) if len(threatList) > 2 else ""
 	), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
 	nipman.smallLNip = vect(2.93, 10.84-2.8, 26.15)
 	nipman.smallRNip= vect(-7.19, 10.8-2.8, 30.27)
+
+	nipman.__languageIndex__ = LANG_LIST.index("{}".format(Color.WHITE))
 
 	setMatchTime(5)
 
@@ -916,7 +909,7 @@ rule "toe medusa":
 
 	while obj != OBJ.INTERMISSION:
 		wait(0.112)
-		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 45:
+		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 40:
 			eventPlayer.feetSlow += 0.05
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
 			damage(eventPlayer, threatToes[0], 2.5)
@@ -1318,7 +1311,8 @@ rule "rain":
 
 	while obj != OBJ.INTERMISSION:
 		for rainVar in range(5):
-			createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 2 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
+			if rainVar % 2 == 0: # halve the cloud seeding fx
+				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 4 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.048)
 			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,3,0,0)
 
@@ -1449,8 +1443,8 @@ rule "discharge":
 	threatLactaters.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatLactaters.setInvisibility(Invis.ALL)
 	threatLactaters.startForcingButton(Button.PRIMARY_FIRE)
-	eventPlayer.botA.startFacing(evalOnce(directionTowards(eventPlayer.smallLNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.4 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.4)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	eventPlayer.botB.startFacing(evalOnce(directionTowards(eventPlayer.smallRNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) + 0.4 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.4)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(evalOnce(directionTowards(eventPlayer.smallLNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) * 0.7 + 0.4 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.25)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(evalOnce(directionTowards(eventPlayer.smallRNip * vect(1,0,1), Vector.LEFT * 20)) * sin(getTotalTimeElapsed() * 33) * 0.7 + 0.4 * (Vector.UP * (sin(getTotalTimeElapsed() * 47) + 0.25)) + (eventPlayer.getFacingDirection()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	# eventPlayer.botA.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	# eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.36)
@@ -1960,14 +1954,17 @@ rule "page found":
 	objPos = vect(random.randint(-18,18),0,random.randint(-5 if THREATS.CAGE in threatList else -18,16))
 
 rule "debug finish obj":
-	@Disabled
 	@Condition "{}".format(hostPlayer) == "OMGIDIED"
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
 	@Condition hostPlayer.isHoldingButton(Button.CROUCH)
 	@Condition hostPlayer.isHoldingButton(Button.MELEE)
 	@Condition hostPlayer.isHoldingButton(Button.JUMP)
-	@Condition obj != OBJ.INTERMISSION
-	objProg = objGoal
+	wait(1, Wait.ABORT_WHEN_FALSE)
+	if obj != OBJ.INTERMISSION:
+		objProg = objGoal
+	smallMessage(hostPlayer, hostPlayer.__languageIndex__)
+	hostPlayer.__languageIndex__ += 1
+	hostPlayer.__languageIndex__ = (hostPlayer.__languageIndex__ % 3)
 
 # misc
 rule "flava fla":
