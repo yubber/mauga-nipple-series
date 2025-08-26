@@ -51,15 +51,16 @@ settings {
                 "ability1Cooldown%": 120
             },
 			"echo": {
-                "ability1Cooldown%": 120
+                "ability1Cooldown%": 130
             },
-			# "roadhog": {
-            #     "ultGen%":
-            # },
+			"freja": {
+                "ability1Cooldown%": 65,
+                "ability2Cooldown%": 120
+            },
 			"zarya": {
                 "ultGen%": 25,
-				"ability1Cooldown%": 65,
-				"ability2Cooldown%": 65
+				"ability1Cooldown%": 45,
+				"ability2Cooldown%": 45
             },
 			"cassidy":{
 				"damageDealt%": 85,
@@ -288,7 +289,7 @@ globalvar objPos # used for miniboss entity
 globalvar roundNo
 globalvar threatList = []
 # threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON/*THREATS.TOES/*, THREATS.KITSUNIPS*/]
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON, THREATS.TOES/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 
@@ -361,6 +362,11 @@ playervar cacheB
 playervar cacheC
 playervar botA
 playervar botB
+
+# player shoots wrong mauga
+#!define wrongCounter cacheA
+# autobot
+#!define isBot cacheB
 
 #!define chainSetup (nipman.cacheC)
 
@@ -615,6 +621,17 @@ rule "loop":
 
 	goto RULE_START
 
+rule "player init & detect ai bot":
+	@Event eachPlayer
+	@Condition eventPlayer.isDummy() == false
+	@Condition eventPlayer.hasSpawned()
+	eventPlayer.startForcingName("")
+	if "{}".format(eventPlayer) == "":
+		eventPlayer.isBot = true
+	else:
+		eventPlayer.isBot = false
+	eventPlayer.stopForcingName()
+
 # mobs
 def mobsInit():
 	mobs = []
@@ -767,7 +784,7 @@ rule "mob retarget":
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
 			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
-	wait(1.6)
+	wait(1.92)
 	if ruleCondition:
 		loop()
 
@@ -783,14 +800,6 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive() and entityExists(eventPlayer.mobTarget):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
-rule "dragon change target":
-	@Event eachPlayer
-	@Hero hanzo
-	@Team 2
-	while obj != OBJ.INTERMISSION:
-		wait(2)
-		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
-
 rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Event eachPlayer
 	@Hero mauga
@@ -799,18 +808,19 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 7, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 10, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botA)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 7, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 10, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botB)
 	threatFx.append(getLastCreatedEntity())
 
 	threatDragons.disableNameplatesFor(getAllPlayers())
 	threatDragons.startForcingName(BOTNAME_DRAGONIPS)
 	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
+	threatDragons.setInvisibility(Invis.ENEMIES)
 	threatDragons.startScalingSize(0.1, false)
 
 	threatDragons.setDamageDealt(55 if obj == OBJ.MORE else 120)
@@ -828,6 +838,7 @@ rule "dragon stimulation":
 	# @Condition THREATS.DRAGON in threatList
 	@Condition (victim == nipman) or (obj == OBJ.MORE and eventPlayer in objPos)
 	@Condition victim != attackingClone
+	@Condition eventPlayer.isBot == false
 
 	waitUntil(len(threatList) > 0, 5)
 
@@ -837,6 +848,9 @@ rule "dragon stimulation":
 
 	if victim.botA.tickleCounter >= 24:
 		smallMessage(getAllPlayers(), STR_DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
+		victim.botA.mobTarget = random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
+		wait()
+		victim.botB.mobTarget =  random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
 		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallRNip, true)
@@ -980,7 +994,7 @@ rule "more maugas charge attack":
 
 		bigMessage(getAllPlayers(), (STR_MAUGASCHARGING).format(iconString(Icon.WARNING)))
 
-		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.PRESS_THE_ATTACK)
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned() and x.isBot == false]).communicate(Comms.PRESS_THE_ATTACK)
 
 		# all hammond dummies get weak spot init
 		createDummy(Hero.WRECKING_BALL, Team.2, -1, Vector.UP, Vector.UP)
@@ -1024,13 +1038,13 @@ rule "more maugas charge attack":
 			destroyDummy(Team.2, weakSpots[iMores].getSlot())
 		weakSpots = []
 
-		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.COUNTDOWN)
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned() and x.isBot == false]).communicate(Comms.COUNTDOWN)
 		for iMores in range(3):
 			playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION_SOUND, Color.TEAM_2, localPlayer if entityExists(localPlayer) else nipman.getEyePosition(), 99)
 			playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, LeftNip, 99)
 			playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, RightNip, 99)
 			wait(1)
-		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).communicate(Comms.INCOMING)
+		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned() and x.isBot == false]).communicate(Comms.INCOMING)
 		wait(1)
 
 		if obj != OBJ.MORE:
@@ -1133,10 +1147,10 @@ rule "grab":
 
 		# attack
 		if entityExists(grabLeftPlayer):
-			grabLeftPlayer = grabLeftPlayer.getPosition() + Vector.UP * 0.5
+			grabLeftPlayer = grabLeftPlayer.getPosition() + Vector.UP * 0.5 + grabLeftPlayer.getVelocity() * vect(1,0,1) * 2.4
 			chaseOverTime(grabLeft, grabLeftPlayer, 2.4, ChaseTimeReeval.NONE)
 		if entityExists(grabRightPlayer) and grabLeftPlayer != grabRightPlayer:
-			grabRightPlayer = grabRightPlayer.getPosition() + Vector.UP * 0.5
+			grabRightPlayer = grabRightPlayer.getPosition() + Vector.UP * 0.5 + grabRightPlayer.getVelocity() * vect(1,0,1) * 2.4
 			chaseOverTime(grabRight, grabRightPlayer, 2.4, ChaseTimeReeval.NONE)
 
 		wait(2.4)
@@ -1175,7 +1189,7 @@ rule "grab":
 		grabLeftPlayer.stopForcingPosition()
 		grabRightPlayer.stopForcingPosition()
 
-#!define CageMinZ 0
+#!define CageMinZ 1
 rule "cage":
 	@Event eachPlayer
 	@Team 1
@@ -1323,7 +1337,7 @@ rule "sun loop":
 			if entityExists(threatSuns[isun]) == false:
 				threatSuns.remove(threatSuns[isun])
 			else:
-				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice(getLivingPlayers(Team.1)).getPosition()), Relativity.TO_WORLD)
+				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).getPosition()), Relativity.TO_WORLD)
 			wait(0.064)
 		# threatSuns.slice(0,len(threatSuns)/2).setFacing(, Relativity.TO_PLAYER)
 		# threatSuns.slice(len(threatSuns/2),len(threatSuns)).setFacing(directionTowards(RightNip + Vector.UP * 5, random.choice(getLivingPlayers(Team.1)).getEyePosition()), Relativity.TO_WORLD)
@@ -1660,9 +1674,9 @@ rule "sniper change target":
 	@Hero widowmaker
 	@Team 2
 	while obj != OBJ.INTERMISSION:
-		wait(12)
-		eventPlayer.mobTarget = random.choice(getLivingPlayers(Team.1))
+		eventPlayer.mobTarget = random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
 		eventPlayer.setAmmo(0,9999)
+		wait(12)
 
 rule "sniper target dead":
 	@Event eachPlayer
@@ -1828,7 +1842,10 @@ rule "setup & refresh forest":
 	wait(1.2)
 
 	while obj == OBJ.PAGES:
-		if (getPlayersOnHero(Hero.LIFEWEAVER, Team.2) == 0):
+		if (getPlayersOnHero(Hero.LIFEWEAVER, Team.2) == []):
+			for i in range(len(getPlayersOnHero(Hero.LIFEWEAVER, Team.2))):
+				destroyDummy(Team.2, getPlayersOnHero(Hero.LIFEWEAVER, Team.2)[i])
+				wait(0.096)
 			loop()
 		getPlayers(Team.2).setUltCharge(100)
 		wait(0.08)
@@ -1949,11 +1966,20 @@ rule "flava fla":
 rule "wrong mauga":
 	@Event playerDealtDamage
 	@Condition victim == nipman
-	@Condition obj != OBJ.INTERMISSION
-	eventPlayer.communicate(Comms.NO)
-	smallMessage(eventPlayer, f"{iconString(Icon.CROSS)} {Hero.MAUGA} {l'Protected'}")
-	playEffect(eventPlayer, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, Color.TEAM_1, nipman, true)
-	wait(10)
+	if obj == OBJ.INTERMISSION:
+		wait(getMatchTime(), Wait.IGNORE_CONDITION)
+	eventPlayer.wrongCounter += 1
+	if eventPlayer.wrongCounter > 6:
+		eventPlayer.wrongCounter = 0
+		eventPlayer.communicate(Comms.NO)
+		smallMessage(eventPlayer, f"  {iconString(Icon.CROSS)} {Hero.MAUGA} {l'Protected'}")
+		playEffect(eventPlayer, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, Color.TEAM_1, nipman, true)
+		wait(10)
+	# min delay between events
+	wait(0.24, Wait.IGNORE_CONDITION)
+	# reset counter when not shooting for some time
+	wait(1.2, Wait.RESTART_WHEN_TRUE)
+	eventPlayer.wrongCounter = 0
 rule "rez cd if not hardcore":
 	wait(2)
 	if isHardcore == false:
@@ -2184,7 +2210,7 @@ rule "win":
 	@Condition eventPlayer == nipman
 	@Condition attacker != null
 	setSlowMotion(50)
-	getPlayers(Team.ALL).communicate(Comms.VOICE_LINE_UP)
+	getAllPlayers().communicate(Comms.VOICE_LINE_UP)
 	wait(0.48)
 	declareTeamVictory(Team.1)
 	destroyAllEffects()
