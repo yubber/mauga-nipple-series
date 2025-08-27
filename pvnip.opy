@@ -123,6 +123,7 @@ settings {
 # this var is still used for the server side translation (nipman.__languageIndex__)
 playervar __languageIndex__
 globalvar nipman
+globalvar bracket
 #!define serverSideTranslate(x) x[nipman.__languageIndex__]
 
 rule "want to contribute a translation? please visit https://github.com/yubber/mauga-nipple-series/, it's easier to make translations for the overpy source file.":
@@ -161,6 +162,11 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 #!define SETTING_PLAYERSCALE "increase player damage per missing player | 없는 플레이어당 주는 대미지 증가"
 #!define SETTING_DIFFICULTY "difficulty | 난이도"
 #!define SETTING_HARDCORE "respawn players only when round ends | 라운드가 끝난 이후에만 리스폰"
+enum SETTING_RESPAWN:
+	NAME = "player respawning",
+	ALWAYS = "always | ",
+	ROUND_END = "only when round ends! | ",
+	NEVER = "never!!! | "
 # */
 /*
 #!define SETTING_GAMEPLAY "게임플레이"
@@ -176,43 +182,45 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 globalvar objDescs = [___("collect pages"), ___("defeat the mini maugas"), ___("slay enemies"), ___("slay the miniboss"), ___("capture the point")] # keep point as last
 globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), /*"the third nipact",*/ ___("dragon stimulation"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("dairy deaths"), ___("milk wall"), ___("mending milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
 
+#!suppressWarnings w_enum_constant
 # these are references to strings in other parts of the program. i've moved them here for your convenience.
 # if you would like context for where these strings are used, you can CTRL+F the PART_AFTER_DEFINE.
-#!define STR_OBJCOUNTDOWN t"next objective in 3 seconds!"
-#!define STR_ROUNDSTART t"round start!"
-#!define STR_MAUGAVULNERABLE t"objective complete! mauga is vulnerable!"
-# leave the {} there. these are for warning icons.
-#!define STR_MAUGASCHARGING t"{0} deadly attack incoming! attack the sensitive spots! {0}"
-#!define STR_MAUGASFAILED t"{} failed to stop the attack. brace for impact!"
-# here, {} is the player who found the page. this is for the slenderman objective.
-#!define STR_PAGEFOUND t" {} found a page!"
-#!define STR_ALLDEAD t"game over. all players died."
-# this string is for players that try to hook/charge the mauga. write whatever's funniest in the target language.
-#!define STR_CHIDING t"do not the mauga"
-# if you are translating the petrified text, delete the next line and use the line after it instead. also get rid of the "# " at the start.
-#!define STR_PETRIFIED t"{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA)
-# #!define STR_PETRIFIED t"petrified! avoid facing sigma.".format(iconString(Icon.EYE))
-# {} is mauga's icon
-#!define STR_DRAGONTRIGGER t"{} heehee, stop tickling me! dragon lactation initation!"
-#!define STR_PAGEGUNS t"remember to check inside mauga's guns for the pages."
-#!define MESSAGE_GRABBED t"{} you were grabbed!"
-
-#!define MESSAGE_MAUGA_GONE t"something went wrong. skipping phase..."
-#!define MESSAGE_TIMEOUT t"timeout exceeded, skipping phase in case of softlock."
-
-# total deaths in the team.
-#!define HUD_TEAMDEATHS t"team deaths"
-#!define HUD_ROUNDS t"rounds elapsed"
-#!define HUD_TIME t"time elapsed"
-#!define HUD_HC t"hardcore mode is on"
-#!define HUD_HCDESC t"no respawning until round ends"
-# \n is a newline, because text doesn't wrap automatically i think
-#!define HUD_SPECTATORS __("spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)")
-# supposed to show the korean flag but no worky
-#!define HUD_KR_MODE (t"\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
-#!define HUD_IMPORT_CODE t"use code DS2MD for the latest version"
-#!define HUD_LOAD_1 t"peak: {} | average: {}"
-#!define HUD_LOAD_2 t"server load: {}\n"
+enum STRINGS:
+	OBJCOUNTDOWN = t"next objective in 3 seconds!"
+	ROUNDSTART = t"round start!"
+	MAUGAVULNERABLE = t"objective complete! mauga is vulnerable!"
+	# leave the {} there. these are for warning icons.
+	MAUGASCHARGING = t"{0} deadly attack incoming! attack the sensitive spots! {0}"
+	MAUGASFAILED = t"{} failed to stop the attack. brace for impact!"
+	# here, {} is the player who found the page. this is for the slenderman objective.
+	PAGEFOUND = t" {} found a page!"
+	ALLDEAD = t"game over. all players died."
+	# this string is for players that try to hook/charge the mauga. write whatever's funniest in the target language.
+	CHIDING = t"do not the mauga"
+	# if you are translating the petrified text, delete the next line and use the line after it instead. also get rid of the "# " at the start.
+	PETRIFIED = t"{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA)
+	# PETRIFIED = t"petrified! avoid facing sigma.".format(iconString(Icon.EYE))
+	# {} is mauga's icon
+	DRAGONTRIGGER = t"{} heehee, stop tickling me! dragon lactation initation!"
+	PAGEGUNS = t"remember to check inside mauga's guns for the pages."
+	GRABBED = t"{} you were grabbed!"
+	MAUGA_GONE = t"something went wrong. skipping phase..."
+	TIMEOUT = t"timeout exceeded, skipping phase in case of softlock."
+	HC = t"hardcore mode is on"
+	UHC = t"ultra hardcore mode is on"
+	HCDESC = t"no respawning until round ends"
+	UHCDESC = t"no respawning ever!"
+	# total deaths in the team.
+	TEAMDEATHS = t"team deaths"
+	ROUNDS = t"rounds elapsed"
+	TIME = t"time elapsed"
+	# \n is a newline, because text doesn't wrap automatically i think
+	SPECTATORS = __("spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)")
+	# supposed to show the korean flag but no worky
+	KR_MODE = (t"\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
+	IMPORT_CODE = t"use code DS2MD for the latest version"
+	LOAD_1 = t"peak: {} | average: {}"
+	LOAD_2 = t"server load: {}\n"
 
 /*
 TODO
@@ -274,7 +282,6 @@ enum THREATS:
 #!define NipmanLeftConst vect(2.93, 10.84-2.8, 26.15)
 #!define NipmanRightConst vect(-7.19, 10.8-2.8, 30.27)
 
-globalvar bracket
 #!define LeftNip (nipman.smallLNip)
 #!define RightNip (nipman.smallRNip)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
@@ -304,8 +311,6 @@ globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Bu
 # globalvar threatText = ""
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
 globalvar mobDmg = [90, 130, 75, 60]
-# globalvar enemies = [Hero.MAUGA]
-# globalvar mobDmg = [100]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -354,7 +359,11 @@ globalvar mobs = []
 globalvar threatFx
 globalvar antiCrashOn
 
-globalvar isHardcore = createWorkshopSettingBool(SETTING_DIFFICULTY, SETTING_HARDCORE, false, 0)
+globalvar hardcoreLevel = createWorkshopSettingEnum(SETTING_DIFFICULTY, SETTING_RESPAWN.NAME, 0, [
+	SETTING_RESPAWN.ALWAYS,
+	SETTING_RESPAWN.ROUND_END,
+	SETTING_RESPAWN.NEVER
+], 0)
 
 playervar mobTarget # also used for sniper target, milk wall victims (nipman.mobTarget)
 playervar cacheA
@@ -363,20 +372,20 @@ playervar cacheC
 playervar botA
 playervar botB
 
+### HUMAN PLAYERS
 # player shoots wrong mauga
 #!define wrongCounter cacheA
 # autobot
 #!define isBot cacheB
+#!define scale cacheC
 
+### THREATS
 #!define chainSetup (nipman.cacheC)
-
 # feetpples
 #!define feetSlow cacheA
-
 # dragons' vars
 #!define tickleCounter cacheA
 #!define iDragon cacheA
-
 # big and small maugas' nip pos. world vect
 #!define smallLNip cacheA
 #!define smallRNip cacheB
@@ -386,9 +395,8 @@ playervar botB
 #!define nipletsPosList botA.cacheA
 playervar iniplets
 
-# choose 1 clone
+# choose 1 clone for more maugas
 #!define cycledClone objPos[getTotalTimeElapsed() % len(objPos)]
-
 #!define MiniScale 15
 
 rule "guide to adding threats":
@@ -424,7 +432,7 @@ rule "init":
 	wait()
 	# print(len(getPlayers(Team.2)))
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), HUD_LOAD_2.format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+    hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), STRINGS.LOAD_2.format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     hudSubtext(getAllPlayers(), t"use code DS2MD for the latest version", HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	disableInspector()
 
@@ -454,17 +462,15 @@ rule "init":
 	nipman.smallRNip = NipmanRightConst
 
 	# score huds
-	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), HUD_TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.SKULL), HUD_TEAMDEATHS, teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.FLAG), HUD_ROUNDS, roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), STRINGS.TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.SKULL), STRINGS.TEAMDEATHS, teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.FLAG), STRINGS.ROUNDS, roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers() if isHardcore else null, iconString(Icon.EXCLAMATION_MARK), HUD_HC, HUD_HCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
-	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), HUD_SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-	# hudSubtext(getAllPlayers() if obj == OBJ.INTERMISSION else null, HUD_KR_MODE, HudPosition.LEFT, 10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-
+	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), STRINGS.SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+	# hudSubtext(getAllPlayers() if obj == OBJ.INTERMISSION else null, STRINGS.KR_MODE, HudPosition.LEFT, 10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
 
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
 	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
@@ -474,9 +480,9 @@ rule "init":
 	for i in range(6):
 		createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.CLOUD, Color.GRAY, Vector.UP * i * 0.1 - 0.7, 50, EffectReeval.VISIBILITY)
 		wait()
-	createEffect(getAllPlayers(), Effect.SPHERE, Color.WHITE, objPos if obj == OBJ.PAGES else Vector.DOWN, 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	createEffect(getAllPlayers(), Effect.RING, Color.BLUE, objPos if obj == OBJ.CAPTURE else Vector.DOWN * getTotalTimeElapsed(), 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
+	createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, objPos + Vector.UP * (1 + 0.5 * sin(getTotalTimeElapsed())) if obj == OBJ.PAGES else Vector.DOWN, 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if obj == OBJ.CAPTURE else [], Effect.RING, Color.BLUE, objPos, 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
 
 	# threat fx
 	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, LeftNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
@@ -509,6 +515,12 @@ rule "init":
 
 	nipman.__languageIndex__ = LANG_LIST.index("{}".format(Color.WHITE))
 
+	# hardcore huds
+	if hardcoreLevel == 1:
+		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.HC, STRINGS.HCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	elif hardcoreLevel == 2:
+		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.UHC, STRINGS.UHCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+
 	setMatchTime(5)
 
 rule "loop":
@@ -534,6 +546,8 @@ rule "loop":
 	stopChasingVariable(area2)
 	stopChasingVariable(twisterPos)
 	stopChasingVariable(missilePos)
+	getPlayers(Team.1).scale = 1
+	getPlayers(Team.1).stopScalingSize()
 	stopAllDamageModifications()
 	# getPlayers(Team.1).stopAcceleration()
 	getPlayers(Team.1).setGravity(100)
@@ -544,7 +558,7 @@ rule "loop":
 	setMatchTime(11)
 	unpauseMatchTime()
 	wait(8)
-	bigMessage(getAllPlayers(), STR_OBJCOUNTDOWN)
+	bigMessage(getAllPlayers(), STRINGS.OBJCOUNTDOWN)
 	wait(2.5)
 	pauseMatchTime()
 	wait(0.5)
@@ -595,8 +609,9 @@ rule "loop":
 	roundNo++
 
 	wait()
-	getDeadPlayers(Team.1).respawn()
-	bigMessage(getAllPlayers(), STR_ROUNDSTART)
+	if hardcoreLevel < 2:
+		getDeadPlayers(Team.1).respawn()
+	bigMessage(getAllPlayers(), STRINGS.ROUNDSTART)
 
 	nipman.forceButtonPress(Button.ABILITY_2)
 	wait(0.48)
@@ -610,19 +625,23 @@ rule "loop":
 
 	waitUntil(objProg >= objGoal, 10*60) # timeout
 	if objProg < objGoal:
-		bigMessage(getAllPlayers(), MESSAGE_TIMEOUT)
+		bigMessage(getAllPlayers(), STRINGS.TIMEOUT)
 
 	# nipman.setStatusEffect(null, Status.STUNNED, 0.5)
 	playEffect(getAllPlayers(), DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, Color.TEAM_1, Vector.FORWARD * 18, 100)
 	playEffect(getAllPlayers(), DynamicEffect.ANA_BIOTIC_GRENADE_EXPLOSION_SOUND, Color.TEAM_1, localPlayer, 200)
-	bigMessage(getAllPlayers(), STR_MAUGAVULNERABLE)
+	bigMessage(getAllPlayers(), STRINGS.MAUGAVULNERABLE)
 	wait()
-	getDeadPlayers(Team.1).respawn()
+
+	if hardcoreLevel < 2:
+		if hardcoreLevel < 2:
+			getDeadPlayers(Team.1).respawn()
 
 	goto RULE_START
 
 rule "player init & detect ai bot":
 	@Event eachPlayer
+	@Team 1
 	@Condition eventPlayer.isDummy() == false
 	@Condition eventPlayer.hasSpawned()
 	eventPlayer.startForcingName("")
@@ -631,6 +650,11 @@ rule "player init & detect ai bot":
 	else:
 		eventPlayer.isBot = false
 	eventPlayer.stopForcingName()
+	eventPlayer.scale = 1
+	eventPlayer.disableGamemodeHud()
+	eventPlayer.setAllowedHeroes(getAllHeroes())
+	if hardcoreLevel > 0:
+		getPlayers(Team.1).disableRespawn()
 
 # mobs
 def mobsInit():
@@ -726,7 +750,7 @@ rule "slendy":
 		mobs.forceButtonPress(Button.MELEE)
 		wait(1.2)
 		if random.uniform(0,1) < 0.03:
-			smallMessage(getAllPlayers(), STR_PAGEGUNS)
+			smallMessage(getAllPlayers(), STRINGS.PAGEGUNS)
 
 rule "mob respawn":
 	@Event eachPlayer
@@ -840,14 +864,14 @@ rule "dragon stimulation":
 	@Condition victim != attackingClone
 	@Condition eventPlayer.isBot == false
 
-	waitUntil(len(threatList) > 0, 5)
+	# waitUntil(len(threatList) > 0, 5)
 
-	if THREATS.DRAGON in threatList == false: # don't check again
-		waitUntil(obj == OBJ.INTERMISSION, 99999)
-		return
+	# if THREATS.DRAGON in threatList == false: # don't check again
+	# 	waitUntil(obj == OBJ.INTERMISSION, 99999)
+	# 	return
 
 	if victim.botA.tickleCounter >= 24:
-		smallMessage(getAllPlayers(), STR_DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
+		smallMessage(getAllPlayers(), STRINGS.DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
 		victim.botA.mobTarget = random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
 		wait()
 		victim.botB.mobTarget =  random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
@@ -941,7 +965,7 @@ rule "toe medusa":
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
 			damage(eventPlayer, threatToes[0], 2.5)
 			if eventPlayer.feetSlow >= 1:
-				smallMessage(eventPlayer, STR_PETRIFIED)
+				smallMessage(eventPlayer, STRINGS.PETRIFIED)
 				eventPlayer.feetSlow = 1
 				eventPlayer.setStatusEffect(threatToes[0], Status.FROZEN, 1.2)
 				damage(eventPlayer, threatToes[0], 80)
@@ -992,7 +1016,7 @@ rule "more maugas charge attack":
 		createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)
 		moreFx.append(getLastCreatedEntity())
 
-		bigMessage(getAllPlayers(), (STR_MAUGASCHARGING).format(iconString(Icon.WARNING)))
+		bigMessage(getAllPlayers(), (STRINGS.MAUGASCHARGING).format(iconString(Icon.WARNING)))
 
 		random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned() and x.isBot == false]).communicate(Comms.PRESS_THE_ATTACK)
 
@@ -1032,7 +1056,7 @@ rule "more maugas charge attack":
 			attackingClone = null
 			continue
 
-		bigMessage(getAllPlayers(), STR_MAUGASFAILED.format(iconString(Icon.SAD)))
+		bigMessage(getAllPlayers(), STRINGS.MAUGASFAILED.format(iconString(Icon.SAD)))
 
 		for iMores in range(len(weakSpots)):
 			destroyDummy(Team.2, weakSpots[iMores].getSlot())
@@ -1164,13 +1188,13 @@ rule "grab":
 		# check landing
 		grabLeftPlayer = getRealPlayersInRadius(grabLeft, 2, Team.1)
 		grabLeftPlayer.startForcingPosition(grabLeft,true)
-		smallMessage(grabLeftPlayer, MESSAGE_GRABBED.format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
+		smallMessage(grabLeftPlayer, STRINGS.GRABBED.format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabLeft, 20)
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabLeft, 20)
 
 		grabRightPlayer = getRealPlayersInRadius(grabRight, 2, Team.1)
 		grabRightPlayer.startForcingPosition(grabRight,true)
-		smallMessage(grabRightPlayer, MESSAGE_GRABBED.format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
+		smallMessage(grabRightPlayer, STRINGS.GRABBED.format(abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)))
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, grabRight, 20)
 		playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION, Color.TEAM_2, grabRight, 20)
 
@@ -1456,8 +1480,15 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(0.8)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.2, 20, 1, 1, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(objPos.exclude(eventPlayer) if obj == OBJ.MORE else mobs))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 80, 1, 1, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.1)))
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 80, 1, 1, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.1)))
+
+rule "chungus":
+	@Event playerReceivedHealing
+	@Team 1
+	@Condition healer == nipman
+	eventPlayer.scale += eventHealing * 0.005
+	eventPlayer.startScalingSize(eventPlayer.scale, false)
 
 #!define NukeAoe 10
 rule "nuke":
@@ -1725,7 +1756,7 @@ rule "missing mauga":
 	@Condition obj == OBJ.MORE
 	@Condition all([not entityExists(x) for x in objPos])
 	wait(2, Wait.ABORT_WHEN_FALSE)
-	smallMessage(getAllPlayers(), MESSAGE_MAUGA_GONE)
+	smallMessage(getAllPlayers(), STRINGS.MAUGA_GONE)
 	objProg = objGoal
 	wait(2, Wait.ABORT_WHEN_FALSE)
 	if ruleCondition:
@@ -1936,7 +1967,7 @@ rule "page found":
 	@Condition obj == OBJ.PAGES
 	@Condition eventPlayer.isDummy() == false
 	@Condition distance(eventPlayer, objPos) < 1.3
-	smallMessage(getAllPlayers(), STR_PAGEFOUND.format(eventPlayer))
+	smallMessage(getAllPlayers(), STRINGS.PAGEFOUND.format(eventPlayer))
 	playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, objPos, 65)
 	playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, Color.TEAM_1, objPos, 1)
 	addToTeamScore(Team.1, 1) # sound
@@ -1982,7 +2013,7 @@ rule "wrong mauga":
 	eventPlayer.wrongCounter = 0
 rule "rez cd if not hardcore":
 	wait(2)
-	if isHardcore == false:
+	if hardcoreLevel == 0:
 		while true:
 			getPlayersOnHero(Hero.MERCY, Team.1).setAbilityCooldown(Button.ABILITY_2, 0)
 			wait(1)
@@ -2072,7 +2103,7 @@ rule "charge no breaky":
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "charge no breaky more maugas":
 	@Event eachPlayer
@@ -2084,7 +2115,7 @@ rule "charge no breaky more maugas":
 	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "echo charge no breaky":
 	@Event eachPlayer
@@ -2095,7 +2126,7 @@ rule "echo charge no breaky":
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "echo charge no breaky more maugas":
 	@Event eachPlayer
@@ -2108,7 +2139,7 @@ rule "echo charge no breaky more maugas":
 	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "punch no breaky":
 	@Event eachPlayer
@@ -2119,7 +2150,7 @@ rule "punch no breaky":
 	@Condition eventPlayer.getPosition().z > 15
 	@Condition eventPlayer.getFacingDirection().z > 0
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "hook no breaky":
 	@Event eachPlayer
@@ -2129,7 +2160,7 @@ rule "hook no breaky":
 	@Condition eventPlayer.isUsingAbility1()
 	@Condition raycast(eventPlayer.getEyePosition(), eventPlayer.getEyePosition() + 35 * eventPlayer.getFacingDirection(), getPlayers(Team.2), getPlayersOnHero(Hero.LIFEWEAVER, Team.2), true).getPlayerHit() == nipman
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
-	smallMessage(eventPlayer, STR_CHIDING)
+	smallMessage(eventPlayer, STRINGS.CHIDING)
 rule "flux no breaky":
 	@Event playerDealtDamage
 	@Hero sigma
@@ -2218,15 +2249,6 @@ rule "win":
 	wait(3)
 	restartMatch()
 
-rule "player init, cage add":
-	@Event eachPlayer
-	@Team 1
-	@Condition eventPlayer.hasSpawned()
-	eventPlayer.disableGamemodeHud()
-	eventPlayer.setAllowedHeroes(getAllHeroes())
-	if isHardcore:
-		getPlayers(Team.1).disableRespawn()
-
 rule "sombra aint slick":
 	@Event eachPlayer
 	@Hero sombra
@@ -2254,16 +2276,24 @@ rule "sombra was a little slick":
 	@Condition eventAbility == Button.ULTIMATE or eventDamage > 1000
 	nipman.setHealth(nipman.getHealth() + eventDamage * 0.7)
 
-rule "you are dead, not big surprise":
+rule "you are dead, not big surprise + chungus explode":
 	@Event playerDied
 	@Team 1
 	addToTeamScore(Team.2, 1)
+	if eventPlayer.scale > 2:
+		# if checking los with 20 players isn't too expensive can turn it on
+		damage(getPlayersInRadius(eventPlayer.getPosition(), eventPlayer.scale, Team.ALL, LosCheck.OFF), eventPlayer, eventPlayer.scale * 90)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.TEAM_1, eventPlayer, 30 * eventPlayer.scale)
+		if eventPlayer.scale > 3.5:
+			playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_1, eventPlayer, 1)
+		else:
+			playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, Color.TEAM_1, eventPlayer, 1)
 	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
 	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
-	if isHardcore:
+	if hardcoreLevel > 0:
 		# eventPlayer.setRespawnTime(99999)
 		if [x for x in getPlayers(Team.1) if x.isAlive() and x.hasSpawned()] == []:
-			bigMessage(getAllPlayers(), STR_ALLDEAD)
+			bigMessage(getAllPlayers(), STRINGS.ALLDEAD)
 			setSlowMotion(50)
 			wait(1)
 			declareTeamVictory(Team.2)
