@@ -479,7 +479,7 @@ rule "slendy":
 	objPos = Vector.FORWARD # set first page pos for clueless players
 	mobs.resurrect()
 	mobs.startModifyingVoicelinePitch(0.6, false)
-	mobs.startForcingName(BOTNAME_SLENDY)
+	mobs.startForcingName(BOTNAME.SLENDY)
 	wait(0.4)
 	heal(mobs,null,99999)
 	while obj == OBJ.PAGES:
@@ -578,7 +578,7 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	threatFx.append(getLastCreatedEntity())
 
 	threatDragons.disableNameplatesFor(getAllPlayers())
-	threatDragons.startForcingName(BOTNAME_DRAGONIPS)
+	threatDragons.startForcingName(BOTNAME.DRAGONIPS)
 	threatDragons.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatDragons.setInvisibility(Invis.ENEMIES)
 	threatDragons.startScalingSize(0.1, false)
@@ -677,7 +677,7 @@ rule "TOES":
 	createEffect(getAllPlayers(), Effect.ANA_NANO_BOOSTED, Color.TEAM_2, threatToes[0], true, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 
-	threatToes.startForcingName(BOTNAME_TOEPPLES)
+	threatToes.startForcingName(BOTNAME.TOEPPLES)
 
 	while threatToes[0].hasStatus(Status.KNOCKED_DOWN) == false:
 		threatToes.startForcingPosition(worldVector(vect(0.017, 0.186, -0.037)*147, nipman, Transform.ROTATION_AND_TRANSLATION), true)
@@ -723,7 +723,7 @@ rule "init weak spots": # ALL hammond dummies are weak spots
 	@Hero wreckingBall
 	@Condition eventPlayer.isDummy()
 	eventPlayer.startScalingSize(0.8, false)
-	eventPlayer.startForcingName(BOTNAME_WEAK_SPOT)
+	eventPlayer.startForcingName(BOTNAME.WEAK_SPOT)
 	createIcon(getAllPlayers(), eventPlayer, Icon.WARNING, IconReeval.VISIBILITY_AND_COLOR, rgb(255, 205 + 50 * (sin(getTotalTimeElapsed() * 4)) / 2, 0), true)
 	weakSpots.append(eventPlayer)
 	wait(0.16)
@@ -867,7 +867,7 @@ rule "niplets + dupe":
 	threatFx.append(getLastCreatedEntity())
 	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botB, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
-	threatNiplets.startForcingName(BOTNAME_NIPLETS)
+	threatNiplets.startForcingName(BOTNAME.NIPLETS)
 	threatNiplets.disableNameplatesFor(getAllPlayers())
 
 	# eventPlayer.iniplets = 0
@@ -1085,7 +1085,7 @@ rule "sun loop":
 		wait(0.64)
 		threatSuns.setInvisibility(Invis.ENEMIES)
 		threatSuns.setStatusEffect(null, Status.PHASED_OUT, 99999)
-		threatSuns.startForcingName(BOTNAME_ILLARIS)
+		threatSuns.startForcingName(BOTNAME.ILLARIS)
 		threatSuns.setProjectileSpeed(30)
 		threatSuns.disableNameplatesFor(getAllPlayers())
 		threatSuns.setDamageDealt(max(20,120 / len(threatSuns)))
@@ -1181,7 +1181,7 @@ rule "discharge":
 	# eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	wait(0.36)
 	threatLactaters.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*2), true)
-	threatLactaters.startForcingName(BOTNAME_TORBS)
+	threatLactaters.startForcingName(BOTNAME.TORBS)
 	threatLactaters.disableNameplatesFor(getAllPlayers())
 
 	# main mauga torbs are higher
@@ -1428,7 +1428,7 @@ rule "dupe + normal sniper":
 
 	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
 	threatSnipers.disableNameplatesFor(getAllPlayers())
-	threatSnipers.startForcingName(BOTNAME_SNIPERS)
+	threatSnipers.startForcingName(BOTNAME.SNIPERS)
 	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatSnipers.startScalingSize(0.1, false)
 
@@ -1538,7 +1538,7 @@ rule "more maugas":
 		wait(0.096) # LOAD BEARING WAIT. NEEDS TO BE THIS LONG AT LEAST
 		objPos[iMores].smallLNip = worldVector(vect(0.360, 1.371, 0.266)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
 		objPos[iMores].smallRNip = worldVector(vect(-0.137, 1.378, 0.466)*MiniScale, objPos[iMores], Transform.ROTATION_AND_TRANSLATION)
-		objPos[iMores].startForcingName(BOTNAME_MAUGA_JR)
+		objPos[iMores].startForcingName(BOTNAME.MAUGA_JR)
 		# createProgressBarInWorldText(getAllPlayers(), /*evalOnce(objPos[iMores]).getHealth() / evalOnce(ceill(objPos[iMores].getHealth()))evalOnce(objPos[iMores]).getNormalizedHealth()*/  * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getHealth()))/*.getMaxHealth()*/), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		# WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400
 		createProgressBarInWorldText(getAllPlayers(), (evalOnce(objPos[iMores]).getHealth() / evalOnce(ceil(objPos[iMores].getMaxHealth()))) * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
@@ -1562,7 +1562,7 @@ rule "miniboss":
 	if objPos.getCurrentHero() == Hero.WINSTON:
 		objPos.setDamageDealt(55)
 	objPos.startForcingThrottle(1,1,0,0,0,1)
-	objPos.startForcingName(BOTNAME_MINIBOSS)
+	objPos.startForcingName(BOTNAME.MINIBOSS)
 	objPos.startFacing(directionTowards(objPos.getPosition(), objPos.mobTarget.getPosition()), 400, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 
 	if objPos.getHero() == Hero.MAUGA:
