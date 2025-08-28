@@ -19,8 +19,9 @@ rule "strings":
 # - to avoid censors, you can use zero-width spaces "​". cyrillic characters also work for the latin script, but they will cause the font to change.
 
 # ! add language code here, and the translation workshop uses for white. maintain the same order!
-#!translations en ko zh_CN
-#!define LANG_LIST ["White", "흰색", ""]
+#!translations en ko
+# zh_CN
+#!define LANG_LIST ["White", "흰색", "白色"]
 
 # the mode name and description are in settings -> main, at the very top of pvnip.opy.
 # since the code is shared across all languages, just add a credit to yourself for translating at the bottom.
@@ -33,7 +34,7 @@ enum BOTNAME:
 	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부"])
 	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手"])
 	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔"])
-	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", ""])
+	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스"])
 	TOEPPLES = serverSideTranslate(["toepples", "발꼭지"])
 	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙"])
 	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
@@ -47,21 +48,22 @@ enum BOTNAME:
 #!define SETTING_DIFFICULTY "difficulty | 난이도"
 #!define SETTING_HARDCORE "respawn players only when round ends | 라운드가 끝난 이후에만 리스폰"
 enum SETTING_RESPAWN:
-	NAME = "player respawning | 玩家重生",
-	ALWAYS = "always | 正常",
-	ROUND_END = "only when round ends! | 回合完毕后",
-	NEVER = "never!!! | 不重生"
+	NAME = "player respawning | 플레이어 리스폰 | 玩家重生",
+	ALWAYS = "always | 항상 | 正常",
+	ROUND_END = "only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后",
+	NEVER = "never!!! | 리스폰 불가 | 不重生"
 
+###
 ### !!! END. the following strings are already translated in the .po file.
+###
 # thank you for translating!
 
-# please preserve the order of these lists.
 globalvar objDescs = [___("collect pages"), ___("defeat the mini maugas"), ___("slay enemies"), ___("slay the miniboss"), ___("capture the point")] # keep point as last
 globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), /*"the third nipact",*/ ___("dragon stimulation"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("dairy deaths"), ___("milk wall"), ___("mega milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
 
 #!suppressWarnings w_enum_constant
 # these are references to strings in other parts of the program. i've moved them here for your convenience.
-# if you would like context for where these strings are used, you can CTRL+F the enum key.
+# if you would like context for where these strings are used, you can CTRL+F the enum key in pvnip.opy.
 enum STRINGS:
 	OBJCOUNTDOWN = t"next objective in 3 seconds!"
 	ROUNDSTART = t"round start!"

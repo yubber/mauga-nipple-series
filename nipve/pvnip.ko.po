@@ -4,211 +4,211 @@ msgstr ""
 "Language: ko\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 247, rule "init"
+#. file pvnip.opy, line 231, rule "init"
 msgid "objective"
 msgstr "목표"
 
-#. file pvnip.opy, line 249, rule "init"
+#. file pvnip.opy, line 232, rule "init"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2033, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2016, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
-#. file strings.opy, line 59, rule "strings"
+#. file strings.opy, line 61, rule "strings"
 msgid "collect pages"
 msgstr "페이지를 모아라"
 
-#. file strings.opy, line 59, rule "strings"
+#. file strings.opy, line 61, rule "strings"
 msgid "defeat the mini maugas"
 msgstr "스몰우가들을 처치해라"
 
-#. file strings.opy, line 59, rule "strings"
+#. file strings.opy, line 61, rule "strings"
 msgid "slay enemies"
 msgstr "적들을 처치해라"
 
-#. file strings.opy, line 59, rule "strings"
+#. file strings.opy, line 61, rule "strings"
 msgid "slay the miniboss"
 msgstr "미니보스를 처치해라"
 
-#. file strings.opy, line 59, rule "strings"
+#. file strings.opy, line 61, rule "strings"
 msgid "capture the point"
 msgstr "거점을 점령해라"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "slenderman"
 msgstr "슬렌더맨"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "more maugas"
 msgstr "마우(추)가"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "frosty nips"
 msgstr "냉동찌찌"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "dragon stimulation"
 msgstr "용의 일겨헉♥"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "toepples"
 msgstr "발꼭지"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "grabbyteats"
 msgstr "하우두유두?"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "niplets"
 msgstr "바운스 모핑"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "cup fight"
 msgstr "케이찌찌 혈투"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "tiddy twister"
 msgstr "공포의 트위스트"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "n!pple nuke"
 msgstr "툭튀미사일"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "dairy deaths"
 msgstr "우유 알러지"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "milk wall"
 msgstr "젖벽대전"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "scalding discharge"
 msgstr "화끈한 분비물"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "s-nip-ers"
 msgstr "젖-격수"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "boobsted mobs"
 msgstr "버젖커 몹들"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "booblet hell"
 msgstr "찌찌피하기"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "gravitatas"
 msgstr "젖력... 아니 중력"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "sun exposure"
 msgstr "노출 (햇빛에)"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "lazer"
 msgstr "레이젖"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "lactic hail"
 msgstr "유당지옥"
 
-#. file strings.opy, line 60, rule "strings"
+#. file strings.opy, line 62, rule "strings"
 msgid "mega milk"
 msgstr ""
 
-#. file strings.opy, line 66, rule "strings"
+#. file strings.opy, line 68, rule "strings"
 msgid "next objective in 3 seconds!"
 msgstr "3초 후에 다음 목표가 적용됩니다!"
 
-#. file strings.opy, line 67, rule "strings"
+#. file strings.opy, line 69, rule "strings"
 msgid "round start!"
 msgstr "라운드 시작!"
 
-#. file strings.opy, line 68, rule "strings"
+#. file strings.opy, line 70, rule "strings"
 msgid "objective complete! mauga is vulnerable!"
 msgstr "목표 달성! 마우가가 약해집니다!"
 
-#. file strings.opy, line 70, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
 msgstr "{0} 자, 치명적인 공격이 옵니다! 약점♥을 공격하세요! {0}"
 
-#. file strings.opy, line 71, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "{0} failed to stop the attack. brace for impact!"
 msgstr "{0} 실패... 충격을 조심하세요!"
 
-#. file strings.opy, line 73, rule "strings"
+#. file strings.opy, line 75, rule "strings"
 msgid "{0} found a page!"
 msgstr " {0}(이)가 페이지를 찾았다!"
 
-#. file strings.opy, line 74, rule "strings"
+#. file strings.opy, line 76, rule "strings"
 msgid "game over. all players died."
 msgstr "게임 오버. 모든 플레이어가 사망했습니다."
 
 # TODO: check if all occurrences have the same translation
-#. file strings.opy, line 76, rule "strings"
+#. file strings.opy, line 78, rule "strings"
 #, hasMultipleOccurrencesNotification
 msgid "do not the mauga"
 msgstr "마우가 끌고우가지 마시오"
 
-#. file strings.opy, line 78, rule "strings"
+#. file strings.opy, line 80, rule "strings"
 msgid "{0} petrified! {1} {2} {3}"
 msgstr "{0} 석화됨! 시그마의 발을 쳐다보지 마세요, 이 변태♥"
 
-#. file strings.opy, line 81, rule "strings"
+#. file strings.opy, line 83, rule "strings"
 msgid "{0} heehee, stop tickling me! dragon lactation initation!"
 msgstr "{0} 헤으응, 그만 간지럽혀♥ 용의 분출 활성화!"
 
-#. file strings.opy, line 82, rule "strings"
+#. file strings.opy, line 84, rule "strings"
 msgid "remember to check inside mauga's guns for the pages."
 msgstr "마우가의 총 안을 확인해 보자."
 
 # TODO: check if all occurrences have the same translation
-#. file strings.opy, line 83, rule "strings"
+#. file strings.opy, line 85, rule "strings"
 #, hasMultipleOccurrencesNotification
 msgid "{0} you were grabbed!"
 msgstr "{0} 잡혔습니다!"
 
-#. file strings.opy, line 84, rule "strings"
+#. file strings.opy, line 86, rule "strings"
 msgid "something went wrong. skipping phase..."
 msgstr "무언가가 잘못되었다, 페이즈 스킵 중..."
 
-#. file strings.opy, line 85, rule "strings"
+#. file strings.opy, line 87, rule "strings"
 msgid "timeout exceeded, skipping phase in case of softlock."
 msgstr ""
 
-#. file strings.opy, line 86, rule "strings"
+#. file strings.opy, line 88, rule "strings"
 msgid "hardcore mode is on"
 msgstr "하드코어 모드 활성화"
 
-#. file strings.opy, line 87, rule "strings"
+#. file strings.opy, line 89, rule "strings"
 msgid "ultra hardcore mode is on"
 msgstr ""
 
-#. file strings.opy, line 88, rule "strings"
+#. file strings.opy, line 90, rule "strings"
 msgid "no respawning until round ends"
 msgstr "라운드가 끝날 때까지 리스폰 불가"
 
-#. file strings.opy, line 89, rule "strings"
+#. file strings.opy, line 91, rule "strings"
 msgid "no respawning ever!"
 msgstr ""
 
-#. file strings.opy, line 91, rule "strings"
+#. file strings.opy, line 93, rule "strings"
 msgid "team deaths"
 msgstr "사망 수"
 
-#. file strings.opy, line 92, rule "strings"
+#. file strings.opy, line 94, rule "strings"
 msgid "rounds elapsed"
 msgstr "지난 라운드 수"
 
-#. file strings.opy, line 93, rule "strings"
+#. file strings.opy, line 95, rule "strings"
 msgid "time elapsed"
 msgstr "지난 시간"
 
-#. file strings.opy, line 95, rule "strings"
+#. file strings.opy, line 97, rule "strings"
 msgid ""
 "spectators, please turn off team 1 & 2 heroes\n"
 "and game mode hud in spectator options\n"
@@ -218,20 +218,18 @@ msgstr ""
 "게임 모드 HUD 설정을 꺼 주십시오\n"
 "(B 키)"
 
-#. file strings.opy, line 97, rule "strings"
+#. file strings.opy, line 99, rule "strings"
 msgid "{0}TX 000000009D14> 한국어: K08WD"
 msgstr ""
 
-#. 2 occurrences:
-#.  - file strings.opy, line 98, rule "strings"
-#.  - file pvnip.opy, line 183, rule "init"
+#. file strings.opy, line 100, rule "strings"
 msgid "use code DS2MD for the latest version"
 msgstr "워크샵 코드: DS2MD가 항상 최신 버전입니다"
 
-#. file strings.opy, line 99, rule "strings"
+#. file strings.opy, line 101, rule "strings"
 msgid "peak: {0} | average: {1}"
 msgstr ""
 
-#. file strings.opy, line 100, rule "strings"
+#. file strings.opy, line 102, rule "strings"
 msgid "server load: {0}"
 msgstr "server load: {0}"

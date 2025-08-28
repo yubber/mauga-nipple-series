@@ -106,7 +106,7 @@ msgstr ""
 
 #. file strings.opy, line 60, rule "strings"
 msgid "sun exposure"
-msgstr ""
+msgstr "阳光明咪"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "lazer"
@@ -138,7 +138,7 @@ msgstr ""
 
 #. file strings.opy, line 71, rule "strings"
 msgid "{0} failed to stop the attack. brace for impact!"
-msgstr ""
+msgstr "{0} 阻止攻击失败。"
 
 #. file strings.opy, line 73, rule "strings"
 msgid "{0} found a page!"

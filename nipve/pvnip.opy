@@ -136,6 +136,10 @@ settings {
 #!include "vars.opy"
 
 /* TODO
+- milkbender: self ult + nip water
+- venture drill nipples, makes a hole in the floor
+- size suck, lower grav & hp
+- microtransaction popup
 
 known issues
 - more maugas hp bar starts depleted (tank passive grrr)
@@ -180,7 +184,7 @@ rule "init":
 	# print(len(getPlayers(Team.2)))
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), STRINGS.LOAD_2.format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-    hudSubtext(getAllPlayers(), t"use code DS2MD for the latest version", HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+    hudSubtext(getAllPlayers(), STRINGS.IMPORT_CODE, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	disableInspector()
 
 	obj = OBJ.INTERMISSION
