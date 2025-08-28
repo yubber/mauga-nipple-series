@@ -58,9 +58,9 @@ settings {
                 "ability2Cooldown%": 120
             },
 			"zarya": {
-                "ultGen%": 25,
-				"ability1Cooldown%": 45,
-				"ability2Cooldown%": 45
+				# "ability1Cooldown%": 45,
+				# "ability2Cooldown%": 45,
+                "ultGen%": 25
             },
 			"cassidy":{
 				"damageDealt%": 85,
@@ -75,6 +75,9 @@ settings {
 			"lucio":{
 				"damageDealt%": 150,
                 "ammoClipSize%": 300
+			},
+			"mercy":{
+				"ability2Cooldown%": 250
 			},
             "general": {
                 "abilityCooldown%": 60,
@@ -118,6 +121,14 @@ settings {
         }
     }
 }
+
+#!extension spawnMoreDummyBots
+#!extension projectiles
+#!extension beamEffects
+#!extension energyExplosionEffects
+#!extension buffStatusEffects
+# !extension debuffStatusEffects
+#!extension explosionSounds
 
 # all strings
 #!include "strings.opy"
@@ -201,15 +212,9 @@ rule "init":
 	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), STRINGS.TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.SKULL), STRINGS.TEAMDEATHS, teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	hudText(getAllPlayers(), iconString(Icon.FLAG), STRINGS.ROUNDS, roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	# hudText(getAllPlayers(), abilityIconString(Hero.CASSIDY, Button.ULTIMATE), "total kills", kills, HudPosition.LEFT, 2, Color.ROSE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	# createEffect([] if obj != OBJ.INTERMISSION else getAllPlayers(), Effect., Color.TEAM_1, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), STRINGS.SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-	# hudSubtext(getAllPlayers() if obj == OBJ.INTERMISSION else null, STRINGS.KR_MODE, HudPosition.LEFT, 10, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
-
-	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, LeftNip, 1, EffectReeval.VISIBILITY)
-	# createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, RightNip, 1, EffectReeval.VISIBILITY)
 
 	# objective effects
 	createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.BAD_AURA, Color.GRAY, Vector.UP, 50, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
@@ -220,21 +225,10 @@ rule "init":
 	createEffect(getAllPlayers() if obj == OBJ.CAPTURE else [], Effect.RING, Color.BLUE, objPos, 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
 
-	# threat fx
-	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, LeftNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.ICE in threatList else [], Projectile.MEI_ICICLE, null, RightNip + Vector.FORWARD * 5.8, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, LeftNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.GRAV in threatList else [], Projectile.ZARYA_GRAVITON, null, RightNip, Vector.BACKWARD, 0.27, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.SUN in threatList else [], Projectile.REINHARDT_FIRE_STRIKE, null, RightNip, Vector.BACKWARD, 0.02, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, LeftNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
-	# createProjectileEffect(getAllPlayers() if THREATS.HEAL in threatList else [], Projectile.MOIRA_HEAL_ORB, null, RightNip, Vector.BACKWARD, 0, ProjectileEffectReeval.VISIBILITY)
-
 	wait(0.16)
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
 	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(t"objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-    # hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}\&fullwidth_space;".format(l"Threats", threatText), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
 		f"{threatIcons[threatList[0]]} ",
 		_(threatNames[threatList[0]]),
@@ -324,7 +318,7 @@ rule "loop":
 		threatList.append(THREATS.MORE)
 
 	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	# threatList.append(THREATS.DRAGON)
+	# threatList.append(THREATS.HEAL)
 
 	wait(0.36)
 	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
@@ -389,6 +383,7 @@ rule "player init & detect ai bot":
 	eventPlayer.scale = 1
 	eventPlayer.disableGamemodeHud()
 	eventPlayer.setAllowedHeroes(getAllHeroes())
+	# print(eventPlayer.scale)
 	if hardcoreLevel > 0:
 		getPlayers(Team.1).disableRespawn()
 
@@ -1215,15 +1210,15 @@ rule "heal milk":
 	threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
-		wait(0.8)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 80, 1, 1, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.1)))
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip + eventPlayer.getFacingDirection() * 2, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 80, 1, 1, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 60,10,0,random.choice(getLivingPlayers(Team.1)))
+		wait(1.2)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice(getLivingPlayers(Team.1)),1)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice(getLivingPlayers(Team.1)),1)
 
 rule "chungus":
 	@Event playerReceivedHealing
 	@Team 1
 	@Condition healer == nipman
-	eventPlayer.scale += eventHealing * 0.005
+	eventPlayer.scale += eventHealing * 0.0065
 	eventPlayer.startScalingSize(eventPlayer.scale, false)
 
 #!define NukeAoe 10
@@ -2016,14 +2011,21 @@ rule "you are dead, not big surprise + chungus explode":
 	@Event playerDied
 	@Team 1
 	addToTeamScore(Team.2, 1)
+	smallMessage(hostPlayer, eventPlayer.scale)
 	if eventPlayer.scale > 2:
+		bigMessage(eventPlayer, t"mega milk explode!")
 		# if checking los with 20 players isn't too expensive can turn it on
-		damage(getPlayersInRadius(eventPlayer.getPosition(), eventPlayer.scale, Team.ALL, LosCheck.OFF), eventPlayer, eventPlayer.scale * 90)
-		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.TEAM_1, eventPlayer, 30 * eventPlayer.scale)
+		damage(getPlayersInRadius(eventPlayer.getPosition(), eventPlayer.scale * 1.5, Team.ALL, LosCheck.OFF), eventPlayer, eventPlayer.scale * 40)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.TEAM_1, eventPlayer, 15 * eventPlayer.scale)
 		if eventPlayer.scale > 3.5:
 			playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_1, eventPlayer, 1)
+			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, eventPlayer, eventPlayer.scale)
 		else:
 			playEffect(getAllPlayers(), DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, Color.TEAM_1, eventPlayer, 1)
+
+	eventPlayer.stopScalingSize()
+	eventPlayer.scale = 1
+
 	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
 	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
 	if hardcoreLevel > 0:

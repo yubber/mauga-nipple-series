@@ -31,14 +31,6 @@ enum THREATS:
 	SUN,
 	LASER # keep as last
 
-#!extension spawnMoreDummyBots
-#!extension projectiles
-#!extension beamEffects
-#!extension energyExplosionEffects
-#!extension buffStatusEffects
-# !extension debuffStatusEffects
-#!extension explosionSounds
-
 #!define MaxBots 15-1
 #!define TreeNo 7
 #!define PlayerSlots 9

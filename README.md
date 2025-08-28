@@ -11,7 +11,7 @@ https://workshop.codes/u/_yubz
 
 ## translations
 
-**mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/pvnip.opy) and create a `.po` file.
+**mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/pvnip.opy) and create a `.po` file.
 
 there are 2 files to create translations for.
 

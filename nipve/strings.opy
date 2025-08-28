@@ -10,6 +10,8 @@ globalvar bracket
 rule "want to contribute a translation? please visit https://github.com/yubber/mauga-nipple-series/, it's easier to make translations for the overpy source file.":
 	@Delimiter
 
+rule "strings":
+
 ### TRANSLATORS' SECTION
 # refer to README.MD for a guide.
 # general pointers:
@@ -27,16 +29,16 @@ rule "want to contribute a translation? please visit https://github.com/yubber/m
 # since they're in bot names i can't use the translation features
 # ! add translated names here, in the same format and following the order of the language codes
 enum BOTNAME:
-	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨"])
+	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影"])
 	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부"])
-	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수"])
-	NIPLETS = serverSideTranslate(["niplets", "젖먹이"])
-	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스"])
+	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手"])
+	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔"])
+	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", ""])
 	TOEPPLES = serverSideTranslate(["toepples", "발꼭지"])
-	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥"])
-	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥"])
-	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR."])
-	MINIBOSS = serverSideTranslate(["miniboss", "미니보스"])
+	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙"])
+	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
+	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加"])
+	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"])
 
 # these are descriptions for custom settings.
 # gameplay category of settings
@@ -45,10 +47,10 @@ enum BOTNAME:
 #!define SETTING_DIFFICULTY "difficulty | 난이도"
 #!define SETTING_HARDCORE "respawn players only when round ends | 라운드가 끝난 이후에만 리스폰"
 enum SETTING_RESPAWN:
-	NAME = "player respawning | ",
-	ALWAYS = "always | ",
-	ROUND_END = "only when round ends! | ",
-	NEVER = "never!!! | "
+	NAME = "player respawning | 玩家重生",
+	ALWAYS = "always | 正常",
+	ROUND_END = "only when round ends! | 回合完毕后",
+	NEVER = "never!!! | 不重生"
 
 ### !!! END. the following strings are already translated in the .po file.
 # thank you for translating!
