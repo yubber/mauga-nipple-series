@@ -18,23 +18,23 @@ msgstr ""
 
 #. file strings.opy, line 59, rule "strings"
 msgid "collect pages"
-msgstr ""
+msgstr "收集八页纸"
 
 #. file strings.opy, line 59, rule "strings"
 msgid "defeat the mini maugas"
-msgstr ""
+msgstr "消灭小毛加"
 
 #. file strings.opy, line 59, rule "strings"
 msgid "slay enemies"
-msgstr ""
+msgstr "消除暴徒"
 
 #. file strings.opy, line 59, rule "strings"
 msgid "slay the miniboss"
-msgstr ""
+msgstr "消灭小头目"
 
 #. file strings.opy, line 59, rule "strings"
 msgid "capture the point"
-msgstr ""
+msgstr "控制点"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "slenderman"
@@ -46,7 +46,7 @@ msgstr "毛+++"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "frosty nips"
-msgstr ""
+msgstr "冰冻馒头"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "dragon stimulation"
@@ -54,7 +54,7 @@ msgstr "奶龙"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "toepples"
-msgstr ""
+msgstr "奶趾"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "grabbyteats"
@@ -74,7 +74,7 @@ msgstr "乳卷风"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "n!pple nuke"
-msgstr ""
+msgstr "核馒头"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "dairy deaths"
@@ -82,7 +82,7 @@ msgstr ""
 
 #. file strings.opy, line 60, rule "strings"
 msgid "milk wall"
-msgstr ""
+msgstr "万里奶城"
 
 #. file strings.opy, line 60, rule "strings"
 msgid "scalding discharge"
@@ -122,19 +122,19 @@ msgstr ""
 
 #. file strings.opy, line 66, rule "strings"
 msgid "next objective in 3 seconds!"
-msgstr ""
+msgstr "下个目标3秒后出现！"
 
 #. file strings.opy, line 67, rule "strings"
 msgid "round start!"
-msgstr ""
+msgstr "下一轮开始！"
 
 #. file strings.opy, line 68, rule "strings"
 msgid "objective complete! mauga is vulnerable!"
-msgstr ""
+msgstr "目标完成！毛加易受打击！"
 
 #. file strings.opy, line 70, rule "strings"
 msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
-msgstr ""
+msgstr "{0} 毛加准备着强大的攻击！快打过敏部位！"
 
 #. file strings.opy, line 71, rule "strings"
 msgid "{0} failed to stop the attack. brace for impact!"
@@ -174,7 +174,7 @@ msgstr "{0} 你被抓到了！"
 
 #. file strings.opy, line 84, rule "strings"
 msgid "something went wrong. skipping phase..."
-msgstr ""
+msgstr "游戏错误。"
 
 #. file strings.opy, line 85, rule "strings"
 msgid "timeout exceeded, skipping phase in case of softlock."
@@ -182,19 +182,19 @@ msgstr ""
 
 #. file strings.opy, line 86, rule "strings"
 msgid "hardcore mode is on"
-msgstr ""
+msgstr "硬核模式"
 
 #. file strings.opy, line 87, rule "strings"
 msgid "ultra hardcore mode is on"
-msgstr ""
+msgstr "超硬核模式"
 
 #. file strings.opy, line 88, rule "strings"
 msgid "no respawning until round ends"
-msgstr ""
+msgstr "玩家仅在回合完成后重生"
 
 #. file strings.opy, line 89, rule "strings"
 msgid "no respawning ever!"
-msgstr ""
+msgstr "玩家重生"
 
 #. file strings.opy, line 91, rule "strings"
 msgid "team deaths"
@@ -206,7 +206,7 @@ msgstr ""
 
 #. file strings.opy, line 93, rule "strings"
 msgid "time elapsed"
-msgstr ""
+msgstr "游戏时间"
 
 #. file strings.opy, line 95, rule "strings"
 msgid ""
@@ -225,7 +225,7 @@ msgstr ""
 #.  - file pvnip.opy, line 183, rule "init"
 #, hasMultipleOccurrencesNotification
 msgid "use code DS2MD for the latest version"
-msgstr ""
+msgstr "用DS2MD代码导入最新的版本"
 
 #. file strings.opy, line 99, rule "strings"
 msgid "peak: {0} | average: {1}"

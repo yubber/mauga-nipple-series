@@ -1,7 +1,10 @@
+macro MODENAME = "mauga n!pple pve testing new threats"
+macro DEBUG = false
+
 settings {
     "main": {
-        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\n\nyubz made it\nyubz 제작, Lonepier 번역",
-        "modeName": "mauga n!pple pve"
+        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\nworkshop.codes/ds2md\n\nyubz made it\nyubz 제작, Lonepier 번역",
+        "modeName": MODENAME
 		# "description": "마우가의 찌!찌!를 공략하는 보스레이드\nDS2MD\n\nyubz 제작, Lonepier 번역",
         # "modeName": "마우가 찌!찌! pve"
     },
@@ -105,6 +108,9 @@ settings {
 			"mauga": {
                 "ability1Cooldown%": 0,
                 "passiveHealthRegen": false
+            },
+			"venture": {
+                "secondaryFireCooldown%": 0
             },
 			"wreckingBall": {
                 "enableRollOnly": true
@@ -272,6 +278,7 @@ rule "loop":
 	threatToes = []
 	threatNiplets = []
 	threatDragons = []
+	threatDrills = []
 	# nipman.threatDecor = []
 	nipman.setDamageReceived(60)
 	nipman.clearStatusEffect(Status.FROZEN) # has to be unfroze early bc his hitbox desyncs with model
@@ -559,6 +566,43 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive() and entityExists(eventPlayer.mobTarget):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
+macro holeRadius 8
+rule "drills setup and act":
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.HOLE in threatList
+	createDummy(Hero.VENTURE, Team.2, -1, LeftNip, Vector.BACKWARD)
+	threatDrills.append(getLastCreatedEntity())
+	createDummy(Hero.VENTURE, Team.2, -1, RightNip, Vector.BACKWARD)
+	threatDrills.append(getLastCreatedEntity())
+
+	threatDrills.startScalingSize(9, false)
+	threatDrills[0].startForcingPosition(vect(-2.01, -7.43, 12.43) + LeftNip, false)
+	threatDrills.last().startForcingPosition(vect(-2.01, -7.43, 12.43) + vect(0.56, 0.05, -0.82) + RightNip, false)
+	threatDrills.setStatusEffect(null, Status.PHASED_OUT, 99999)
+
+	# place hole
+	holePos = Vector.FORWARD * random.uniform(-15, 15) + Vector.RIGHT * random.uniform(-15, 15)
+
+	# createEffect
+
+	while obj != OBJ.INTERMISSION:
+		threatDrills.forceButtonPress(Button.SECONDARY_FIRE)
+		wait(0.288)
+
+rule "hole action":
+	@Event eachPlayer
+	@Team 1
+	@Condition obj != OBJ.INTERMISSION
+	@Condition THREATS.HOLE in threatList
+	wait(0.8)
+	if eventPlayer.getPosition().y < 0.5:
+		if distance(eventPlayer.getPosition() * vect(1,0,1), holePos) < holeRadius:
+			eventPlayer.disableEnvironmentCollision(true)
+		else:
+			eventPlayer.enableEnvironmentCollision()
+	if ruleCondition:
+		loop()
+
 rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Event eachPlayer
 	@Hero mauga
@@ -2029,6 +2073,7 @@ rule "you are dead, not big surprise + chungus explode":
 
 	eventPlayer.stopScalingSize()
 	eventPlayer.scale = 1
+	eventPlayer.enableEnvironmentCollision()
 
 	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
 	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())

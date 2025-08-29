@@ -53,9 +53,11 @@ globalvar nipman
 globalvar nipbots
 
 enum VARS:
+    NIPBOTS_HERO,
     NIPBOTS_SCALE,
     NIPBOTS_OFFSET,
-    NIPBOTS_FACING
+    NIPBOTS_FACING,
+    RIGHTNIP_OFFSET
 
 enum TYPES:
     SCALAR=0,
@@ -63,9 +65,16 @@ enum TYPES:
     DIRECTION,
     HERO
 
-globalvar types = [TYPES.SCALAR, TYPES.POSITION, TYPES.DIRECTION]
-globalvar varNames = ["nipbots scale", "nipbots offset (world vect)", "nipbots facing (world vect)"]
-globalvar defaults = [1, vect(0,0,0), Vector.BACKWARD, Hero.ECHO]
+globalvar types = [TYPES.HERO, TYPES.SCALAR, TYPES.POSITION, TYPES.DIRECTION, TYPES.POSITION]
+globalvar varNames = ["nipbots hero", "nipbots scale", "nipbots offset (world vect)", "nipbots facing (world vect)", "right nipbot extra offset"]
+
+# this should not match the value arrays. it should match the TYPES enum. so only modify when adding new data types.
+globalvar defaults = [1, vect(0,0,0), Vector.BACKWARD, Hero.VENTURE]
+
+/*how to add a new value
+- add enum in VARS
+- add name in varNames
+- add its type in types*/
 
 rule "refr valk":
 	@Event eachPlayer
@@ -81,21 +90,23 @@ rule "refr valk":
 		goto RULE_START
 
 rule "global init + custom nipbots behavior":
-    wait(1.2)
+    waitUntil(hostPlayer.hasSpawned(), 10)
     createDummy(Hero.MAUGA, Team.2, -1, Vector.UP, Vector.BACKWARD)
     nipman = getLastCreatedEntity()
-    hudHeader(getAllPlayers(), f"{buttonToString(Button.PRIMARY_FIRE)} modify this value", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
-    hudHeader(getAllPlayers(), f"{buttonToString(Button.SECONDARY_FIRE)} toggle selecting another value", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
+    hudHeader(getAllPlayers(), f"{buttonToString(Button.PRIMARY_FIRE)} (hold) - modify this value", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
+    hudHeader(getAllPlayers(), f"{buttonToString(Button.SECONDARY_FIRE)} (hold) - move to another value", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
     hudHeader(getAllPlayers(), f"{buttonToString(Button.INTERACT)} cycle fineness", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
-    hudHeader(getAllPlayers(), fb"{varNames[localPlayer.option]}: {localPlayer.values[localPlayer.option]}", HudPosition.TOP, nipman.i, Color.TURQUOISE, HudReeval.VISIBILITY_AND_STRING)
+    hudText(getAllPlayers(), fb"{varNames[localPlayer.option]}: {localPlayer.values[localPlayer.option]}", "", " \n ", HudPosition.TOP, 0, Color.TURQUOISE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+
+    hudSubtext(getAllPlayers(), fb"fineness: {localPlayer.fineMult}", HudPosition.TOP, 1, Color.GRAY, HudReeval.VISIBILITY_AND_STRING)
     for nipman.i in range(len(types)):
         # value preview
-        hudSubtext(getAllPlayers(), f"{evalOnce(varNames[nipman.i])}: {localPlayer.values[evalOnce(nipman.i)]}", HudPosition.ACTUALLY_LEFT, nipman.i, Color.TURQUOISE, HudReeval.VISIBILITY_AND_STRING)
+        hudSubtext(getAllPlayers(), f"{evalOnce(varNames[nipman.i])}: {localPlayer.values[evalOnce(nipman.i)]}", HudPosition.ACTUALLY_LEFT, nipman.i, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
         # selector
 
-    createDummy(Hero.VENTURE, Team.2, -1, Vector.UP, Vector.FORWARD)
+    createDummy(hostPlayer.values[VARS.NIPBOTS_HERO], Team.2, -1, Vector.UP, Vector.FORWARD)
     nipbots = [getLastCreatedEntity()]
-    createDummy(Hero.VENTURE, Team.2, -1, Vector.UP, Vector.FORWARD)
+    createDummy(hostPlayer.values[VARS.NIPBOTS_HERO], Team.2, -1, Vector.UP, Vector.FORWARD)
     nipbots.append(getLastCreatedEntity())
 
     wait(1.2)
@@ -103,12 +114,19 @@ rule "global init + custom nipbots behavior":
     nipman.disablePlayerCollision()
     nipman.disableEnvironmentCollision(true)
     nipman.startScalingSize(20, false)
+    nipman.setStatusEffect(null, Status.FROZEN, 99999)
     nipbots.disablePlayerCollision()
     nipbots.disableEnvironmentCollision(true)
     nipbots[0].startForcingPosition(hostPlayer.values[VARS.NIPBOTS_OFFSET] + NipmanLeftConst)
-    nipbots.last().startForcingPosition(hostPlayer.values[VARS.NIPBOTS_OFFSET] + NipmanRightConst)
+    nipbots.last().startForcingPosition(hostPlayer.values[VARS.NIPBOTS_OFFSET] + hostPlayer.values[VARS.RIGHTNIP_OFFSET] + NipmanRightConst)
     nipbots.startScalingSize(hostPlayer.values[VARS.NIPBOTS_SCALE], true)
     nipbots.startFacing(hostPlayer.values[VARS.NIPBOTS_FACING], Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+    nipbots.disablePlayerCollision()
+
+    setMatchTime(4*60+20)
+    pauseMatchTime()
+
+    print(f"gnd {hostPlayer.isOnGround()}, ult {hostPlayer.isUsingUltimate()}")
 
     # custom behavior
     while true:
@@ -117,7 +135,6 @@ rule "global init + custom nipbots behavior":
 
 rule "init player":
     @Event eachPlayer
-    @Condition eventPlayer.hasSpawned()
     @Condition eventPlayer.isDummy() == false
     eventPlayer.values = []
     eventPlayer.option = 0
@@ -141,7 +158,7 @@ rule "mod value":
             smallMessage(eventPlayer, "look up and down to change.")
             eventPlayer.setterVar = eventPlayer.getVerticalFacingAngle()
             while eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
-                eventPlayer.values[eventPlayer.option] = eventPlayer.valueCache + (eventPlayer.getVerticalFacingAngle() - eventPlayer.setterVar) * eventPlayer.fineMult
+                eventPlayer.values[eventPlayer.option] = eventPlayer.valueCache + (eventPlayer.setterVar - eventPlayer.getVerticalFacingAngle()) * eventPlayer.fineMult
                 wait(0.096)
             break
         case TYPES.POSITION:
@@ -164,11 +181,14 @@ rule "mod value":
             break
         case TYPES.HERO:
             eventPlayer.setterVar = eventPlayer.getHero()
+            eventPlayer.teleport(Vector.UP * 10)
             eventPlayer.setAllowedHeroes(Hero.ANA if eventPlayer.getHero() == Hero.ORISA else Hero.ORISA)
             wait()
             eventPlayer.setAllowedHeroes(getAllHeroes())
-            waitUntil(eventPlayer.getHero() != null, 99999)
+            waitUntil(eventPlayer.isUsingUltimate() or eventPlayer.isOnGround(), 99999)
             eventPlayer.values[eventPlayer.option] = eventPlayer.setterVar
+            if eventPlayer.option == VARS.NIPBOTS_HERO:
+                nipbots.startForcingHero(eventPlayer.getHero())
             eventPlayer.startForcingHero(eventPlayer.setterVar)
             eventPlayer.stopForcingCurrentHero()
             break
@@ -192,7 +212,31 @@ rule "reselect on":
     @Condition eventPlayer.isHoldingButton(Button.INTERACT) == false
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false
     playEffect(eventPlayer, DynamicEffect.SOMBRA_LOGO_SOUND, Color.TEAM_1, eventPlayer, 30)
-    smallMessage(eventPlayer, "changing active value.")
+    smallMessage(eventPlayer, "changing active value. move to set.")
     eventPlayer.setMoveSpeed(0.01)
     waitUntil(eventPlayer.isHoldingButton(Button.SECONDARY_FIRE) == false, 99999)
     eventPlayer.setMoveSpeed(100)
+
+rule "reselect up":
+    @Event eachPlayer
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == false
+    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false
+    @Condition eventPlayer.getThrottle().z > 0 or eventPlayer.getThrottle().x < 0
+    eventPlayer.option = (eventPlayer.option + 1 % len(varNames))
+    wait(0.2, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()
+
+rule "reselect up":
+    @Event eachPlayer
+    @Condition eventPlayer.isDummy() == false
+    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == false
+    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE) == false
+    @Condition eventPlayer.getThrottle().z < 0 or eventPlayer.getThrottle().x > 0
+    eventPlayer.option = max(0, eventPlayer.option - 1)
+    wait(0.2, Wait.ABORT_WHEN_FALSE)
+    if ruleCondition:
+        loop()

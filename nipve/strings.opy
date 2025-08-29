@@ -31,15 +31,16 @@ rule "strings":
 # ! add translated names here, in the same format and following the order of the language codes
 enum BOTNAME:
 	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影"])
-	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부"])
+	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火"])
 	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手"])
 	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔"])
-	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스"])
-	TOEPPLES = serverSideTranslate(["toepples", "발꼭지"])
+	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主"])
+	TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾"])
 	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙"])
 	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
 	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加"])
-	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"])
+	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"]),
+	DRILLS = serverSideTranslate(["earthbreakers"])
 
 # these are descriptions for custom settings.
 # gameplay category of settings
@@ -59,7 +60,7 @@ enum SETTING_RESPAWN:
 # thank you for translating!
 
 globalvar objDescs = [___("collect pages"), ___("defeat the mini maugas"), ___("slay enemies"), ___("slay the miniboss"), ___("capture the point")] # keep point as last
-globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), /*"the third nipact",*/ ___("dragon stimulation"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("dairy deaths"), ___("milk wall"), ___("mega milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
+globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), ___("lactation excavation"), /*"the third nipact",*/ ___("dragon stimulation"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("dairy deaths"), ___("milk wall"), ___("mega milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
 
 #!suppressWarnings w_enum_constant
 # these are references to strings in other parts of the program. i've moved them here for your convenience.
@@ -100,3 +101,34 @@ enum STRINGS:
 	IMPORT_CODE = t"use code DS2MD for the latest version"
 	LOAD_1 = t"peak: {} | average: {}"
 	LOAD_2 = t"server load: {}\n"
+
+/*
+rule "threat data":
+	splitDictArray({
+		name: threatNames,
+		icon: threatIcons
+	}, [ # keep lazer as last and frosty as 1st after slender
+		{name: ___("slenderman"), icon: heroIcon(Hero.REAPER)},
+		{name: ___("more maugas"), icon: abilityIconString(Hero.MAUGA, Button.ABILITY_1)},
+		{name: ___("frosty nips"), icon: abilityIconString(Hero.MEI, Button.ULTIMATE)},
+		{name: ___("lactation excavation"), icon: abilityIconString(Hero.VENTURE, Button.MELEE)},
+		{name: ___("dragon stimulation"), icon: abilityIconString(Hero.HANZO, Button.ULTIMATE)},
+		{name: ___("toepples"), icon: heroIcon(Hero.SIGMA)},
+		{name: ___("grabbyteats"), icon: abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE)},
+		{name: ___("niplets"), icon: abilityIconString(Hero.SIGMA, Button.ABILITY_1)},
+		{name: ___("cup fight"), icon: abilityIconString(Hero.MAUGA, Button.ULTIMATE)},
+		{name: ___("tiddy twister"), icon: abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE)},
+		{name: ___("lactic hail"), icon: abilityIconString(Hero.HAZARD, Button.ULTIMATE)},
+		{name: ___("n!pple nuke"), icon: iconString(Icon.RADIOACTIVE)},
+		{name: ___("dairy deaths"), icon: abilityIconString(Hero.REAPER, Button.ULTIMATE)},
+		{name: ___("milk wall"), icon: abilityIconString(Hero.MEI, Button.ABILITY_2)},
+		{name: ___("mega milk"), icon: abilityIconString(Hero.MAUGA, Button.ABILITY_2)},
+		{name: ___("scalding discharge"), icon: abilityIconString(Hero.TORBJORN, Button.ULTIMATE)},
+		{name: ___("s-nip-ers"), icon: abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE)},
+		{name: ___("boobsted mobs"), icon: abilityIconString(Hero.ANA, Button.ULTIMATE)},
+		{name: ___("booblet hell"), icon: abilityIconString(Hero.PHARAH, Button.ULTIMATE)},
+		{name: ___("gravitatas"), icon: abilityIconString(Hero.ZARYA, Button.ULTIMATE)},
+		{name: ___("sun exposure"), icon: abilityIconString(Hero.ILLARI, Button.ULTIMATE)},
+		{name: ___("lazer"), icon: abilityIconString(Hero.ECHO, Button.ABILITY_2)}
+	])
+*/

@@ -4,15 +4,15 @@ msgstr ""
 "Language: ko\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 231, rule "init"
+#. file pvnip.opy, line 241, rule "init"
 msgid "objective"
 msgstr "목표"
 
-#. file pvnip.opy, line 232, rule "init"
+#. file pvnip.opy, line 242, rule "init"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2016, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2026, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -118,6 +118,10 @@ msgstr "유당지옥"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "mega milk"
+msgstr ""
+
+#. file strings.opy, line 62, rule "strings"
+msgid "lactation excavation"
 msgstr ""
 
 #. file strings.opy, line 68, rule "strings"
