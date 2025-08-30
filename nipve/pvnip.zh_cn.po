@@ -12,7 +12,7 @@ msgstr "目标"
 msgid "threats"
 msgstr "危险"
 
-#. file pvnip.opy, line 2090, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2102, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -217,10 +217,6 @@ msgid ""
 "spectators, please turn off team 1 & 2 heroes\n"
 "and game mode hud in spectator options\n"
 "(press b)"
-msgstr ""
-
-#. file strings.opy, line 99, rule "strings"
-msgid "{0}TX 000000009D14> 한국어: K08WD"
 msgstr ""
 
 #. file strings.opy, line 100, rule "strings"

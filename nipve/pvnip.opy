@@ -551,19 +551,21 @@ rule "mob retarget":
 		if obj == OBJ.BOSS:
 			objPos.stopForcingThrottle()
 	else:
-		mobs.startForcingThrottle(1,1,0,0,0,1)
-		if obj == OBJ.BOSS:
-			objPos.startForcingThrottle(1,1,0,0,0,1)
 		for i in range(len(mobs)):
-			wait(0.192)
+			wait(0.24)
 			# 1st-3rd closest player
 			if mobs[i].isAlive():
 				mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
+				wait(0.08)
+				mobs[i].startFacing(directionTowards(mobs[i].getEyePosition(), mobs[i].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+		mobs.startForcingThrottle(1,1,0,0,0,1)
+		if obj == OBJ.BOSS:
+			objPos.startForcingThrottle(1,1,0,0,0,1)
 		# change boss target
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
 			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
-	wait(1.68)
+	wait(1.2)
 	if ruleCondition:
 		loop()
 
@@ -579,9 +581,19 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive() and entityExists(eventPlayer.mobTarget):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
+rule "hammer":
+	# @Condition obj != OBJ.INTERMISSION
+	# @Condition THREATS.HAMMER in threatList
+
+	# while obj != OBJ.INTERMISSION:
+		# hammerSide = random.randint(0,1)
+
+
+	# 	wait(8)
 macro holeRadius = 8
 # this is NOT related to the hole size. it's the intended size of the sphere effect (assuming correction applied. bigger is flatter but less precise)
-macro sphereRadius = 50 * i / 10
+macro sphereRadius = 50
+#* i / 10
 rule "drills setup and act":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.HOLE in threatList
@@ -599,7 +611,7 @@ rule "drills setup and act":
 	# place hole
 	holePos = Vector.FORWARD * random.uniform(-15, 15) + Vector.RIGHT * random.uniform(-15, 15)
 
-	getRealPlayersInRadius(holePos, holeRadius, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+	getRealPlayersInRadius(holePos, holeRadius, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 30, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
 	wait()
 	playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, holePos, 1)
 	playEffect(getAllPlayers(), DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, Color.TEAM_2, holePos, 90)
@@ -609,7 +621,7 @@ rule "drills setup and act":
 	threatFx.append(getLastCreatedEntity())
 
 	for drillI in range(1,11,1):
-		createEffect(getAllPlayers(), Effect.SPHERE, Color.BLACK, holePos + Vector.DOWN * (sqrt(sphereRadius**2 - (holeRadius+0.5)**2)) * Math.SPHERE_VERTICAL_RADIUS_MULT, (sphereRadius) / Math.SPHERE_VERTICAL_RADIUS_MULT, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers(), Effect.SPHERE, Color.BLACK, (holePos) + Vector.DOWN * (sqrt((sphereRadius)**2 - (holeRadius+0.5)**2)) * Math.SPHERE_VERTICAL_RADIUS_MULT, (sphereRadius * i / 10) / Math.SPHERE_VERTICAL_RADIUS_MULT, EffectReeval.VISIBILITY)
 		threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
@@ -1287,8 +1299,8 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(1.2)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),0.9)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),0.9 )
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1 )
 
 rule "chungus":
 	@Event playerReceivedHealing

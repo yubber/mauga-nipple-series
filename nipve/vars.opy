@@ -115,6 +115,9 @@ globalvar mobs = []
 globalvar threatFx
 globalvar antiCrashOn
 
+globalvar hammerProg
+globalvar hammerSide
+
 globalvar hardcoreLevel = createWorkshopSettingEnum(SETTING_DIFFICULTY, SETTING_RESPAWN.NAME, 0, [
 	SETTING_RESPAWN.ALWAYS,
 	SETTING_RESPAWN.ROUND_END,

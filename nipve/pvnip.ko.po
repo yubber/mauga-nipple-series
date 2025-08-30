@@ -12,7 +12,7 @@ msgstr "목표"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2090, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2102, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -221,10 +221,6 @@ msgstr ""
 "관전자는 1팀/2팀 영웅들 설정과\n"
 "게임 모드 HUD 설정을 꺼 주십시오\n"
 "(B 키)"
-
-#. file strings.opy, line 99, rule "strings"
-msgid "{0}TX 000000009D14> 한국어: K08WD"
-msgstr ""
 
 #. file strings.opy, line 100, rule "strings"
 msgid "use code DS2MD for the latest version"
