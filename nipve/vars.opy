@@ -32,12 +32,11 @@ enum THREATS:
 	SUN,
 	LASER # keep as last
 
-#!define MaxBots 15-1
-#!define TreeNo 7
-#!define PlayerSlots 9
-#!define NipmanForcePosConst vect(0,-17-2.8,35)
-#!define NipmanLeftConst vect(2.93, 10.84-2.8, 26.15)
-#!define NipmanRightConst vect(-7.19, 10.8-2.8, 30.27)
+macro MaxBots = 15-1
+macro TreeNo = 7
+macro NipmanForcePosConst = vect(0,-17-2.8,35)
+macro NipmanLeftConst = vect(2.93, 10.84-2.8, 26.15)
+macro NipmanRightConst = vect(-7.19, 10.8-2.8, 30.27)
 
 #!define LeftNip (nipman.smallLNip)
 #!define RightNip (nipman.smallRNip)
@@ -53,7 +52,7 @@ globalvar objPos # used for miniboss entity
 globalvar roundNo
 globalvar threatList = []
 # threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON, THREATS.TOES/*, THREATS.KITSUNIPS*/]
+globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON, THREATS.TOES, THREATS.HOLE/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 
@@ -147,7 +146,9 @@ playervar botB
 #!define smallLNip cacheA
 #!define smallRNip cacheB
 #!define hpBar cacheC
-macro holePos threatDrills[0].cacheA
+
+macro holePos = threatDrills[0].cacheA
+macro drillI = threatDrills[0].cacheB
 
 # event player.
 #!define nipletsPosList botA.cacheA

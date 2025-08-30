@@ -4,15 +4,15 @@ msgstr ""
 "Language: ko\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 241, rule "init"
+#. file pvnip.opy, line 249, rule "init"
 msgid "objective"
 msgstr "목표"
 
-#. file pvnip.opy, line 242, rule "init"
+#. file pvnip.opy, line 250, rule "init"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2026, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2090, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -237,3 +237,19 @@ msgstr ""
 #. file strings.opy, line 102, rule "strings"
 msgid "server load: {0}"
 msgstr "server load: {0}"
+
+#. file strings.opy, line 103, rule "strings"
+msgid "debug version"
+msgstr ""
+
+#. file strings.opy, line 104, rule "strings"
+msgid "host may be afk. please report bugs in match chat"
+msgstr ""
+
+#. file strings.opy, line 105, rule "strings"
+msgid "high server load detected"
+msgstr ""
+
+#. file strings.opy, line 106, rule "strings"
+msgid "slowing game speed to prevent crashing"
+msgstr ""

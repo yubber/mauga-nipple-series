@@ -1,17 +1,17 @@
-macro MODENAME = "mauga n!pple pve testing new threats"
-macro DEBUG = false
+macro DEBUG = true
+macro PlayerSlots = 9
 
 settings {
     "main": {
         "description":"it's like rein invasion but with mauga's milkers\nDS2MD\nworkshop.codes/ds2md\n\nyubz made it\nyubz 제작, Lonepier 번역",
-        "modeName": MODENAME
+        "modeName": "mauga n!pple pve (test version)" if DEBUG else "mauga n!pple pve"
 		# "description": "마우가의 찌!찌!를 공략하는 보스레이드\nDS2MD\n\nyubz 제작, Lonepier 번역",
         # "modeName": "마우가 찌!찌! pve"
     },
     "lobby": {
         "allowPlayersInQueue": true,
-        "spectatorSlots": 5,
-        "team1Slots": 9,
+        "spectatorSlots": 12,
+        "team1Slots": PlayerSlots,
         "team2Slots": 0,
         "returnToLobby": "never",
         "swapTeamsAfterMatch": false
@@ -54,7 +54,8 @@ settings {
                 "ability1Cooldown%": 120
             },
 			"echo": {
-                "ability1Cooldown%": 130
+                "ability1Cooldown%": 130,
+                "enablePassive": false
             },
 			"freja": {
                 "ability1Cooldown%": 65,
@@ -143,7 +144,7 @@ settings {
 
 /* TODO
 - milkbender: self ult + nip water
-- venture drill nipples, makes a hole in the floor
+- milk hammer
 - size suck, lower grav & hp
 - microtransaction popup
 
@@ -188,9 +189,11 @@ rule "init":
 
 	wait()
 	# print(len(getPlayers(Team.2)))
-	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.ACTUALLY_LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), STRINGS.LOAD_2.format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
     hudSubtext(getAllPlayers(), STRINGS.IMPORT_CODE, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+
+	# if DEBUG == false:
 	disableInspector()
 
 	obj = OBJ.INTERMISSION
@@ -219,19 +222,24 @@ rule "init":
 	nipman.smallRNip = NipmanRightConst
 
 	# score huds
-	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), STRINGS.TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.SKULL), STRINGS.TEAMDEATHS, teamScore(Team.2), HudPosition.LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	hudText(getAllPlayers(), iconString(Icon.FLAG), STRINGS.ROUNDS, roundNo, HudPosition.LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), abilityIconString(Hero.LUCIO, Button.ABILITY_2), STRINGS.TIME, "{}:{}".format(floor(getTotalTimeElapsed() / 60), getTotalTimeElapsed() % 60), HudPosition.ACTUALLY_LEFT, 1, Color.SKY_BLUE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.SKULL), STRINGS.TEAMDEATHS, teamScore(Team.2), HudPosition.ACTUALLY_LEFT, 2, Color.RED, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+	hudText(getAllPlayers(), iconString(Icon.FLAG), STRINGS.ROUNDS, roundNo, HudPosition.ACTUALLY_LEFT, 2, Color.YELLOW, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else [], Effect.BAPTISTE_IMMORTALITY_FIELD_PROTECTED, Color.TEAM_2, nipman, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
-	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), STRINGS.SPECTATORS, HudPosition.LEFT, 9, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+	if DEBUG:
+		hudText(getAllPlayers(), abilityIconString(Hero.BASTION, Button.ABILITY_1), STRINGS.DEBUG_TITLE, STRINGS.DEBUG_DESC, HudPosition.ACTUALLY_LEFT, 3, Color.LIME_GREEN, Color.LIME_GREEN, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+
+	hudText(getAllPlayers() if antiCrashOn else null, iconString(Icon.SAD), STRINGS.ANTICRASH_TITLE, STRINGS.ANTICRASH_DESC, HudPosition.ACTUALLY_LEFT, 4, Color.ORANGE, Color.ORANGE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+
+	hudSubtext(null if (localPlayer in getPlayers(Team.1)) else getAllPlayers(), STRINGS.SPECTATORS, HudPosition.ACTUALLY_LEFT, 9, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
 
 	# objective effects
 	createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.BAD_AURA, Color.GRAY, Vector.UP, 50, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	for i in range(6):
 		createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.CLOUD, Color.GRAY, Vector.UP * i * 0.1 - 0.7, 50, EffectReeval.VISIBILITY)
 		wait()
-	createEffect(getAllPlayers(), Effect.ORB, Color.WHITE, objPos + Vector.UP * (1 + 0.5 * sin(getTotalTimeElapsed())) if obj == OBJ.PAGES else Vector.DOWN, 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if obj == OBJ.PAGES else null, Effect.ORB, Color.WHITE, (objPos + Vector.UP * (1 + 0.2 * sin(getTotalTimeElapsed() * 5))), 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	createEffect(getAllPlayers() if obj == OBJ.CAPTURE else [], Effect.RING, Color.BLUE, objPos, 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
 
@@ -257,15 +265,16 @@ rule "init":
 
 	# hardcore huds
 	if hardcoreLevel == 1:
-		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.HC, STRINGS.HCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.HC, STRINGS.HCDESC, HudPosition.ACTUALLY_LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 	elif hardcoreLevel == 2:
-		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.UHC, STRINGS.UHCDESC, HudPosition.LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+		hudText(getAllPlayers(), iconString(Icon.EXCLAMATION_MARK), STRINGS.UHC, STRINGS.UHCDESC, HudPosition.ACTUALLY_LEFT, 3, Color.BLACK, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
 
 	setMatchTime(5)
 
 rule "loop":
 	# start game when any player spawns for the first time
-	@Condition any([x.hasSpawned() for x in getPlayers(Team.1)])
+	@Condition entityExists(nipman)
+	@Condition any([x.hasSpawned() /*and x.isBot == false*/ for x in getPlayers(Team.1)])
 	# intermission
 	destroyEffect(threatFx)
 	destroyEffect(moreFx)
@@ -309,7 +318,6 @@ rule "loop":
 	objPos = Vector.DOWN * nipman.getMaxHealth()
 
 	objGoal = lastObj
-
 	while lastObj == objGoal: # prevent 2 same obj in a row
 		objGoal = random.uniform(0, 1) # sum(weights) must be 1. obj is r here
 		upto = 0
@@ -320,30 +328,33 @@ rule "loop":
 			upto += objWeights[i]
 			wait()
 
-	# objGoal = OBJ.BOSS
+	### pick threats
+	wait(0.36)
+	## guaranteed threats
+	# lastObj is used as temp storage for the candidate threat
+	# guarantee a threat that will get copied by mauga clones
+	if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
+		lastObj = random.choice(moreFunThreats)
 
-	threatList = []
+	## add threats until 2 non-obj ones are reached
+	while len(threatList) < 2:
+		wait()
+		lastObj = random.randint(THREATS.ICE, THREATS.LASER)
+
+		# prevent dupes
+		if (not lastObj in threatList)\
+			and ((not lastObj in dummyThreats) or len([x for x in threatList if x in dummyThreats]) == 0): # stay under dummy limit, to prevent conflicts on botA and botB vars or exceeding skin limit.
+			threatList.append(lastObj)
+
+		# forbidden combinations
+		if THREATS.HOLE in threatList and THREATS.CAGE in threatList:
+			del threatList[len(threatList)-1]
+
+	## insert objective threats
 	if objGoal == OBJ.PAGES:
 		threatList.append(THREATS.SLENDY)
 	elif objGoal == OBJ.MORE:
 		threatList.append(THREATS.MORE)
-
-	threatList.append(random.randint(THREATS.ICE, THREATS.LASER))
-	# threatList.append(THREATS.HEAL)
-
-	wait(0.36)
-	if objGoal != OBJ.PAGES: # attempt to add a 2nd threat
-		# lastObj is used as temp storage
-		# guarantee a threat that will get copied by mauga clones
-		if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
-			lastObj = random.choice(moreFunThreats)
-		else:
-			lastObj = random.randint(THREATS.ICE, THREATS.LASER)
-		if not lastObj in threatList:
-			threatList.append(lastObj)
-	# prevent multiple dummy-using threats to be used, to prevent conflicts on botA and botB vars or exceeding skin limit.
-	if len([x for x in threatList if x in dummyThreats]) >= 2:
-		threatList = threatList.slice(0,len(threatList) - 1)
 
 	wait()
 
@@ -375,8 +386,10 @@ rule "loop":
 	wait()
 
 	if hardcoreLevel < 2:
-		if hardcoreLevel < 2:
-			getDeadPlayers(Team.1).respawn()
+		getDeadPlayers(Team.1).respawn()
+
+	[x for x in getLivingPlayers(Team.1) if x.getPosition().y < 0].respawn()
+	getPlayers(Team.1).enableEnvironmentCollision()
 
 	goto RULE_START
 
@@ -566,7 +579,9 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive() and entityExists(eventPlayer.mobTarget):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
-macro holeRadius 8
+macro holeRadius = 8
+# this is NOT related to the hole size. it's the intended size of the sphere effect (assuming correction applied. bigger is flatter but less precise)
+macro sphereRadius = 50 * i / 10
 rule "drills setup and act":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.HOLE in threatList
@@ -579,30 +594,42 @@ rule "drills setup and act":
 	threatDrills[0].startForcingPosition(vect(-2.01, -7.43, 12.43) + LeftNip, false)
 	threatDrills.last().startForcingPosition(vect(-2.01, -7.43, 12.43) + vect(0.56, 0.05, -0.82) + RightNip, false)
 	threatDrills.setStatusEffect(null, Status.PHASED_OUT, 99999)
+	threatDrills.startForcingName(BOTNAME.DRILLS)
 
 	# place hole
 	holePos = Vector.FORWARD * random.uniform(-15, 15) + Vector.RIGHT * random.uniform(-15, 15)
 
-	# createEffect
+	getRealPlayersInRadius(holePos, holeRadius, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 50, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+	wait()
+	playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, holePos, 1)
+	playEffect(getAllPlayers(), DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, Color.TEAM_2, holePos, 90)
+	# createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, threatDrills[0], holePos, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, holeRadius, DynamicEffect.BAD_EXPLOSION, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, 0, getTotalTimeElapsed(), 1, 50, 0,0)
+
+	createEffect(getAllPlayers(), Effect.RING, Color.BLACK, holePos, holeRadius + 0.5, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+
+	for drillI in range(1,11,1):
+		createEffect(getAllPlayers(), Effect.SPHERE, Color.BLACK, holePos + Vector.DOWN * (sqrt(sphereRadius**2 - (holeRadius+0.5)**2)) * Math.SPHERE_VERTICAL_RADIUS_MULT, (sphereRadius) / Math.SPHERE_VERTICAL_RADIUS_MULT, EffectReeval.VISIBILITY)
+		threatFx.append(getLastCreatedEntity())
 
 	while obj != OBJ.INTERMISSION:
 		threatDrills.forceButtonPress(Button.SECONDARY_FIRE)
 		wait(0.288)
+		threatDrills.setAbilityCooldown(Button.SECONDARY_FIRE, 0)
 
 rule "hole action":
 	@Event eachPlayer
 	@Team 1
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.HOLE in threatList
-	wait(0.8)
-	if eventPlayer.getPosition().y < 0.5:
-		if distance(eventPlayer.getPosition() * vect(1,0,1), holePos) < holeRadius:
+	wait(0.64)
+	while obj != OBJ.INTERMISSION:
+		if eventPlayer.getPosition().y < 0.5 and distance(eventPlayer.getPosition() * vect(1,0,1), holePos) < holeRadius:
 			eventPlayer.disableEnvironmentCollision(true)
-		else:
+			eventPlayer.setEnvironmentalKillCreditor(threatDrills[0])
+		elif eventPlayer.getPosition().y > 0:
 			eventPlayer.enableEnvironmentCollision()
-	if ruleCondition:
-		loop()
-
+		wait(0.24)
 rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Event eachPlayer
 	@Hero mauga
@@ -638,16 +665,17 @@ rule "dragon stimulation":
 	@Hero mauga
 	@Team 2
 	@Condition obj != OBJ.INTERMISSION
-	# @Condition THREATS.DRAGON in threatList
 	@Condition (victim == nipman) or (obj == OBJ.MORE and eventPlayer in objPos)
 	@Condition victim != attackingClone
-	@Condition eventPlayer.isBot == false
+	@Condition attacker.isBot != true
+	# disable if below check is done
+	# @Condition THREATS.DRAGON in threatList
 
-	# waitUntil(len(threatList) > 0, 5)
+	waitUntil(len(threatList) > 0, 5)
 
-	# if THREATS.DRAGON in threatList == false: # don't check again
-	# 	waitUntil(obj == OBJ.INTERMISSION, 99999)
-	# 	return
+	if THREATS.DRAGON in threatList == false: # don't check again
+		waitUntil(obj == OBJ.INTERMISSION, 99999)
+		return
 
 	if victim.botA.tickleCounter >= 24:
 		smallMessage(getAllPlayers(), STRINGS.DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
@@ -1005,7 +1033,7 @@ rule "cage":
 	# 	threatFx.append(getLastCreatedEntity())
 	# 	wait()
 
-	wait(THREATS.CAGE * 0.032)
+	wait(THREATS.CAGE * 0.032, Wait.ABORT_WHEN_FALSE)
 
 	createBeam(getAllPlayers(), Beam.JUNKRAT_TRAP_CHAIN, evalOnce(LeftNip if eventPlayer.getSlot() % 2 == 0 else RightNip), eventPlayer, Color.TEAM_1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
@@ -1014,7 +1042,7 @@ rule "cage":
 
 	while obj != OBJ.INTERMISSION:
 		if eventPlayer.getPosition().z < CageMinZ and (eventPlayer.isCrouching() == false):
-			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 10, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
+			eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), LeftNip if (eventPlayer.getSlot() % 2 == 0) else RightNip), 15, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 		wait(0.36)
 
 rule "cage boundary":
@@ -1086,8 +1114,8 @@ rule "rain":
 
 	while obj != OBJ.INTERMISSION:
 		for rainVar in range(5):
-			if rainVar % 2 == 0: # halve the cloud seeding fx
-				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 4 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
+			if rainVar == 4: # reduce the cloud seeding fx
+				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 8 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.048)
 			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,3,0,0)
 
@@ -1259,14 +1287,14 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(1.2)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice(getLivingPlayers(Team.1)),1)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice(getLivingPlayers(Team.1)),1)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),0.9)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,4,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),0.9 )
 
 rule "chungus":
 	@Event playerReceivedHealing
 	@Team 1
 	@Condition healer == nipman
-	eventPlayer.scale += eventHealing * 0.0065
+	eventPlayer.scale += eventHealing * 0.0085
 	eventPlayer.startScalingSize(eventPlayer.scale, false)
 
 #!define NukeAoe 10
@@ -1460,13 +1488,13 @@ rule "dupe + normal sniper":
 	eventPlayer.botA = getLastCreatedEntity()
 	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botA)
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), (eventPlayer.botA.getEyePosition() + 80 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botA.getEyePosition(), (eventPlayer.botA.getEyePosition() + 60 * eventPlayer.botA.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.WIDOWMAKER, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
 	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 5, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatSnipers.append(eventPlayer.botB)
-	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), (eventPlayer.botB.getEyePosition() + 80 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createBeam(getAllPlayers(), Beam.TORBJORN_TURRET_SIGHT, eventPlayer.botB.getEyePosition(), (eventPlayer.botB.getEyePosition() + 60 * eventPlayer.botB.getFacingDirection()), Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 
 	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
@@ -1501,7 +1529,7 @@ rule "sniper fire":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.SNIPER in threatList
 	wait(1.504)
-	threatSnipers.setDamageDealt(50 if obj == OBJ.MORE else 90)
+	threatSnipers.setDamageDealt(180 / getNumberOfHeroes(Hero.WIDOWMAKER, Team.2))
 	threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
 	if ruleCondition:
 		loop()
@@ -1541,9 +1569,9 @@ rule "missing mauga":
 	if ruleCondition:
 		loop()
 rule "NO BOTS?":
-	@Condition obj == OBJ.KILL or obj == OBJ.CAPTURE or obj == OBJ.BOSS # slendy is also a mob
+	@Condition obj == OBJ.KILL or obj == OBJ.CAPTURE or obj == OBJ.BOSS # slendy is also a mob so don't check for empty arr
 	@Condition getNumberOfPlayers(Team.2) < 7
-	wait(3, Wait.ABORT_WHEN_FALSE)
+	wait(4, Wait.ABORT_WHEN_FALSE)
 	for i in range(len(mobs)):
 		destroyDummy(mobs[i].getTeam(), mobs[i].getSlot())
 
@@ -1551,7 +1579,7 @@ rule "NO BOTS?":
 
 	mobsInit()
 
-	wait(3, Wait.ABORT_WHEN_FALSE)
+	wait(1, Wait.ABORT_WHEN_FALSE)
 	if ruleCondition:
 		goto RULE_START
 
@@ -1616,6 +1644,7 @@ rule "miniboss":
 
 	wait(2)
 	objPos.disablePlayerCollision() # laggy i think
+	# objPos.disableEnvironmentCollision(false)
 	waitUntil(objPos.isOnGround(), 4)
 	objPos.setStatusEffect(null,Status.KNOCKED_DOWN,2)
 	if enemies[roundNo%len(enemies)] != Hero.MAUGA:
@@ -1755,6 +1784,8 @@ rule "page found":
 	objPos = vect(random.randint(-18,18),0,random.randint(CageMinZ if THREATS.CAGE in threatList else -18,16))
 
 rule "debug finish obj":
+	@Disabled
+	@Condition DEBUG
 	@Condition "{}".format(hostPlayer) == "OMGIDIED"
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
 	@Condition hostPlayer.isHoldingButton(Button.CROUCH)
@@ -1799,6 +1830,7 @@ rule "rez cd if not hardcore":
 
 rule "player count balancing, freeze & nip pos check":
 	while true:
+		wait(1)
 		if createWorkshopSettingBool(SETTING_GAMEPLAY, SETTING_PLAYERSCALE,true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
 			getPlayers(Team.1).setDamageDealt(min(400,900 / len([x for x in getPlayers(Team.1) if x.hasSpawned()])))
@@ -1811,7 +1843,7 @@ rule "player count balancing, freeze & nip pos check":
 		# if nipman.smallLNip.y <= 4 or nipman.smallRNip.y <= 4:
 		nipman.smallLNip = NipmanLeftConst
 		nipman.smallRNip = NipmanRightConst
-		wait(5)
+		wait(4)
 rule "wake up":
 	@Event eachPlayer
 	@Team 2
@@ -2010,11 +2042,6 @@ rule "echo hog ult nerf":
 	waitUntil(eventPlayer.isUsingUltimate() == false, 8)
 	eventPlayer.setDamageDealt(100)
 
-rule "debug":
-	@Disabled
-	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
-	hostPlayer.setUltCharge(100)
-	# hostPlayer.setDamageReceived(0)
 rule "win":
 	@Event playerDied
 	@Condition eventPlayer == nipman
@@ -2058,8 +2085,7 @@ rule "sombra was a little slick":
 rule "you are dead, not big surprise + chungus explode":
 	@Event playerDied
 	@Team 1
-	addToTeamScore(Team.2, 1)
-	smallMessage(hostPlayer, eventPlayer.scale)
+	# smallMessage(hostPlayer, eventPlayer.scale)
 	if eventPlayer.scale > 2:
 		bigMessage(eventPlayer, t"mega milk explode!")
 		# if checking los with 20 players isn't too expensive can turn it on
@@ -2075,6 +2101,11 @@ rule "you are dead, not big surprise + chungus explode":
 	eventPlayer.scale = 1
 	eventPlayer.enableEnvironmentCollision()
 
+	if obj == OBJ.INTERMISSION:
+		eventPlayer.respawn()
+	else:
+		addToTeamScore(Team.2, 1)
+
 	# if getPlayersOnHero(Hero.MERCY, Team.1) == []:
 	# 	eventPlayer.teleport(Vector.DOWN * getTotalTimeElapsed())
 	if hardcoreLevel > 0:
@@ -2088,3 +2119,8 @@ rule "you are dead, not big surprise + chungus explode":
 			setSlowMotion(100)
 			wait(3)
 			restartMatch()
+
+	waitUntil(eventPlayer.isAlive(), 99999)
+	if THREATS.HOLE in threatList and distance(eventPlayer, holePos) < holeRadius:
+		eventPlayer.teleport(eventPlayer.getPosition() + 12 * Vector.UP)
+		eventPlayer.enableEnvironmentCollision()

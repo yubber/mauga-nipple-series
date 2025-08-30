@@ -19,8 +19,7 @@ rule "strings":
 # - to avoid censors, you can use zero-width spaces "​". cyrillic characters also work for the latin script, but they will cause the font to change.
 
 # ! add language code here, and the translation workshop uses for white. maintain the same order!
-#!translations en ko
-# zh_CN
+#!translations en ko zh_CN
 #!define LANG_LIST ["White", "흰색", "白色"]
 
 # the mode name and description are in settings -> main, at the very top of pvnip.opy.
@@ -40,7 +39,7 @@ enum BOTNAME:
 	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
 	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加"])
 	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"]),
-	DRILLS = serverSideTranslate(["earthbreakers"])
+	DRILLS = serverSideTranslate(["double drills", "", "双钻头"])
 
 # these are descriptions for custom settings.
 # gameplay category of settings
@@ -96,11 +95,15 @@ enum STRINGS:
 	TIME = t"time elapsed"
 	# \n is a newline, because text doesn't wrap automatically i think
 	SPECTATORS = __("spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)")
-	# supposed to show the korean flag but no worky
-	KR_MODE = (t"\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
+	# supposed to show the korean flag but no worky. deprecated.
+	# KR_MODE = (t"\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
 	IMPORT_CODE = t"use code DS2MD for the latest version"
 	LOAD_1 = t"peak: {} | average: {}"
 	LOAD_2 = t"server load: {}\n"
+	DEBUG_TITLE = t"debug version"
+	DEBUG_DESC = t"host may be afk. please report bugs in match chat"
+	ANTICRASH_TITLE = t"high server load detected"
+	ANTICRASH_DESC = t"slowing game speed to prevent crashing"
 
 /*
 rule "threat data":
