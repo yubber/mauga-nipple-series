@@ -124,6 +124,8 @@ globalvar hardcoreLevel = createWorkshopSettingEnum(SETTING_DIFFICULTY, SETTING_
 	SETTING_RESPAWN.NEVER
 ], 0)
 
+globalvar nipmanLastHP
+
 playervar mobTarget # also used for sniper target, milk wall victims (nipman.mobTarget)
 playervar cacheA
 playervar cacheB

@@ -83,6 +83,9 @@ settings {
 			"mercy":{
 				"ability2Cooldown%": 250
 			},
+			"reinhardt": {
+                "ability1Cooldown%": 40
+            },
             "general": {
                 "abilityCooldown%": 60,
                 "ammoClipSize%": 150,
@@ -364,6 +367,7 @@ rule "loop":
 	if hardcoreLevel < 2:
 		getDeadPlayers(Team.1).respawn()
 	bigMessage(getAllPlayers(), STRINGS.ROUNDSTART)
+	nipmanLastHP = nipman.getHealth()
 
 	nipman.forceButtonPress(Button.ABILITY_2)
 	wait(0.48)
@@ -388,7 +392,7 @@ rule "loop":
 	if hardcoreLevel < 2:
 		getDeadPlayers(Team.1).respawn()
 
-	[x for x in getLivingPlayers(Team.1) if x.getPosition().y < 0].respawn()
+	[x for x in getLivingPlayers(Team.1) if x.getPosition().y < 0].teleport(Vector.UP)
 	getPlayers(Team.1).enableEnvironmentCollision()
 
 	goto RULE_START
@@ -442,7 +446,7 @@ def mobsInit():
 		mobs.setMaxHealth(55)
 		mobs.setMoveSpeed(40)
 		mobs.setKnockbackDealt(40)
-		mobs.setDamageReceived(130)
+		mobs.setDamageReceived(115)
 	else:
 		mobs.setDamageReceived(100)
 
@@ -557,7 +561,7 @@ rule "mob retarget":
 			if mobs[i].isAlive():
 				mobs[i].mobTarget = getRealClosestPlayers(mobs[i].getPosition(), Team.1)[random.randint(0,2) % getNumberOfLivingPlayers(Team.1)]
 				wait(0.08)
-				mobs[i].startFacing(directionTowards(mobs[i].getEyePosition(), mobs[i].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+				mobs[i].startFacing(directionTowards(evalOnce(mobs[i]).getEyePosition(), evalOnce(mobs[i]).mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 		mobs.startForcingThrottle(1,1,0,0,0,1)
 		if obj == OBJ.BOSS:
 			objPos.startForcingThrottle(1,1,0,0,0,1)
@@ -581,15 +585,21 @@ rule "mauga mob behavior":
 			if (eventPlayer.isUsingAbility1() == false) and (eventPlayer.isOnGround() or eventPlayer.getNormalizedHealth() < 1) and eventPlayer.mobTarget.isAlive() and entityExists(eventPlayer.mobTarget):
 				eventPlayer.forceButtonPress(Button.ABILITY_1)
 # threats
-rule "hammer":
-	# @Condition obj != OBJ.INTERMISSION
-	# @Condition THREATS.HAMMER in threatList
+macro handleRad = 15
+# macro handleVect = vect(0,handleRad*sin(hammerProg * Math.PI), handleRad*cos(hammerProg * Math.PI))
+# rule "hammer":
+# 	@Condition obj != OBJ.INTERMISSION
+# 	@Condition THREATS.HAMMER in threatList
 
-	# while obj != OBJ.INTERMISSION:
-		# hammerSide = random.randint(0,1)
+# 	createBeam(getAllPlayers() if hammerProg > -1 else null, Beam.BAD, vect(-20+20*hammerSide,0.1,-20), vect(0+20*hammerSide,0.1,20), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+# 	threatFx.append(getLastCreatedEntity())
+# 	createBeam(getAllPlayers() if hammerProg > -1 else null, Beam.BAD, vect(-20+20*hammerSide,0.1,20), vect(0+20*hammerSide,0.1,-20), Color.WHITE, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+# 	threatFx.append(getLastCreatedEntity())
 
-
-	# 	wait(8)
+# 	while obj != OBJ.INTERMISSION:
+# 		hammerProg = -1
+# 		hammerSide = random.randint(0,1)
+# 		wait(8)
 macro holeRadius = 8
 # this is NOT related to the hole size. it's the intended size of the sphere effect (assuming correction applied. bigger is flatter but less precise)
 macro sphereRadius = 50
@@ -670,6 +680,7 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	wait(0.48)
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip + eventPlayer.getFacingDirection() * -6, false)
 	eventPlayer.botA.startForcingPosition(eventPlayer.smallLNip + eventPlayer.getFacingDirection() * -6, false)
+	eventPlayer.botA.tickleCounter = 0
 	threatDragons.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*4), true)
 
 rule "dragon stimulation":
@@ -689,7 +700,7 @@ rule "dragon stimulation":
 		waitUntil(obj == OBJ.INTERMISSION, 99999)
 		return
 
-	if victim.botA.tickleCounter >= 24:
+	if victim.botA.tickleCounter >= (48 if obj == OBJ.MORE else 24):
 		smallMessage(getAllPlayers(), STRINGS.DRAGONTRIGGER.format(heroIcon(Hero.MAUGA)))
 		victim.botA.mobTarget = random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
 		wait()
@@ -1126,9 +1137,9 @@ rule "rain":
 
 	while obj != OBJ.INTERMISSION:
 		for rainVar in range(5):
-			if rainVar == 4: # reduce the cloud seeding fx
-				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar % 8 == 0 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
-			wait(0.048)
+			if rainVar % 2 != 0: # reduce the cloud seeding fx
+				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
+			wait(0.0512)
 			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,3,0,0)
 
 rule "twister":
@@ -1227,13 +1238,13 @@ rule "laser":
 	createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, area2 + 4 * Vector.DOWN, Vector.DOWN, 0.55, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 	threatFx.append(getLastCreatedEntity())
 
-	chase(area1, getRealClosestPlayer(area1,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
-	chase(area2, getRealClosestPlayer(area2,Team.1).getPosition()*vect(1,0,1), rate=0.8, ChaseReeval.DESTINATION_AND_RATE)
+	chase(area1, getRealClosestPlayer(area1,Team.1).getPosition()*vect(1,0,1), rate=1.1, ChaseReeval.DESTINATION_AND_RATE)
+	chase(area2, getRealClosestPlayer(area2,Team.1).getPosition()*vect(1,0,1), rate=1.1, ChaseReeval.DESTINATION_AND_RATE)
 
 	while obj != OBJ.INTERMISSION:
-		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, area1 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 10, 55, 0, 0)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, area1 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR_SOUND, 0, getTotalTimeElapsed(), 10, 55, 0, 0)
 		wait(0.08)
-		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, area2 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, 0, getTotalTimeElapsed(), 3, 55, 0, 0)
+		createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, null, area2 + 0.5 * Vector.UP, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20, 1, 3, DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, DynamicEffect.SYMMETRA_TELEPORTER_REAPPEAR_SOUND, 0, getTotalTimeElapsed(), 3, 55, 0, 0)
 		wait(0.8)
 
 rule "discharge":
@@ -1394,7 +1405,9 @@ rule "nuke":
 		for missileTemp in range(50):
 			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 30)
 			getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
-			wait(0.112)
+			wait(0.128)
+			if obj == OBJ.INTERMISSION:
+				break
 		for missileTemp in range(len(missileFx)):
 			destroyEffect(missileFx[missileTemp])
 		missileFx = []
@@ -1571,11 +1584,11 @@ rule "init suns":
 	threatFx.append(getLastCreatedEntity())
 
 # objective setup
-rule "missing mauga":
+rule "missing maugas":
 	@Condition obj == OBJ.MORE
 	@Condition all([not entityExists(x) for x in objPos])
 	wait(2, Wait.ABORT_WHEN_FALSE)
-	smallMessage(getAllPlayers(), STRINGS.MAUGA_GONE)
+	smallMessage(getAllPlayers(), STRINGS.MAUGAS_GONE)
 	objProg = objGoal
 	wait(2, Wait.ABORT_WHEN_FALSE)
 	if ruleCondition:
@@ -1584,8 +1597,9 @@ rule "NO BOTS?":
 	@Condition obj == OBJ.KILL or obj == OBJ.CAPTURE or obj == OBJ.BOSS # slendy is also a mob so don't check for empty arr
 	@Condition getNumberOfPlayers(Team.2) < 7
 	wait(4, Wait.ABORT_WHEN_FALSE)
-	for i in range(len(mobs)):
-		destroyDummy(mobs[i].getTeam(), mobs[i].getSlot())
+	for i in range(getNumberOfPlayers(Team.2)):
+		if getPlayers(Team.2)[i] != nipman:
+			destroyDummy(Team.2, getPlayers(Team.2)[i].getSlot())
 
 	mobs = []
 
@@ -1913,7 +1927,7 @@ rule "where did he go":
 	wait()
 	nipman.setHealingReceived(0)
 	wait()
-	nipman.setHealth(57500)
+	nipman.setHealth(nipmanLastHP)
 	wait(1, Wait.ABORT_WHEN_FALSE)
 	if ruleCondition:
 		goto RULE_START
@@ -1922,7 +1936,7 @@ rule "charge no breaky":
 	@Event eachPlayer
 	@Hero reinhardt
 	@Condition eventPlayer.isUsingAbility1()
-	@Condition eventPlayer.getPosition().z > 18
+	@Condition eventPlayer.getPosition().z > 17
 	@Condition eventPlayer.getFacingDirection().z > -0.7
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
@@ -1933,9 +1947,9 @@ rule "charge no breaky more maugas":
 	@Hero reinhardt
 	@Condition obj == OBJ.MORE
 	@Condition eventPlayer.isUsingAbility1()
-	@Condition ((eventPlayer.getPosition().z < -18 and eventPlayer.getFacingDirection().z < 0.7)
-	or (eventPlayer.getPosition().x < -18 and eventPlayer.getFacingDirection().x < 0.7)
-	or (eventPlayer.getPosition().x > 18 and eventPlayer.getFacingDirection().x > -0.7))
+	@Condition ((eventPlayer.getPosition().z < -17 and eventPlayer.getFacingDirection().z < 0.7)
+	or (eventPlayer.getPosition().x < -17 and eventPlayer.getFacingDirection().x < 0.7)
+	or (eventPlayer.getPosition().x > 17 and eventPlayer.getFacingDirection().x > -0.7))
 	eventPlayer.setStatusEffect(null, Status.HACKED, 0.5)
 	eventPlayer.cancelPrimaryAction()
 	smallMessage(eventPlayer, STRINGS.CHIDING)
@@ -2114,7 +2128,9 @@ rule "you are dead, not big surprise + chungus explode":
 	eventPlayer.enableEnvironmentCollision()
 
 	if obj == OBJ.INTERMISSION:
-		eventPlayer.respawn()
+		if eventPlayer.isHoldingButton(Button.CROUCH) == false:
+			eventPlayer.respawn()
+			smallMessage(eventPlayer, STRINGS.SEPPUKU)
 	else:
 		addToTeamScore(Team.2, 1)
 

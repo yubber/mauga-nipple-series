@@ -83,7 +83,7 @@ enum STRINGS:
 	DRAGONTRIGGER = t"{} heehee, stop tickling me! dragon lactation initation!"
 	PAGEGUNS = t"remember to check inside mauga's guns for the pages."
 	GRABBED = t"{} you were grabbed!"
-	MAUGA_GONE = t"something went wrong. skipping phase..."
+	MAUGAS_GONE = t"something went wrong. skipping phase..."
 	TIMEOUT = t"timeout exceeded, skipping phase in case of softlock."
 	HC = t"hardcore mode is on"
 	UHC = t"ultra hardcore mode is on"
@@ -104,6 +104,7 @@ enum STRINGS:
 	DEBUG_DESC = t"host may be afk. please report bugs in match chat"
 	ANTICRASH_TITLE = t"high server load detected"
 	ANTICRASH_DESC = t"slowing game speed to prevent crashing"
+	SEPPUKU = t"if you need to change heroes, hold crouch as you die."
 
 /*
 rule "threat data":

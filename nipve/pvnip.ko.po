@@ -4,15 +4,15 @@ msgstr ""
 "Language: ko\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 249, rule "init"
+#. file pvnip.opy, line 252, rule "init"
 msgid "objective"
 msgstr "목표"
 
-#. file pvnip.opy, line 250, rule "init"
+#. file pvnip.opy, line 253, rule "init"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2102, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2116, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -248,4 +248,8 @@ msgstr ""
 
 #. file strings.opy, line 106, rule "strings"
 msgid "slowing game speed to prevent crashing"
+msgstr ""
+
+#. file strings.opy, line 107, rule "strings"
+msgid "if you need to change heroes, hold crouch as you die."
 msgstr ""

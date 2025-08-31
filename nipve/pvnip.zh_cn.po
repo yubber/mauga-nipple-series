@@ -4,15 +4,15 @@ msgstr ""
 "Language: zh_cn\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 249, rule "init"
+#. file pvnip.opy, line 252, rule "init"
 msgid "objective"
 msgstr "目标"
 
-#. file pvnip.opy, line 250, rule "init"
+#. file pvnip.opy, line 253, rule "init"
 msgid "threats"
 msgstr "危险"
 
-#. file pvnip.opy, line 2102, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2116, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -246,3 +246,7 @@ msgstr "服务器压力高"
 #. file strings.opy, line 106, rule "strings"
 msgid "slowing game speed to prevent crashing"
 msgstr "游戏速度已放慢，以免游戏崩溃"
+
+#. file strings.opy, line 107, rule "strings"
+msgid "if you need to change heroes, hold crouch as you die."
+msgstr ""
