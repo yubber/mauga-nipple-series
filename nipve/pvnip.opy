@@ -1,4 +1,4 @@
-macro DEBUG = true
+macro DEBUG = false
 macro PlayerSlots = 9
 
 settings {
@@ -19,7 +19,8 @@ settings {
     "gamemodes": {
         "tdm": {
             "enabledMaps": [
-                "workshopIslandNight"
+                "workshopIslandNight",
+                "workshopIsland",
             ],
 			"enablePerks": true,
             "perkEliminationCatchupLevelAmount%": 100,
@@ -339,6 +340,8 @@ rule "loop":
 	if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
 		lastObj = random.choice(moreFunThreats)
 
+	threatList.append(THREATS.HOLE)
+
 	## add threats until 2 non-obj ones are reached
 	while len(threatList) < 2:
 		wait()
@@ -621,7 +624,7 @@ rule "drills setup and act":
 	# place hole
 	holePos = Vector.FORWARD * random.uniform(-15, 15) + Vector.RIGHT * random.uniform(-15, 15)
 
-	getRealPlayersInRadius(holePos, holeRadius, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 30, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+	getRealPlayersInRadius(holePos, holeRadius + 5, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
 	wait()
 	playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, holePos, 1)
 	playEffect(getAllPlayers(), DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, Color.TEAM_2, holePos, 90)
@@ -630,9 +633,10 @@ rule "drills setup and act":
 	createEffect(getAllPlayers(), Effect.RING, Color.BLACK, holePos, holeRadius + 0.5, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 
-	for drillI in range(1,11,1):
-		createEffect(getAllPlayers(), Effect.SPHERE, Color.BLACK, (holePos) + Vector.DOWN * (sqrt((sphereRadius)**2 - (holeRadius+0.5)**2)) * Math.SPHERE_VERTICAL_RADIUS_MULT, (sphereRadius * i / 10) / Math.SPHERE_VERTICAL_RADIUS_MULT, EffectReeval.VISIBILITY)
+	for drillI in range(0,20,1):
+		createEffect(getAllPlayers(), Effect.SPHERE, Color.BLACK, (holePos) + Vector.DOWN * (sqrt((sphereRadius)**2 - ((holeRadius * (drillI % 10 + 1) / 10)+0.5)**2)) * Math.SPHERE_VERTICAL_RADIUS_MULT, (sphereRadius) / Math.SPHERE_VERTICAL_RADIUS_MULT, EffectReeval.VISIBILITY)
 		threatFx.append(getLastCreatedEntity())
+		wait()
 
 	while obj != OBJ.INTERMISSION:
 		threatDrills.forceButtonPress(Button.SECONDARY_FIRE)
@@ -649,9 +653,9 @@ rule "hole action":
 		if eventPlayer.getPosition().y < 0.5 and distance(eventPlayer.getPosition() * vect(1,0,1), holePos) < holeRadius:
 			eventPlayer.disableEnvironmentCollision(true)
 			eventPlayer.setEnvironmentalKillCreditor(threatDrills[0])
-		elif eventPlayer.getPosition().y > 0:
+		elif eventPlayer.getPosition().y > -0.3:
 			eventPlayer.enableEnvironmentCollision()
-		wait(0.24)
+		wait(0.16)
 rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Event eachPlayer
 	@Hero mauga

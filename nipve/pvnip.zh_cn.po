@@ -4,15 +4,15 @@ msgstr ""
 "Language: zh_cn\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 252, rule "init"
+#. file pvnip.opy, line 253, rule "init"
 msgid "objective"
 msgstr "目标"
 
-#. file pvnip.opy, line 253, rule "init"
+#. file pvnip.opy, line 254, rule "init"
 msgid "threats"
 msgstr "危险"
 
-#. file pvnip.opy, line 2116, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2120, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
