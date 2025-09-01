@@ -335,14 +335,16 @@ rule "loop":
 	### pick threats
 	wait(0.36)
 	## guaranteed threats
-	# lastObj is used as temp storage for the candidate threat
 	# guarantee a threat that will get copied by mauga clones
-	if objGoal == OBJ.MORE and ((threatList.last() in moreFunThreats) == false):
-		lastObj = random.choice(moreFunThreats)
+	if objGoal == OBJ.MORE:
+		threatList.append(random.choice(moreFunThreats))
 
-	threatList.append(THREATS.HOLE)
+	if DEBUG == true:
+		pass
+		# threatList.append(THREATS.HOLE)
 
 	## add threats until 2 non-obj ones are reached
+	# lastObj is used as temp storage for the candidate threat
 	while len(threatList) < 2:
 		wait()
 		lastObj = random.randint(THREATS.ICE, THREATS.LASER)
@@ -603,7 +605,7 @@ macro handleRad = 15
 # 		hammerProg = -1
 # 		hammerSide = random.randint(0,1)
 # 		wait(8)
-macro holeRadius = 8
+macro holeRadius = 6
 # this is NOT related to the hole size. it's the intended size of the sphere effect (assuming correction applied. bigger is flatter but less precise)
 macro sphereRadius = 50
 #* i / 10
@@ -664,12 +666,12 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	@Condition (eventPlayer.smallLNip == nipman.smallLNip) or (obj == OBJ.MORE and eventPlayer in objPos)
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, eventPlayer.getFacingDirection())
 	eventPlayer.botA = getLastCreatedEntity()
-	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 10, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botA.startFacing(directionTowards(eventPlayer.botA.getEyePosition(), eventPlayer.botA.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botA)
 	threatFx.append(getLastCreatedEntity())
 	createDummy(Hero.HANZO, Team.2, -1, Vector.UP, Vector.BACKWARD)
 	eventPlayer.botB = getLastCreatedEntity()
-	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 10, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	eventPlayer.botB.startFacing(directionTowards(eventPlayer.botB.getEyePosition(), eventPlayer.botB.mobTarget.getEyePosition()), 6, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 	threatDragons.append(eventPlayer.botB)
 	threatFx.append(getLastCreatedEntity())
 
@@ -712,8 +714,8 @@ rule "dragon stimulation":
 		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallRNip, true)
-		victim.botA.setFacing(victim.botA.mobTarget, Relativity.TO_WORLD)
-		victim.botB.setFacing(victim.botB.mobTarget, Relativity.TO_WORLD)
+		victim.botA.setFacing(directionTowards(victim.botA.getEyePosition(), victim.botA.mobTarget), Relativity.TO_WORLD)
+		victim.botB.setFacing(directionTowards(victim.botB.getEyePosition(), victim.botB.mobTarget), Relativity.TO_WORLD)
 		for victim.botB.iDragon in range(3):
 			threatDragons.setUltCharge(100)
 			wait(1.12)
@@ -795,9 +797,9 @@ rule "toe medusa":
 	while obj != OBJ.INTERMISSION:
 		wait(0.192)
 		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), threatToes[0])) < 40:
-			eventPlayer.feetSlow += 0.05
+			eventPlayer.feetSlow += 0.04
 			eventPlayer.setMoveSpeed(100 - eventPlayer.feetSlow * 100)
-			damage(eventPlayer, threatToes[0], 2.5)
+			damage(eventPlayer, threatToes[0], 3)
 			if eventPlayer.feetSlow >= 1:
 				smallMessage(eventPlayer, STRINGS.PETRIFIED)
 				eventPlayer.feetSlow = 1
@@ -1144,7 +1146,7 @@ rule "rain":
 			if rainVar % 2 != 0: # reduce the cloud seeding fx
 				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.0512)
-			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,3,0,0)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,2,0,0)
 
 rule "twister":
 	@Condition obj != OBJ.INTERMISSION
@@ -1849,7 +1851,7 @@ rule "wrong mauga":
 	# min delay between events
 	wait(0.24, Wait.IGNORE_CONDITION)
 	# reset counter when not shooting for some time
-	wait(1.2, Wait.RESTART_WHEN_TRUE)
+	wait(1.8, Wait.RESTART_WHEN_TRUE)
 	eventPlayer.wrongCounter = 0
 rule "rez cd if not hardcore":
 	wait(2)
@@ -2154,5 +2156,5 @@ rule "you are dead, not big surprise + chungus explode":
 
 	waitUntil(eventPlayer.isAlive(), 99999)
 	if THREATS.HOLE in threatList and distance(eventPlayer, holePos) < holeRadius:
-		eventPlayer.teleport(eventPlayer.getPosition() + 12 * Vector.UP)
+		eventPlayer.teleport(eventPlayer.getPosition() + 18 * Vector.UP)
 		eventPlayer.enableEnvironmentCollision()

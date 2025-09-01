@@ -12,7 +12,7 @@ msgstr "목표"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2120, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2122, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 
 #. file strings.opy, line 102, rule "strings"
 msgid "server load: {0}"
-msgstr "server load: {0}"
+msgstr ""
 
 #. file strings.opy, line 103, rule "strings"
 msgid "debug version"
