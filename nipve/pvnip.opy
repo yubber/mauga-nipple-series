@@ -3,7 +3,7 @@ macro PlayerSlots = 9
 
 settings {
     "main": {
-        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\nworkshop.codes/ds2md\n\nyubz made it\nyubz 제작, Lonepier 번역",
+        "description":"it's like rein invasion but with mauga's milkers\nDS2MD\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역",
         "modeName": "mauga n!pple pve (test version)" if DEBUG else "mauga n!pple pve"
 		# "description": "마우가의 찌!찌!를 공략하는 보스레이드\nDS2MD\n\nyubz 제작, Lonepier 번역",
         # "modeName": "마우가 찌!찌! pve"
@@ -206,6 +206,7 @@ rule "init":
 	nipman.startForcingPosition(NipmanForcePosConst, false)
 	nipman.startFacing(Vector.BACKWARD, 999, Relativity.TO_WORLD, FacingReeval.NONE)
 	nipman.disablePlayerCollision()
+	# mei iceblock glitch found by https://x.com/mtndewmpdgirl/status/1928190111847485589
 	nipman.disableEnvironmentCollision(true)
 	nipman.startScalingSize(20, false) # max size
 	upto = nipman.getMaxHealth()
@@ -243,14 +244,14 @@ rule "init":
 	for i in range(6):
 		createEffect(getAllPlayers() if obj == OBJ.PAGES else [], Effect.CLOUD, Color.GRAY, Vector.UP * i * 0.1 - 0.7, 50, EffectReeval.VISIBILITY)
 		wait()
-	createEffect(getAllPlayers() if obj == OBJ.PAGES else null, Effect.ORB, Color.WHITE, (objPos + Vector.UP * (1 + 0.2 * sin(getTotalTimeElapsed() * 5))), 0.7, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	createEffect(getAllPlayers() if obj == OBJ.PAGES else null, Effect.ORB, Color.WHITE, (objPos + Vector.UP * (1 + 0.2 * sin(getTotalTimeElapsed() * 5))), true, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	createEffect(getAllPlayers() if obj == OBJ.CAPTURE else [], Effect.RING, Color.BLUE, objPos, 12, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
-	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos + Vector.UP, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
+	createIcon(getAllPlayers() if obj == OBJ.CAPTURE else [], objPos + Vector.UP * (1 + 0.3 * sin(getTotalTimeElapsed() * 5)), Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.TEAM_1, true)
 
 	wait(0.16)
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(t"objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_2 if obj == OBJ.BOSS else Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
+	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(t"objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
     hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
 		f"{threatIcons[threatList[0]]} ",
 		_(threatNames[threatList[0]]),
@@ -349,6 +350,10 @@ rule "loop":
 		wait()
 		lastObj = random.randint(THREATS.ICE, THREATS.LASER)
 
+		# prevent useless threats in more maugas
+		if objGoal == OBJ.MORE and lastObj in moreMaugasExclude:
+			continue
+
 		# prevent dupes
 		if (not lastObj in threatList)\
 			and ((not lastObj in dummyThreats) or len([x for x in threatList if x in dummyThreats]) == 0): # stay under dummy limit, to prevent conflicts on botA and botB vars or exceeding skin limit.
@@ -378,7 +383,7 @@ rule "loop":
 	wait(0.48)
 
 	obj = objGoal
-	objGoal = [8, 3, 60, 1, 100][obj]
+	objGoal = [8, 3, 50, 1, 100][obj]
 
 	nipman.setDamageReceived(0.001) # i forgot why this can't be 0. surely nothing bad happens :clueless:
 	# i rember now. it's to detect hook, punch, etc. now also for dragonipples
@@ -505,9 +510,9 @@ rule "slendy":
 	wait()
 	getAllPlayers().enableKillFeed()
 	objPos = Vector.FORWARD # set first page pos for clueless players
-	mobs.resurrect()
 	mobs.startModifyingVoicelinePitch(0.6, false)
 	mobs.startForcingName(BOTNAME.SLENDY)
+	objProg -= 0.5
 	wait(0.4)
 	heal(mobs,null,99999)
 	while obj == OBJ.PAGES:
@@ -574,7 +579,7 @@ rule "mob retarget":
 		if obj == OBJ.BOSS:
 			objPos.mobTarget = mobs[0].mobTarget
 			# objPos.mobTarget = getRealClosestPlayer(objPos, Team.1)
-	wait(1.2)
+	wait(1.2) # crash condition found by https://bsky.app/profile/did:plc:reljto3lpvjj5l2tfbl34h4a
 	if ruleCondition:
 		loop()
 
@@ -605,10 +610,9 @@ macro handleRad = 15
 # 		hammerProg = -1
 # 		hammerSide = random.randint(0,1)
 # 		wait(8)
-macro holeRadius = 6
+macro holeRadius = 7
 # this is NOT related to the hole size. it's the intended size of the sphere effect (assuming correction applied. bigger is flatter but less precise)
 macro sphereRadius = 50
-#* i / 10
 rule "drills setup and act":
 	@Condition obj != OBJ.INTERMISSION
 	@Condition THREATS.HOLE in threatList
@@ -640,10 +644,11 @@ rule "drills setup and act":
 		threatFx.append(getLastCreatedEntity())
 		wait()
 
+	wait(0.8)
 	while obj != OBJ.INTERMISSION:
-		threatDrills.forceButtonPress(Button.SECONDARY_FIRE)
-		wait(0.288)
 		threatDrills.setAbilityCooldown(Button.SECONDARY_FIRE, 0)
+		wait(0.288)
+		threatDrills.forceButtonPress(Button.SECONDARY_FIRE)
 
 rule "hole action":
 	@Event eachPlayer
@@ -689,7 +694,7 @@ rule "dragon init": # 9/11 with more maugas but it's ok ig
 	eventPlayer.botA.tickleCounter = 0
 	threatDragons.startModifyingVoicelinePitch(1 + 0.5 * sin(getTotalTimeElapsed()*4), true)
 
-rule "dragon stimulation":
+rule "dragon stimulation": # concept by https://x.com/DeathPony_/status/1955123578807910869
 	@Event playerTookDamage
 	@Hero mauga
 	@Team 2
@@ -711,11 +716,12 @@ rule "dragon stimulation":
 		victim.botA.mobTarget = random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
 		wait()
 		victim.botB.mobTarget =  random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()])
+		wait()
 		playEffect(getAllPlayers(), DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, Color.TEAM_2, victim.smallLNip, 200)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallLNip, true)
 		playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, victim.smallRNip, true)
-		victim.botA.setFacing(directionTowards(victim.botA.getEyePosition(), victim.botA.mobTarget), Relativity.TO_WORLD)
-		victim.botB.setFacing(directionTowards(victim.botB.getEyePosition(), victim.botB.mobTarget), Relativity.TO_WORLD)
+		victim.botA.setFacing(directionTowards(victim.botA.getEyePosition(), victim.botA.mobTarget.getEyePosition()), Relativity.TO_WORLD)
+		victim.botB.setFacing(directionTowards(victim.botB.getEyePosition(), victim.botB.mobTarget.getEyePosition()), Relativity.TO_WORLD)
 		for victim.botB.iDragon in range(3):
 			threatDragons.setUltCharge(100)
 			wait(1.12)
@@ -1049,7 +1055,7 @@ rule "grab":
 		grabLeftPlayer.stopForcingPosition()
 		grabRightPlayer.stopForcingPosition()
 
-#!define CageMinZ 1
+macro CageMinZ = -4
 rule "cage":
 	@Event eachPlayer
 	@Team 1
@@ -1094,6 +1100,8 @@ rule "milk wall + collision":
 	while obj != OBJ.INTERMISSION:
 		wallPos = vect(random.uniform(-20, 20 - WallGap * WallWidth), 0, 20)
 		for wallI in range(54):
+			if obj == OBJ.INTERMISSION:
+				goto lbl_wallskip
 			createProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip if wallI % 2 == 0 else RightNip, directionTowards(LeftNip if wallI % 2 == 0 else RightNip, wallPos + vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 0, 0, 0.1, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR_SOUND, 0.1, 50,
 				magnitude((LeftNip if wallI % 2 == 0 else RightNip) - wallPos + (vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap)) / 120 /*0.6 - 0.002 * wallI ** 2*/, 0,0,0)
 			wait(0.144)
@@ -1106,6 +1114,8 @@ rule "milk wall + collision":
 		chaseOverTime(wallPos, wallPos + 90 * Vector.BACKWARD, 3.5, ChaseTimeReeval.NONE)
 		# collision
 		for wallI in range(25):
+			if obj == OBJ.INTERMISSION:
+				break
 			wait(0.096)
 			nipman.mobTarget = [p for p in getLivingPlayers(Team.1)
 				if abs(p.getPosition().z - wallPos.z) < 1.3
@@ -1121,6 +1131,7 @@ rule "milk wall + collision":
 		# 	and p.getPosition().x < wallPos.x + WallWidth * WallGap
 		# 	and p.getPosition().y <= 60 / WallWidth].applyImpulse(Vector.BACKWARD + Vector.UP * 0.3, 360, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION)
 		# wait(1)
+		lbl_wallskip:
 		for wallI in range(len(wallEffects)):
 			destroyEffect(wallEffects[wallI])
 			wait()
@@ -1145,8 +1156,9 @@ rule "rain":
 		for rainVar in range(5):
 			if rainVar % 2 != 0: # reduce the cloud seeding fx
 				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.05, 30, 1, 0,0,-5)
-			wait(0.0512)
+			wait(0.032)
 			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 25, 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.07, 200, 1,2,0,0)
+			wait(0.024)
 
 rule "twister":
 	@Condition obj != OBJ.INTERMISSION
@@ -1188,14 +1200,14 @@ rule "sun loop":
 		threatSuns.startForcingName(BOTNAME.ILLARIS)
 		threatSuns.setProjectileSpeed(30)
 		threatSuns.disableNameplatesFor(getAllPlayers())
-		threatSuns.setDamageDealt(max(20,120 / len(threatSuns)))
+		threatSuns.setDamageDealt(max(45,180 / len(threatSuns)))
 		threatSuns.startModifyingVoicelinePitch(0, false)
 		threatSuns.setUltCharge(100)
-		wait(4)
+		wait(8 if obj == OBJ.MORE else 4)
 		threatSuns.forceButtonPress(Button.ULTIMATE)
 		for isun in range(len(threatSuns)):
 			if entityExists(threatSuns[isun]) == false:
-				threatSuns.remove(threatSuns[isun])
+				del threatSuns[isun]
 			else:
 				threatSuns[isun].setFacing(directionTowards(threatSuns[isun].getEyePosition(), random.choice([x for x in getLivingPlayers(Team.1) if x.hasSpawned()]).getPosition()), Relativity.TO_WORLD)
 			wait(0.064)
@@ -1316,14 +1328,14 @@ rule "heal milk":
 
 	while obj != OBJ.INTERMISSION and eventPlayer.isAlive():
 		wait(1.2)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1)
-		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 40,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1 )
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallLNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 50,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1)
+		createHomingProjectile(Projectile.ECHO_STICKY_BOMB, eventPlayer, eventPlayer.smallRNip, eventPlayer.getFacingDirection(), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 40, 20, 1, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 50,1,0,random.choice([x for x in getLivingPlayers(Team.1) if x.getNormalizedHealth() < 1]),1 )
 
 rule "chungus":
 	@Event playerReceivedHealing
 	@Team 1
 	@Condition healer == nipman
-	eventPlayer.scale += eventHealing * 0.0085
+	eventPlayer.scale += eventHealing * 0.0095
 	eventPlayer.startScalingSize(eventPlayer.scale, false)
 
 #!define NukeAoe 10
@@ -1374,8 +1386,8 @@ rule "nuke":
 
 		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, LeftNip, 1)
 		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, RightNip, 1)
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,70, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,40, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,40, 0,0)
 		wait(0.012 * distance(LeftNip, missilePos))
 		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
 		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
@@ -1961,6 +1973,7 @@ rule "charge no breaky more maugas":
 	smallMessage(eventPlayer, STRINGS.CHIDING)
 
 rule "echo charge no breaky":
+	# bug found by https://x.com/mtndewmpdgirl/status/1923835540371034434
 	@Event eachPlayer
 	@Hero echo
 	@Condition eventPlayer.getHeroOfDuplication() == Hero.REINHARDT
@@ -2097,6 +2110,7 @@ rule "sombra aint slick":
 	wait(0.48)
 	stopDamageModification(eventPlayer.mobTarget)
 rule "echo sombra aint slick":
+	# bug found by https://www.youtube.com/watch?v=gOU0awrvWxQ
 	@Event eachPlayer
 	@Hero echo
 	@Condition eventPlayer.getHeroOfDuplication() == Hero.SOMBRA
@@ -2158,3 +2172,5 @@ rule "you are dead, not big surprise + chungus explode":
 	if THREATS.HOLE in threatList and distance(eventPlayer, holePos) < holeRadius:
 		eventPlayer.teleport(eventPlayer.getPosition() + 18 * Vector.UP)
 		eventPlayer.enableEnvironmentCollision()
+	# if THREATS.CAGE in threatList and eventPlayer.getPosition().z < CageMinZ:
+	eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 2)
