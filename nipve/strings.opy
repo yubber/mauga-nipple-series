@@ -39,7 +39,7 @@ enum BOTNAME:
 	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
 	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加"])
 	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"]),
-	DRILLS = serverSideTranslate(["double drills", "", "双钻头"])
+	DRILLS = serverSideTranslate(["double drills", "찌찌드릴", "双钻头"])
 
 # these are descriptions for custom settings.
 # gameplay category of settings

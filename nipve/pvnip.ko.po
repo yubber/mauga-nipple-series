@@ -14,7 +14,7 @@ msgstr "위험 요인"
 
 #. file pvnip.opy, line 2136, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
-msgstr ""
+msgstr "너무 성장해버렸다..."
 
 #. file strings.opy, line 61, rule "strings"
 msgid "collect pages"
@@ -118,11 +118,11 @@ msgstr "유당지옥"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "mega milk"
-msgstr ""
+msgstr "성장촉진 우유"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "lactation excavation"
-msgstr ""
+msgstr "찌찌드릴"
 
 #. file strings.opy, line 68, rule "strings"
 msgid "next objective in 3 seconds!"
@@ -182,7 +182,7 @@ msgstr "무언가가 잘못되었다, 페이즈 스킵 중..."
 
 #. file strings.opy, line 87, rule "strings"
 msgid "timeout exceeded, skipping phase in case of softlock."
-msgstr ""
+msgstr "타임아웃 시간 초과, 버그 방지를 위해 페이즈를 스킵합니다."
 
 #. file strings.opy, line 88, rule "strings"
 msgid "hardcore mode is on"
@@ -190,7 +190,7 @@ msgstr "하드코어 모드 활성화"
 
 #. file strings.opy, line 89, rule "strings"
 msgid "ultra hardcore mode is on"
-msgstr ""
+msgstr "울트라 하드코어 모드 활성화"
 
 #. file strings.opy, line 90, rule "strings"
 msgid "no respawning until round ends"
@@ -198,7 +198,7 @@ msgstr "라운드가 끝날 때까지 리스폰 불가"
 
 #. file strings.opy, line 91, rule "strings"
 msgid "no respawning ever!"
-msgstr ""
+msgstr "부활할 수 없습니다!"
 
 #. file strings.opy, line 93, rule "strings"
 msgid "team deaths"
@@ -228,28 +228,28 @@ msgstr "워크샵 코드: DS2MD가 항상 최신 버전입니다"
 
 #. file strings.opy, line 101, rule "strings"
 msgid "peak: {0} | average: {1}"
-msgstr ""
+msgstr "최대: {0} | 평균: {1}"
 
 #. file strings.opy, line 102, rule "strings"
 msgid "server load: {0}"
-msgstr ""
+msgstr "서버 로드: {0}"
 
 #. file strings.opy, line 103, rule "strings"
 msgid "debug version"
-msgstr ""
+msgstr "디버그 버전"
 
 #. file strings.opy, line 104, rule "strings"
 msgid "host may be afk. please report bugs in match chat"
-msgstr ""
+msgstr "방장이 잠수 중일 수 있습니다. 전체 채팅에 버그를 보고해 주세요"
 
 #. file strings.opy, line 105, rule "strings"
 msgid "high server load detected"
-msgstr ""
+msgstr "서버 로드 높음"
 
 #. file strings.opy, line 106, rule "strings"
 msgid "slowing game speed to prevent crashing"
-msgstr ""
+msgstr "크래시 방지를 위해 게임 속도가 늦춰집니다"
 
 #. file strings.opy, line 107, rule "strings"
 msgid "if you need to change heroes, hold crouch as you die."
-msgstr ""
+msgstr "영웅 변경을 원하신다면, 사망 시 앉기를 누르세요."
