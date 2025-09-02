@@ -628,7 +628,7 @@ rule "drills setup and act":
 	threatDrills.startForcingName(BOTNAME.DRILLS)
 
 	# place hole
-	holePos = Vector.FORWARD * random.uniform(-15, 15) + Vector.RIGHT * random.uniform(-15, 15)
+	holePos = Vector.FORWARD * random.uniform(-18 + holeRadius, 18 - holeRadius) + Vector.RIGHT * random.uniform(-18 + holeRadius, 18 - holeRadius)
 
 	getRealPlayersInRadius(holePos, holeRadius + 5, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
 	wait()
@@ -1386,8 +1386,8 @@ rule "nuke":
 
 		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, LeftNip, 1)
 		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, RightNip, 1)
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,40, 0,0)
-		createProjectile(Projectile.PHARAH_ROCKET, nipman, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,40, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, null, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,20, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, null, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,20, 0,0)
 		wait(0.012 * distance(LeftNip, missilePos))
 		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
 		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
