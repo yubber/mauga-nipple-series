@@ -12,7 +12,7 @@ msgstr "목표"
 msgid "threats"
 msgstr "위험 요인"
 
-#. file pvnip.opy, line 2136, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2137, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr "너무 성장해버렸다..."
 

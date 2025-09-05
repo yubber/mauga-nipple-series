@@ -51,8 +51,8 @@ globalvar objGoal
 globalvar objPos # used for miniboss entity
 globalvar roundNo
 globalvar threatList = []
-# threats that use dummy bots. more not included - hammond bots cancel out absence of mobs
-globalvar dummyThreats = [THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON, THREATS.TOES, THREATS.HOLE/*, THREATS.KITSUNIPS*/]
+# threats that use dummy bots. more not included - no mobs cancels out hammond bots. slendy reaper and weavers also take 2 skins.
+globalvar dummyThreats = [THREATS.SLENDY, THREATS.COOM, THREATS.SNIPER, THREATS.SUN, THREATS.FRACTAL, THREATS.DRAGON, THREATS.TOES, THREATS.HOLE/*, THREATS.KITSUNIPS*/]
 # threats that don't scale in more maugas. ie threats that cannot share global variables, affect mobs only or won't scale in fun ways
 # globalvar moreBlacklist = [THREATS.BOOST, THREATS.DD, THREATS.CAGE, THREATS.GRAB, THREATS.GRAV, THREATS.WALL, THREATS.TWISTER, THREATS.RAIN, THREATS.NUKE]
 

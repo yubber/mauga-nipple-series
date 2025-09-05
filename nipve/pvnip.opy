@@ -32,7 +32,7 @@ settings {
             "heroLimit": "off",
             "needsImbalancedTeamScoreToWin": true,
             "enableKillCam": false,
-            "respawnTime%": 40,
+            "respawnTime%": 35,
             "enableSelfInitiatedRespawn": false,
             "tankPassiveHealthBonus": "alwaysEnabled",
             "team1ScoreToWin": 100,
@@ -344,9 +344,15 @@ rule "loop":
 		pass
 		# threatList.append(THREATS.HOLE)
 
+	## insert objective threats
+	if objGoal == OBJ.PAGES:
+		threatList.append(THREATS.SLENDY)
+	elif objGoal == OBJ.MORE:
+		threatList.append(THREATS.MORE)
+
 	## add threats until 2 non-obj ones are reached
 	# lastObj is used as temp storage for the candidate threat
-	while len(threatList) < 2:
+	while len(threatList) < (3 if obj == OBJ.PAGES or obj == OBJ.MORE else 2):
 		wait()
 		lastObj = random.randint(THREATS.ICE, THREATS.LASER)
 
@@ -356,18 +362,13 @@ rule "loop":
 
 		# prevent dupes
 		if (not lastObj in threatList)\
-			and ((not lastObj in dummyThreats) or len([x for x in threatList if x in dummyThreats]) == 0): # stay under dummy limit, to prevent conflicts on botA and botB vars or exceeding skin limit.
+			and ((not lastObj in dummyThreats) or len([x for x in threatList if x in dummyThreats]) == 0):
+			# stay under dummy limit (1 dummy threat), to prevent conflicts on botA and botB vars or exceeding skin limit.
 			threatList.append(lastObj)
 
 		# forbidden combinations
 		if THREATS.HOLE in threatList and THREATS.CAGE in threatList:
 			del threatList[len(threatList)-1]
-
-	## insert objective threats
-	if objGoal == OBJ.PAGES:
-		threatList.append(THREATS.SLENDY)
-	elif objGoal == OBJ.MORE:
-		threatList.append(THREATS.MORE)
 
 	wait()
 
@@ -1541,10 +1542,10 @@ rule "dupe + normal sniper":
 	threatFx.append(getLastCreatedEntity())
 
 	threatSnipers.startForcingButton(Button.SECONDARY_FIRE)
-	threatSnipers.disableNameplatesFor(getAllPlayers())
 	threatSnipers.startForcingName(BOTNAME.SNIPERS)
 	threatSnipers.setStatusEffect(null, Status.PHASED_OUT, 9999)
 	threatSnipers.startScalingSize(0.1, false)
+	threatSnipers.disableNameplatesFor(getAllPlayers())
 
 	wait(0.48)
 	eventPlayer.botB.startForcingPosition(eventPlayer.smallRNip, false)
@@ -1574,6 +1575,7 @@ rule "sniper fire":
 	wait(1.504)
 	threatSnipers.setDamageDealt(180 / getNumberOfHeroes(Hero.WIDOWMAKER, Team.2))
 	threatSnipers.forceButtonPress(Button.PRIMARY_FIRE)
+	threatSnipers.disableNameplatesFor(getAllPlayers())
 	if ruleCondition:
 		loop()
 
@@ -1877,7 +1879,7 @@ rule "player count balancing, freeze & nip pos check":
 		wait(1)
 		if createWorkshopSettingBool(SETTING_GAMEPLAY, SETTING_PLAYERSCALE,true,0):
 			# getPlayers(Team.1).setDamageDealt(100 + (20 * (9 - getNumberOfPlayers(Team.1))))
-			getPlayers(Team.1).setDamageDealt(min(400,900 / len([x for x in getPlayers(Team.1) if x.hasSpawned()])))
+			getPlayers(Team.1).setDamageDealt(min(350,100 * PlayerSlots / len([x for x in getPlayers(Team.1) if x.hasSpawned()])))
 		if (obj != OBJ.INTERMISSION):
 			nipman.setStatusEffect(null, Status.FROZEN, 99999)
 			nipman.setDamageReceived(0.001)
