@@ -283,8 +283,8 @@ rule "loop":
 	# intermission
 	destroyEffect(threatFx)
 	destroyEffect(moreFx)
-	destroyProgressBarInWorldText(threatFx)
-	# destroyEffect(nipman.threatDecor)
+	for i in range(len(threatFx)):
+		destroyInWorldText(threatFx[i])
 	threatFx = []
 	threatLactaters = []
 	threatSuns = []
@@ -925,9 +925,9 @@ rule "more maugas charge attack":
 		for iMores in range(15, -17, -5):
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(10,0,iMores), 10)
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(-10,0,iMores), 10)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 1, 10, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
-			wait(0.016*21)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			wait(0.016*21)20
 			if obj == OBJ.INTERMISSION:
 				break
 
@@ -975,7 +975,6 @@ rule "niplets + dupe":
 	createEffect(getAllPlayers(), Effect.LUCIO_SOUND_BARRIER_PROTECTED, Color.TEAM_2, eventPlayer.botB, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	threatFx.append(getLastCreatedEntity())
 	threatNiplets.startForcingName(BOTNAME.NIPLETS)
-	threatNiplets.disableNameplatesFor(getAllPlayers())
 
 	# eventPlayer.iniplets = 0
 	while obj != OBJ.INTERMISSION:
@@ -985,6 +984,7 @@ rule "niplets + dupe":
 		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botA, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.1, 24, 6, 0, 15, 110)
 		wait(0.24)
 		createProjectile(Projectile.BASTION_TACTICAL_GRENADE, eventPlayer.botB, Vector.UP, vect(random.uniform(-0.9,0.9),random.uniform(1,2),1), Relativity.TO_PLAYER, ModifyHealth.DAMAGE, Team.1, 80, 1, 1, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.1, 24, 6, 0, 15, 110)
+		threatNiplets.disableNameplatesFor(getAllPlayers())
 
 rule "grab":
 	@Condition obj != OBJ.INTERMISSION
@@ -1604,34 +1604,7 @@ rule "init suns":
 	threatFx.append(getLastCreatedEntity())
 
 # objective setup
-rule "missing maugas":
-	@Condition obj == OBJ.MORE
-	@Condition all([not entityExists(x) for x in objPos])
-	wait(2, Wait.ABORT_WHEN_FALSE)
-	smallMessage(getAllPlayers(), STRINGS.MAUGAS_GONE)
-	objProg = objGoal
-	wait(2, Wait.ABORT_WHEN_FALSE)
-	if ruleCondition:
-		loop()
-rule "NO BOTS?":
-	@Condition obj == OBJ.KILL or obj == OBJ.CAPTURE or obj == OBJ.BOSS # slendy is also a mob so don't check for empty arr
-	@Condition getNumberOfPlayers(Team.2) < 7
-	wait(4, Wait.ABORT_WHEN_FALSE)
-	for i in range(getNumberOfPlayers(Team.2)):
-		if getPlayers(Team.2)[i] != nipman:
-			destroyDummy(Team.2, getPlayers(Team.2)[i].getSlot())
-
-	mobs = []
-
-	mobsInit()
-
-	wait(1, Wait.ABORT_WHEN_FALSE)
-	if ruleCondition:
-		goto RULE_START
-
-rule "more maugas":
-	@Condition obj == OBJ.MORE
-	wait(0.016 * THREATS.MORE)
+def moreMaugasSetup():
 	objPos = []
 	createDummy(Hero.MAUGA, Team.2, -1, Vector.UP * nipman.getMaxHealth(), Vector.LEFT) # need to keep them far away or the fingers block the weak spots
 	objPos.append(getLastCreatedEntity())
@@ -1666,6 +1639,38 @@ rule "more maugas":
 	wait(0.8)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 	heal(objPos, null, 99999)
+
+rule "missing maugas":
+	@Condition obj == OBJ.MORE
+	@Condition all([not entityExists(x) for x in objPos])
+	wait(2, Wait.ABORT_WHEN_FALSE)
+	moreMaugasSetup()
+	wait(2, Wait.ABORT_WHEN_FALSE)
+	smallMessage(getAllPlayers(), STRINGS.MAUGAS_GONE)
+	objProg = objGoal
+	wait(2, Wait.ABORT_WHEN_FALSE)
+	if ruleCondition:
+		loop()
+rule "NO BOTS?":
+	@Condition obj == OBJ.KILL or obj == OBJ.CAPTURE or obj == OBJ.BOSS # slendy is also a mob so don't check for empty arr
+	@Condition getNumberOfPlayers(Team.2) < 7
+	wait(4, Wait.ABORT_WHEN_FALSE)
+	for i in range(getNumberOfPlayers(Team.2)):
+		if getPlayers(Team.2)[i] != nipman:
+			destroyDummy(Team.2, getPlayers(Team.2)[i].getSlot())
+
+	mobs = []
+
+	mobsInit()
+
+	wait(1, Wait.ABORT_WHEN_FALSE)
+	if ruleCondition:
+		goto RULE_START
+
+rule "more maugas":
+	@Condition obj == OBJ.MORE
+	wait(0.016 * THREATS.MORE)
+	moreMaugasSetup()
 
 rule "miniboss":
 	@Condition obj == OBJ.BOSS

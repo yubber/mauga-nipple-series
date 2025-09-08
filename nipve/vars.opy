@@ -43,7 +43,7 @@ macro NipmanRightConst = vect(-7.19, 10.8-2.8, 30.27)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objWeights = [0.08, 0.12, 0.3, 0.3, 0.20]
+globalvar objWeights = [0.06, 0.12, 0.3, 0.3, 0.22] # pages, more, kill, boss, capture
 globalvar lastObj
 
 globalvar objProg
