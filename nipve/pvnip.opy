@@ -65,7 +65,7 @@ settings {
 			"zarya": {
 				# "ability1Cooldown%": 45,
 				# "ability2Cooldown%": 45,
-                "ultGen%": 25
+                # "ultGen%": 50
             },
 			"cassidy":{
 				"damageDealt%": 85,
@@ -192,6 +192,12 @@ rule "init":
     destroyAllDummies()
 
 	wait()
+	### PROMO
+	createInWorldText(getAllPlayers() if nipman.isDead() else null, STRINGS.PROMO, NipmanForcePosConst + Vector.UP * 30, 4, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Rainbow, SpecVisibility.ALWAYS)
+	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(0,10,-200), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
+	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(200,10,0), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
+	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(-200,10,0), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
+
 	# print(len(getPlayers(Team.2)))
 	# hudText(hostPlayer, iconString(Icon.EYE), "eye position", localPlayer.getEyePosition(), HudPosition.ACTUALLY_LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
     hudText(getAllPlayers(), null,  "peak: {} | average: {}".format(getPeakServerLoad(), getAverageServerLoad()), STRINGS.LOAD_2.format(getServerLoad()), HudPosition.RIGHT, -2, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
@@ -631,6 +637,12 @@ rule "drills setup and act":
 	# place hole
 	holePos = Vector.FORWARD * random.uniform(-18 + holeRadius, 18 - holeRadius) + Vector.RIGHT * random.uniform(-18 + holeRadius, 18 - holeRadius)
 
+	if THREATS.GRAV in threatList:
+		getRealPlayersInRadius(holePos, holeRadius + 2, Team.1, LosCheck.OFF).teleport(vect(
+			getSign(holePos.x) * -15,
+			1,
+			getSign(holePos.z) * -15
+		))
 	getRealPlayersInRadius(holePos, holeRadius + 5, Team.1, LosCheck.OFF).applyImpulse(Vector.UP, 20, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
 	wait()
 	playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, holePos, 1)
@@ -925,9 +937,9 @@ rule "more maugas charge attack":
 		for iMores in range(15, -17, -5):
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(10,0,iMores), 10)
 			playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, Color.ORANGE, vect(-10,0,iMores), 10)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
-			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 280, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
-			wait(0.016*21)20
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(-10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 360, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			createProjectile(Projectile.MERCY_CADUCEUS_BLASTER, attackingClone, vect(10,1,iMores), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 360, 0.1, 12, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 99, 1, 20, 0,0)
+			wait(0.016*21)
 			if obj == OBJ.INTERMISSION:
 				break
 
@@ -2107,15 +2119,44 @@ rule "win":
 	wait(3)
 	restartMatch()
 
+rule "zarya aint slick":
+	@Disabled
+	@Event eachPlayer
+	@Hero zarya
+	@Team 1
+	@Condition eventPlayer.isUsingUltimate() or (eventPlayer.isHoldingButton(Button.ULTIMATE) and eventPlayer.getUltCharge() == 100)
+	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
+	eventPlayer.mobTarget = getLastDamageModification()
+	waitUntil(eventPlayer.getUltCharge() < 100, 2)
+	wait(0.48)
+	waitUntil(eventPlayer.getUltCharge() > 0, 6)
+	stopDamageModification(eventPlayer.mobTarget)
+
+rule "echo zarya aint slick":
+	@Disabled
+	@Event eachPlayer
+	@Hero echo
+	@Team 1
+	@Condition eventPlayer.getHeroOfDuplication() == Hero.ZARYA
+	@Condition eventPlayer.isUsingUltimate() or (eventPlayer.isHoldingButton(Button.ULTIMATE) and eventPlayer.getUltCharge() == 100)
+	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
+	eventPlayer.mobTarget = getLastDamageModification()
+	waitUntil(eventPlayer.getUltCharge() < 100, 2)
+	wait(0.48)
+	waitUntil(eventPlayer.getUltCharge() > 0, 6)
+	stopDamageModification(eventPlayer.mobTarget)
+
 rule "sombra aint slick":
 	@Event eachPlayer
 	@Hero sombra
+	@Team 1
 	@Condition eventPlayer.isUsingUltimate() or (eventPlayer.isHoldingButton(Button.ULTIMATE) and eventPlayer.getUltCharge() == 100)
 	startDamageModification(getPlayersOnHero(Hero.MAUGA, Team.2), eventPlayer, 2, DamageReeval.NONE)
 	eventPlayer.mobTarget = getLastDamageModification()
 	waitUntil(eventPlayer.getUltCharge() < 100, 2)
 	wait(0.48)
 	stopDamageModification(eventPlayer.mobTarget)
+
 rule "echo sombra aint slick":
 	# bug found by https://www.youtube.com/watch?v=gOU0awrvWxQ
 	@Event eachPlayer
@@ -2177,7 +2218,11 @@ rule "you are dead, not big surprise + chungus explode":
 
 	waitUntil(eventPlayer.isAlive(), 99999)
 	if THREATS.HOLE in threatList and distance(eventPlayer, holePos) < holeRadius:
-		eventPlayer.teleport(eventPlayer.getPosition() + 18 * Vector.UP)
+		eventPlayer.teleport(vect(
+			getSign(holePos.x) * -15,
+			1,
+			getSign(holePos.z) * -15
+		))
 		eventPlayer.enableEnvironmentCollision()
 	# if THREATS.CAGE in threatList and eventPlayer.getPosition().z < CageMinZ:
 	eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 2)

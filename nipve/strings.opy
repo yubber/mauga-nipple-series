@@ -65,6 +65,7 @@ globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips
 # these are references to strings in other parts of the program. i've moved them here for your convenience.
 # if you would like context for where these strings are used, you can CTRL+F the enum key in pvnip.opy.
 enum STRINGS:
+	PROMO = t"MAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/mauganip"
 	OBJCOUNTDOWN = t"next objective in 3 seconds!"
 	ROUNDSTART = t"round start!"
 	MAUGAVULNERABLE = t"objective complete! mauga is vulnerable!"

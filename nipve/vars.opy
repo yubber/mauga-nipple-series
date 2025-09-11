@@ -67,7 +67,7 @@ globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Bu
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 
 globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
-globalvar mobDmg = [90, 130, 75, 80]
+globalvar mobDmg = [75, 130, 75, 80]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -134,6 +134,12 @@ playervar cacheB
 playervar cacheC
 playervar botA
 playervar botB
+
+macro Rainbow = rgb(
+	110 + 90 * cosDeg(getTotalTimeElapsed() * 150),
+	110 + 90 * cosDeg((getTotalTimeElapsed() * 150) + 120),
+	110 + 90 * cosDeg((getTotalTimeElapsed() * 150) + 240)
+)
 
 ### HUMAN PLAYERS
 # player shoots wrong mauga
