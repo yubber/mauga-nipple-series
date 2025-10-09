@@ -15,6 +15,8 @@ feel free to share it under a new code until i'm unbanned. when the time comes, 
 
 if you're interested in any of my other modes you can just compile the overpy (on my github/workshop.codes) and paste in the resulting code, or contact me on discord.
 
+*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*
+
 # contributing
 
 ## translations
