@@ -82,11 +82,11 @@ msgstr "乳 死"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "milk wall"
-msgstr "乳汁 ウォール"
+msgstr "乳 汁 ウォール"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "scalding discharge"
-msgstr "熱々乳汁放出"
+msgstr "熱々乳 汁放出"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "s-nip-ers"
@@ -110,7 +110,7 @@ msgstr "日光暴露"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "lazer"
-msgstr "乳首ビーム"
+msgstr "乳 首ビーム"
 
 #. file strings.opy, line 62, rule "strings"
 msgid "lactic hail"
