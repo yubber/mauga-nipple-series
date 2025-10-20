@@ -19,8 +19,8 @@ rule "strings":
 # - to avoid censors, you can use zero-width spaces "​". cyrillic characters also work for the latin script, but they will cause the font to change.
 
 # ! add language code here, and the translation workshop uses for white. maintain the same order!
-#!translations en ko zh_CN
-#!define LANG_LIST ["White", "흰색", "白色"]
+#!translations en ko zh_CN ja
+#!define LANG_LIST ["White", "흰색", "白色", "白色"]
 
 # the mode name and description are in settings -> main, at the very top of pvnip.opy.
 # since the code is shared across all languages, just add a credit to yourself for translating at the bottom.
@@ -29,17 +29,17 @@ rule "strings":
 # since they're in bot names i can't use the translation features
 # ! add translated names here, in the same format and following the order of the language codes
 enum BOTNAME:
-	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影"])
-	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火"])
-	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手"])
-	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔"])
-	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主"])
-	TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾"])
-	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙"])
-	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位"])
-	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加"])
-	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物"]),
-	DRILLS = serverSideTranslate(["double drills", "찌찌드릴", "双钻头"])
+	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影","スレンダーマン"])
+	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火","熱々突起物"])
+	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手","乳 首狙撃手"])
+	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔","ニップレット"])
+	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主","日焼け乳 首"])
+	TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾","足乳"])
+	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙","ドラゴンニップル"])
+	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位","敏感部位"])
+	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加","マウガ Jr."])
+	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物","ミニボス"]),
+	DRILLS = serverSideTranslate(["double drills", "찌찌드릴", "双钻头","ダブルドリル"])
 
 # these are descriptions for custom settings.
 # gameplay category of settings
@@ -48,10 +48,10 @@ enum BOTNAME:
 #!define SETTING_DIFFICULTY "difficulty | 난이도"
 #!define SETTING_HARDCORE "respawn players only when round ends | 라운드가 끝난 이후에만 리스폰"
 enum SETTING_RESPAWN:
-	NAME = "player respawning | 플레이어 리스폰 | 玩家重生",
-	ALWAYS = "always | 항상 | 正常",
-	ROUND_END = "only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后",
-	NEVER = "never!!! | 리스폰 불가 | 不重生"
+	NAME = "player respawning | 플레이어 리스폰 | 玩家重生 | プレイヤーリスポーン",
+	ALWAYS = "always | 항상 | 正常 | 常に",
+	ROUND_END = "only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后 | ラウンドが終わったら",
+	NEVER = "never!!! | 리스폰 불가 | 不重生 | 不可能"
 
 ###
 ### !!! END. the following strings are already translated in the .po file.
