@@ -19,15 +19,15 @@ if you're interested in any of my other modes you can just compile the overpy (o
 
 ## translations
 
-**mauga nipple pve**: please edit [pvnip.opy](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/pvnip.opy) and create a `.po` file.
+**mauga nipple pve**: please edit [strings.opy](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/strings.opy) and create a `.po` file.
 
 there are 2 files to create translations for.
 
-- `pvnip.opy`
+- `strings.opy`
 
 - create a `.po` file
 
-### pvnip.opy
+### strings.opy
 
 all text that needs translation is near the top. no need to go digging around for strings.
 
@@ -35,7 +35,7 @@ you will need to link the .po file if you want to compile the code yourself. or 
 
 to do this, add a [language code](https://github.com/Zezombye/overpy#translations) to the line `#!translations en ko`
 
-there are some strings that must be translated in `pvnip.opy` itself. i've marked them at the top.
+there are some strings that must be translated in `strings.opy` itself. i've marked them at the top.
 
 ### .po file
 
