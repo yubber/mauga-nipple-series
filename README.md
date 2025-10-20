@@ -9,11 +9,17 @@ https://workshop.codes/u/_yubz
 
 # notice on takedown
 
-my account has been temp banned for naughty custom content. in the meantime, you can copy the contents of [export.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export.txt) to paste it into your lobby as a workshop script.
+my account has been temp banned for naughty custom content. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
 
-feel free to share it under a new code until i'm unbanned. when the time comes, please endorse me (`OMGIDIED`) if you ever see me in a match, so i can get the mode up and running again <3
+you can still play: copy the contents of [export.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export.txt) to paste it into your lobby as a workshop script.
+
+feel free to share it under a new code, but note that *the person who reshared the code has also been hit with a 1 month ban.*
+
+when i get unbanned, please endorse me (`OMGIDIED`) if you ever see me in a match, so i can get the mode up and running again <3
 
 if you're interested in any of my other modes you can just compile the overpy (on my github/workshop.codes) and paste in the resulting code, or contact me on discord.
+
+*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*
 
 # contributing
 

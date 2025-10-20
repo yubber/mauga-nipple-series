@@ -1,0 +1,262 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ja\n"
+"X-Generator: OverPy\n"
+
+#. file pvnip.opy, line 260, rule "init"
+msgid "objective"
+msgstr "目標"
+
+#. file pvnip.opy, line 261, rule "init"
+msgid "threats"
+msgstr "警告"
+
+#. file pvnip.opy, line 2184, rule "you are dead, not big surprise + chungus explode"
+msgid "mega milk explode!"
+msgstr "巨大化ミルク爆発！"
+
+#. file strings.opy, line 61, rule "strings"
+msgid "collect pages"
+msgstr "乳 首を集めろ"
+
+#. file strings.opy, line 61, rule "strings"
+msgid "defeat the mini maugas"
+msgstr "ミニマウガを倒せ"
+
+#. file strings.opy, line 61, rule "strings"
+msgid "slay enemies"
+msgstr "敵を倒せ"
+
+#. file strings.opy, line 61, rule "strings"
+msgid "slay the miniboss"
+msgstr "ミニボスを倒せ"
+
+#. file strings.opy, line 61, rule "strings"
+msgid "capture the point"
+msgstr "エリアを占拠せよ"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "slenderman"
+msgstr "スレンダーマン"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "more maugas"
+msgstr "集団マウガ"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "frosty nips"
+msgstr "冷凍乳 首"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "dragon stimulation"
+msgstr "ドラゴンの刺激"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "toepples"
+msgstr "つま先乳 首"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "grabbyteats"
+msgstr "つかみ乳 首"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "niplets"
+msgstr "弾性乳 首"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "cup fight"
+msgstr "カップファイト"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "tiddy twister"
+msgstr "乳 首台風"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "n!pple nuke"
+msgstr "乳 首 nuke"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "dairy deaths"
+msgstr "乳 死"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "milk wall"
+msgstr "乳 汁 ウォール"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "scalding discharge"
+msgstr "熱々乳 汁放出"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "s-nip-ers"
+msgstr "乳 首狙撃手"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "boobsted mobs"
+msgstr "つよモブ"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "booblet hell"
+msgstr "乳 首地獄"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "gravitatas"
+msgstr "重乳力"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "sun exposure"
+msgstr "日光暴露"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "lazer"
+msgstr "乳 首ビーム"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "lactic hail"
+msgstr "乳酸のあられ"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "mega milk"
+msgstr "巨大化ミルク"
+
+#. file strings.opy, line 62, rule "strings"
+msgid "lactation excavation"
+msgstr "乳 首ドリル"
+
+#. file strings.opy, line 68, rule "strings"
+msgid ""
+"MAUGA N!PPLE PVE: THE DOCVMENTARY\n"
+"out 14 sep\n"
+"details: https://tinyurl.com/mauganip"
+msgstr ""
+
+#. file strings.opy, line 69, rule "strings"
+msgid "next objective in 3 seconds!"
+msgstr "あと3秒で次の目標が始まります！"
+
+#. file strings.opy, line 70, rule "strings"
+msgid "round start!"
+msgstr "ラウンド開始！"
+
+#. file strings.opy, line 71, rule "strings"
+msgid "objective complete! mauga is vulnerable!"
+msgstr "目標達成！マウガを攻撃してください！"
+
+#. file strings.opy, line 73, rule "strings"
+msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
+msgstr "{0} 超危険な攻撃が来ます！弱点を攻撃してください！ {0}"
+
+#. file strings.opy, line 74, rule "strings"
+msgid "{0} failed to stop the attack. brace for impact!"
+msgstr "{0} 攻撃を止められませんでした 衝撃に備えてください！"
+
+#. file strings.opy, line 76, rule "strings"
+msgid "{0} found a page!"
+msgstr " {0}がページを見つけました！"
+
+#. file strings.opy, line 77, rule "strings"
+msgid "game over. all players died."
+msgstr "ゲームオーバー すべてのプレイヤーが死亡しました"
+
+# TODO: check if all occurrences have the same translation
+#. file strings.opy, line 79, rule "strings"
+#, hasMultipleOccurrencesNotification
+msgid "do not the mauga"
+msgstr "マウガをしないでください"
+
+#. file strings.opy, line 81, rule "strings"
+msgid "{0} petrified! {1} {2} {3}"
+msgstr "{0} 石化！{1} {2} {3}"
+
+#. file strings.opy, line 84, rule "strings"
+msgid "{0} heehee, stop tickling me! dragon lactation initation!"
+msgstr "{0} へへへ、くすぐるのはやめてください！ドラゴン乳分泌開始！"
+
+#. file strings.opy, line 85, rule "strings"
+msgid "remember to check inside mauga's guns for the pages."
+msgstr "マウガの銃の中を確認してみましょう"
+
+# TODO: check if all occurrences have the same translation
+#. file strings.opy, line 86, rule "strings"
+#, hasMultipleOccurrencesNotification
+msgid "{0} you were grabbed!"
+msgstr "{0} つかまれました！"
+
+#. file strings.opy, line 87, rule "strings"
+msgid "something went wrong. skipping phase..."
+msgstr "何か問題が発生しました フェーズをスキップしています..."
+
+#. file strings.opy, line 88, rule "strings"
+msgid "timeout exceeded, skipping phase in case of softlock."
+msgstr "タイムアウト超過 ソフトロック対策としてフェーズをスキップします"
+
+#. file strings.opy, line 89, rule "strings"
+msgid "hardcore mode is on"
+msgstr "ハードコアモード有効"
+
+#. file strings.opy, line 90, rule "strings"
+msgid "ultra hardcore mode is on"
+msgstr "ウルトラハードコアモード有効"
+
+#. file strings.opy, line 91, rule "strings"
+msgid "no respawning until round ends"
+msgstr "ラウンド終了まで復活しません"
+
+#. file strings.opy, line 92, rule "strings"
+msgid "no respawning ever!"
+msgstr "復活できません！"
+
+#. file strings.opy, line 94, rule "strings"
+msgid "team deaths"
+msgstr "チーム死亡数"
+
+#. file strings.opy, line 95, rule "strings"
+msgid "rounds elapsed"
+msgstr "ラウンド経過数"
+
+#. file strings.opy, line 96, rule "strings"
+msgid "time elapsed"
+msgstr "経過時間"
+
+#. file strings.opy, line 98, rule "strings"
+msgid ""
+"spectators, please turn off team 1 & 2 heroes\n"
+"and game mode hud in spectator options\n"
+"(press b)"
+msgstr ""
+"観戦者は観戦オプションで\n"
+"チーム1＆2のヒーローとゲームモードHUDをオフにしてください\n"
+"（Bキーを押す）"
+
+#. file strings.opy, line 101, rule "strings"
+msgid "use code DS2MD for the latest version"
+msgstr "最新版のコードはDS2MD"
+
+#. file strings.opy, line 102, rule "strings"
+msgid "peak: {0} | average: {1}"
+msgstr "ピーク: {0} | 平均: {1}"
+
+#. file strings.opy, line 103, rule "strings"
+msgid "server load: {0}"
+msgstr "サーバー負荷: {0}"
+
+#. file strings.opy, line 104, rule "strings"
+msgid "debug version"
+msgstr "デバッグ版"
+
+#. file strings.opy, line 105, rule "strings"
+msgid "host may be afk. please report bugs in match chat"
+msgstr "ホストがAFKの可能性があります マッチチャットでバグを報告してください"
+
+#. file strings.opy, line 106, rule "strings"
+msgid "high server load detected"
+msgstr "高いサーバー負荷を検出"
+
+#. file strings.opy, line 107, rule "strings"
+msgid "slowing game speed to prevent crashing"
+msgstr "クラッシュ防止のためゲーム速度を低下"
+
+#. file strings.opy, line 108, rule "strings"
+msgid "if you need to change heroes, hold crouch as you die."
+msgstr "ヒーローを変更する必要がある場合は 死ぬときにしゃがみを保持してください"
