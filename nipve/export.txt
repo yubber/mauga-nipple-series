@@ -2,7 +2,7 @@ settings
 {
 	main
 	{
-		Description: "it's like rein invasion but with mauga's milkers\nDS2MD\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역"
+		Description: "it's like rein invasion but with mauga's milkers\n1984 b­lizzard\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역\nグルメスパイザー\nでお願いします"
 		Mode Name: "mauga n!pple pve"
 	}
 	lobby
@@ -228,9 +228,9 @@ rule ("Initialize global variables") {
         Ongoing - Global;
     }
     actions {
-        Set Global Variable(__overpyTranslationHelper__, String Split(Custom String("0White0흰색0白色"), First Of(Null)));
-        Set Global Variable(objDescs, Array(String Split(Custom String("ＴＬＥｒｒcollect pages페이지를 모아라收集八页纸"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdefeat the mini maugas스몰우가들을 처치해라消灭小毛加"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay enemies적들을 처치해라消除怪物"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay the miniboss미니보스를 처치해라消灭小头目"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcapture the point거점을 점령해라控制点"), Global.__overpyTranslationHelper__)));
-        Set Global Variable(threatNames, Array(String Split(Custom String("ＴＬＥｒｒslenderman슬렌더맨瘦长鬼影"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmore maugas마우(추)가毛+++"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒfrosty nips냉동찌찌冰冻馒头"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactation excavation찌찌드릴lactation excavation"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdragon stimulation용의 일겨헉♥奶龙"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtoepples발꼭지奶趾"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgrabbyteats하우두유두?grabbyteats"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒniplets바운스 모핑贝乳塔"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcup fight케이찌찌 혈투罩杯中斗"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtiddy twister공포의 트위스트乳卷风"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactic hail유당지옥奶雹"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒn!pple nuke툭튀미사일核馒头"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdairy deaths우유 알러지dairy deaths"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmilk wall젖벽대전万里奶城"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmega milk성장촉진 우유mega milk"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒscalding discharge화끈한 분비물阳盛则热"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒs-nip-ers젖-격수狙挤手"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒboobsted mobs버젖커 몹들小康怪物"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒbooblet hell찌찌피하기弹波波"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgravitatas젖력... 아니 중력gravitatas"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒsun exposure노출 (햇빛에)阳光明咪"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlazer레이젖咪光束"), Global.__overpyTranslationHelper__)));
+        Set Global Variable(__overpyTranslationHelper__, String Split(Custom String("0White0흰색0白色0白"), First Of(Null)));
+        Set Global Variable(objDescs, Array(String Split(Custom String("ＴＬＥｒｒcollect pages페이지를 모아라收集八页纸乳 首を集めろ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdefeat the mini maugas스몰우가들을 처치해라消灭小毛加ミニマウガを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay enemies적들을 처치해라消除怪物敵を倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay the miniboss미니보스를 처치해라消灭小头目ミニボスを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcapture the point거점을 점령해라控制点エリアを占拠せよ"), Global.__overpyTranslationHelper__)));
+        Set Global Variable(threatNames, Array(String Split(Custom String("ＴＬＥｒｒslenderman슬렌더맨瘦长鬼影スレンダーマン"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmore maugas마우(추)가毛+++集団マウガ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒfrosty nips냉동찌찌冰冻馒头冷凍乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactation excavation찌찌드릴lactation excavation乳 首ドリル"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdragon stimulation용의 일겨헉♥奶龙ドラゴンの刺激"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtoepples발꼭지奶趾つま先乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgrabbyteats하우두유두?grabbyteatsつかみ乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒniplets바운스 모핑贝乳塔弾性乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcup fight케이찌찌 혈투罩杯中斗カップファイト"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtiddy twister공포의 트위스트乳卷风乳 首台風"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactic hail유당지옥奶雹乳酸のあられ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒn!pple nuke툭튀미사일核馒头乳 首 nuke"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdairy deaths우유 알러지dairy deaths乳 死"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmilk wall젖벽대전万里奶城乳 汁 ウォール"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmega milk성장촉진 우유mega milk巨大化ミルク"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒscalding discharge화끈한 분비물阳盛则热熱々乳 汁放出"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒs-nip-ers젖-격수狙挤手乳 首狙撃手"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒboobsted mobs버젖커 몹들小康怪物つよモブ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒbooblet hell찌찌피하기弹波波乳 首地獄"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgravitatas젖력... 아니 중력gravitatas重乳力"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒsun exposure노출 (햇빛에)阳光明咪日光暴露"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlazer레이젖咪光束乳 首ビーム"), Global.__overpyTranslationHelper__)));
         Set Global Variable(objWeights, Array(0.06, 0.12, 0.3, 0.3, 0.22));
         Set Global Variable(threatList, Empty Array);
         Set Global Variable(dummyThreats, Array(0, 15, 16, 20, 7, 4, 5, 3));
@@ -239,7 +239,7 @@ rule ("Initialize global variables") {
         Set Global Variable(mobDmg, Array(75, 130, 75, 80));
         Set Global Variable(weakSpots, Empty Array);
         Set Global Variable(mobs, Empty Array);
-        Set Global Variable(hardcoreLevel, Workshop Setting Combo(Custom String("difficulty | 난이도"), Custom String("player respawning 󠁼 플레이어 리스폰 󠁼 玩家重生"), 0, Array(Custom String("always | 항상 | 正常"), Custom String("only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后"), Custom String("never!!! | 리스폰 불가 | 不重生")), 0));
+        Set Global Variable(hardcoreLevel, Workshop Setting Combo(Custom String("difficulty | 난이도"), Custom String("player respawning 󠁼 플레이어 리스폰 󠁼 玩家重生 󠁼 プレイヤーリスポーン"), 0, Array(Custom String("always | 항상 | 正常 | 常に"), Custom String("only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后 | ラウンドが終わったら"), Custom String("never!!! | 리스폰 불가 | 不重生 | 不可能")), 0));
     }
 }
 
@@ -293,14 +293,13 @@ rule ("init") {
         Destroy All Dummy Bots;
         Wait(0.016, Ignore Condition);
         "## PROMO"
-        Create In-World Text(If-Then-Else(Is Dead(Global.nipman), All Players(All Teams), Null), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nou{0}", Custom String("t 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/maug{0}", Custom String("anip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10.2, 35), 4, Clip Against Surfaces, Visible To Position String and Color, Custom Color(Add(110, Multiply(90, Cosine From Degrees(Multiply(Total Time Elapsed, 150)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 120)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 240)))), 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nou{0}", Custom String("t 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/maug{0}", Custom String("anip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10, -200), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nou{0}", Custom String("t 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/maug{0}", Custom String("anip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nou{0}", Custom String("t 14 sep\ndetails: https://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout 14 sep\ndetails: https://tinyurl.com/maug{0}", Custom String("anip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(-200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(If-Then-Else(Is Dead(Global.nipman), All Players(All Teams), Null), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10.2, 35), 4, Clip Against Surfaces, Visible To Position String and Color, Custom Color(Add(110, Multiply(90, Cosine From Degrees(Multiply(Total Time Elapsed, 150)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 120)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 240)))), 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10, -200), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(-200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
         "print(len(getPlayers(Team.2)))\nhudText(hostPlayer, iconString(Icon.EYE), \"eye position\", localPlayer.getEyePosition(), HudPosition.ACTUALLY_LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)"
-        Create HUD Text(All Players(All Teams), Null, Custom String("peak: {0} | average: {1}", Server Load Peak, Server Load Average), Value In Array(String Split(Custom String("ＴＬＥｒｒserver load: {0}\n서버 로드: {0}\n服务器压力：{0}\n", Server Load), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Right, -2, Color(Orange), Color(Gray), Color(Gray), Visible To and String, Visible Always);
-        Create HUD Text(All Players(All Teams), Null, Null, Value In Array(String Split(Custom String("ＴＬＥｒｒuse code DS2MD for the latest version워크샵 코드: DS2MD가 항상 최신 버전입니다用DS2MD代码导入最新的版本"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Right, -1, Null, Null, Color(White), Visible To and String, Default Visibility);
-        "if DEBUG == false:"
+        Create HUD Text(All Players(All Teams), Null, Custom String("peak: {0} | average: {1}", Server Load Peak, Server Load Average), Value In Array(String Split(Custom String("ＴＬＥｒｒserver load: {0}\n서버 로드: {0}\n服务器压力：{0}\nサーバー負荷: {0}\n", Server Load), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Right, -2, Color(Orange), Color(Gray), Color(Gray), Visible To and String, Visible Always);
+        "hudSubtext(getAllPlayers(), STRINGS.IMPORT_CODE, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)\nif DEBUG == false:"
         Disable Inspector Recording;
         Set Global Variable(obj, -1);
         Create Dummy Bot(Hero(Mauga), Team 2, -1, Up, Backward);
@@ -329,14 +328,14 @@ rule ("init") {
         Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
         Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
         "score huds"
-        Create HUD Text(All Players(All Teams), Ability Icon String(Hero(Lúcio), Button(Ability 2)), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒtime elapsed지난 시간游戏时间"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Custom String("{0}:{1}", Round To Integer(Divide(Total Time Elapsed, 60), Down), Modulo(Total Time Elapsed, 60)), Left, 1, Color(Sky Blue), Color(White), Color(White), Visible To and String, Default Visibility);
-        Create HUD Text(All Players(All Teams), Icon String(Skull), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒteam deaths사망 수team deaths"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Team Score(Team 2), Left, 2, Color(Red), Color(White), Color(White), Visible To and String, Default Visibility);
-        Create HUD Text(All Players(All Teams), Icon String(Flag), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒrounds elapsed지난 라운드 수轮数"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Global.roundNo, Left, 2, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
+        Create HUD Text(All Players(All Teams), Ability Icon String(Hero(Lúcio), Button(Ability 2)), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒtime elapsed지난 시간游戏时间経過時間"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Custom String("{0}:{1}", Round To Integer(Divide(Total Time Elapsed, 60), Down), Modulo(Total Time Elapsed, 60)), Left, 1, Color(Sky Blue), Color(White), Color(White), Visible To and String, Default Visibility);
+        Create HUD Text(All Players(All Teams), Icon String(Skull), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒteam deaths사망 수team deathsチーム死亡数"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Team Score(Team 2), Left, 2, Color(Red), Color(White), Color(White), Visible To and String, Default Visibility);
+        Create HUD Text(All Players(All Teams), Icon String(Flag), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒrounds elapsed지난 라운드 수轮数ラウンド経過数"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Global.roundNo, Left, 2, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
         Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Baptiste Immortality Field Protected Effect, Color(Team 2), Global.nipman, 1, Visible To Position and Radius);
         If(False);
         End;
-        Create HUD Text(If-Then-Else(Global.antiCrashOn, All Players(All Teams), Null), Icon String(Sad), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhigh server load detected서버 로드 높음服务器压力高"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒslowing game speed to prevent crashing크래시 방지를 위해 게임 속도가 늦춰집니다游戏速度已放慢，以免游戏崩溃"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 4, Color(Orange), Color(Orange), Color(White), Visible To and String, Default Visibility);
-        Create HUD Text(If-Then-Else(Array Contains(All Players(Team 1), Local Player), Null, All Players(All Teams)), Null, Null, Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒspectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)관전자는 1팀/2팀 영웅들 설정과\n게임 모드{0}", Custom String(" HUD 설정을 꺼 주십시오\n(B 키)spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Left, 9, Null, Null, Color(Gray), Visible To and String, Visible Always);
+        Create HUD Text(If-Then-Else(Global.antiCrashOn, All Players(All Teams), Null), Icon String(Sad), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhigh server load detected서버 로드 높음服务器压力高高いサーバー負荷を検出"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒslowing game speed to prevent crashing크래시 방지를 위해 게임 속도가 늦춰집니다游戏速度已放慢，以免游戏崩溃クラッシュ防止のためゲーム速度を低下"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 4, Color(Orange), Color(Orange), Color(White), Visible To and String, Default Visibility);
+        Create HUD Text(If-Then-Else(Array Contains(All Players(Team 1), Local Player), Null, All Players(All Teams)), Null, Null, Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒspectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)관전자는 1팀/2팀 영웅들 설정과\n게임 모드{0}", Custom String(" HUD 설정을 꺼 주십시오\n(B 키)spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)観戦者は観戦オプ{0}", Custom String("ションで\nチーム1＆2のヒーローとゲームモードHUDをオフにしてください\n（Bキーを押す）"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Left, 9, Null, Null, Color(Gray), Visible To and String, Visible Always);
         "objective effects"
         Create Effect(If-Then-Else(Compare(Global.obj, ==, 0), All Players(All Teams), Empty Array), Bad Aura, Color(Gray), Up, 50, Visible To Position and Radius);
         For Global Variable(i, 0, 6, 1);
@@ -349,16 +348,16 @@ rule ("init") {
         Wait(0.16, Ignore Condition);
         "objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there"
         Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, ==, -1), All Players(All Teams), Empty Array), Divide(Multiply(100, Health(Global.nipman)), 57500), Custom String("{0} {1} / 57500 hp", Hero Icon String(Hero(Mauga)), Round To Integer(Health(Global.nipman), Up)), Top, 1, Color(Team 2), Color(White), Visible To Values and Color, Default Visibility);
-        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("{0}: {1}! {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒobjective목표目标"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Value In Array(Global.objDescs, Global.obj), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("{0} / {1}", Global.objProg, Global.objGoal)), Top, 1, Color(Team 1), Color(White), Visible To Values and Color, Default Visibility);
-        Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　{0}: {1} {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒthreats위험 요인危险"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Global.threatIcons, First Of(Global.threatList)), Custom String("{0}{1}{2}", Value In Array(Value In Array(Global.threatNames, First Of(Global.threatList)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String(", "), Custom String("")), Custom String("{0}{1}{2}", If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 1))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 1)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")), Custom String("{0}{1}{2}　", If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String(", "), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 2))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 2)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")))))), Null, Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
+        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("{0}: {1}! {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒobjective목표目标目標"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Value In Array(Global.objDescs, Global.obj), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("{0} / {1}", Global.objProg, Global.objGoal)), Top, 1, Color(Team 1), Color(White), Visible To Values and Color, Default Visibility);
+        Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　{0}: {1} {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒthreats위험 요인危险警告"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Global.threatIcons, First Of(Global.threatList)), Custom String("{0}{1}{2}", Value In Array(Value In Array(Global.threatNames, First Of(Global.threatList)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String(", "), Custom String("")), Custom String("{0}{1}{2}", If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 1))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 1)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")), Custom String("{0}{1}{2}　", If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String(", "), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 2))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 2)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")))))), Null, Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
         Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
         Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
-        Set Player Variable(Global.nipman, __languageIndex__, Index Of Array Value(Array(Custom String("White"), Custom String("흰색"), Custom String("白色")), Custom String("{0}", Color(White))));
+        Set Player Variable(Global.nipman, __languageIndex__, Index Of Array Value(Array(Custom String("White"), Custom String("흰색"), Custom String("白色"), Custom String("白色")), Custom String("{0}", Color(White))));
         "hardcore huds"
         If(Compare(Global.hardcoreLevel, ==, 1));
-            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhardcore mode is on하드코어 모드 활성화硬核模式"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning until round ends라운드가 끝날 때까지 리스폰 불가玩家仅在回合完成后重生"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
+            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhardcore mode is on하드코어 모드 활성화硬核模式ハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning until round ends라운드가 끝날 때까지 리스폰 불가玩家仅在回合完成后重生ラウンド終了まで復活しません"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
         Else If(Compare(Global.hardcoreLevel, ==, 2));
-            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒultra hardcore mode is on울트라 하드코어 모드 활성화超硬核模式"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning ever!부활할 수 없습니다!玩家重生"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
+            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒultra hardcore mode is on울트라 하드코어 모드 활성화超硬核模式ウルトラハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning ever!부활할 수 없습니다!玩家重生復活できません！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
         End;
         Set Match Time(5);
     }
@@ -409,7 +408,7 @@ rule ("loop") {
         Set Match Time(11);
         Unpause Match Time;
         Wait(8, Ignore Condition);
-        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒnext objective in 3 seconds!3초 후에 다음 목표가 적용됩니다!下个目标3秒后出现！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒnext objective in 3 seconds!3초 후에 다음 목표가 적용됩니다!下个目标3秒后出现！あと3秒で次の目標が始まります！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         Wait(2.5, Ignore Condition);
         Pause Match Time;
         Wait(0.5, Ignore Condition);
@@ -467,7 +466,7 @@ rule ("loop") {
         If(Compare(Global.hardcoreLevel, <, 2));
             Respawn(All Dead Players(Team 1));
         End;
-        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒround start!라운드 시작!下一轮开始！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒround start!라운드 시작!下一轮开始！ラウンド開始！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         Set Global Variable(nipmanLastHP, Health(Global.nipman));
         Press Button(Global.nipman, Button(Ability 2));
         Wait(0.48, Ignore Condition);
@@ -480,12 +479,12 @@ rule ("loop") {
         "timeout"
         Wait Until(Compare(Global.objProg, >=, Global.objGoal), 600);
         If(Compare(Global.objProg, <, Global.objGoal));
-            Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒtimeout exceeded, skipping phase in case of softlock.타임아웃 시간 초과, 버그 방지를 위해 페이즈를 스킵합니다.timeout exceeded, skipping phas{0}", Custom String("e in case of softlock.")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒtimeout exceeded, skipping phase in case of softlock.타임아웃 시간 초과, 버그 방지를 위해 페이즈를 스킵합니다.timeout exceeded, skipping phas{0}", Custom String("e in case of softlock.タイムアウト超過 ソフトロック対策としてフェーズをスキップします")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         End;
         "nipman.setStatusEffect(null, Status.STUNNED, 0.5)"
         Play Effect(All Players(All Teams), Sombra EMP Explosion Effect, Color(Team 1), Vector(0, 0, 18), 100);
         Play Effect(All Players(All Teams), Ana Biotic Grenade Explosion Sound, Color(Team 1), Local Player, 200);
-        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒobjective complete! mauga is vulnerable!목표 달성! 마우가가 약해집니다!目标完成！毛加易受打击！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒobjective complete! mauga is vulnerable!목표 달성! 마우가가 약해집니다!目标完成！毛加易受打击！目標達成！マウガを攻撃してください！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         Wait(0.016, Ignore Condition);
         If(Compare(Global.hardcoreLevel, <, 2));
             Respawn(All Dead Players(Team 1));
@@ -619,7 +618,7 @@ rule ("slendy") {
         "set first page pos for clueless players"
         Set Global Variable(objPos, Forward);
         Start Modifying Hero Voice Lines(Global.mobs, 0.6, False);
-        Start Forcing Dummy Bot Name(Global.mobs, Value In Array(Array(Custom String("slenderman"), Custom String("슬렌더맨"), Custom String("瘦长鬼影")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.mobs, Value In Array(Array(Custom String("slenderman"), Custom String("슬렌더맨"), Custom String("瘦长鬼影"), Custom String("スレンダーマン")), (Global.nipman).__languageIndex__));
         Modify Global Variable(objProg, Subtract, 0.5);
         Wait(0.4, Ignore Condition);
         Heal(Global.mobs, Null, 99999);
@@ -627,7 +626,7 @@ rule ("slendy") {
             Press Button(Global.mobs, Button(Melee));
             Wait(1.2, Ignore Condition);
             If(Compare(Random Real(0, 1), <, 0.03));
-                Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒremember to check inside mauga's guns for the pages.마우가의 총 안을 확인해 보자.八页纸可能藏在毛加的火枪里。"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+                Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒremember to check inside mauga's guns for the pages.마우가의 총 안을 확인해 보자.八页纸可能藏在毛加的火枪里。マウガの銃の中を確認してみましょう"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             End;
         End;
     }
@@ -760,7 +759,7 @@ rule ("drills setup and act") {
         Start Forcing Player Position(First Of(Global.threatDrills), Add(Vector(-2.01, -7.43, 12.43), (Global.nipman).cacheA), False);
         Start Forcing Player Position(Last Of(Global.threatDrills), Add(Vector(-1.449999999999999, -7.38, 11.61), (Global.nipman).cacheB), False);
         Set Status(Global.threatDrills, Null, Phased Out, 99999);
-        Start Forcing Dummy Bot Name(Global.threatDrills, Value In Array(Array(Custom String("double drills"), Custom String("찌찌드릴"), Custom String("双钻头")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatDrills, Value In Array(Array(Custom String("double drills"), Custom String("찌찌드릴"), Custom String("双钻头"), Custom String("ダブルドリル")), (Global.nipman).__languageIndex__));
         "place hole"
         Set Player Variable(First Of(Global.threatDrills), cacheA, Add(Multiply(Forward, Random Real(-11, 11)), Multiply(Right, Random Real(-11, 11))));
         If(Array Contains(Global.threatList, 19));
@@ -834,7 +833,7 @@ rule ("dragon init") {
         Modify Global Variable(threatDragons, Append To Array, (Event Player).botB);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Disable Nameplates(Global.threatDragons, All Players(All Teams));
-        Start Forcing Dummy Bot Name(Global.threatDragons, Value In Array(Array(Custom String("dragoniррles"), Custom String("용의 일겨헉♥"), Custom String("奶龙")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatDragons, Value In Array(Array(Custom String("dragoniррles"), Custom String("용의 일겨헉♥"), Custom String("奶龙"), Custom String("ドラゴンニップル")), (Global.nipman).__languageIndex__));
         Set Status(Global.threatDragons, Null, Phased Out, 9999);
         Set Invisible(Global.threatDragons, Enemies);
         Start Scaling Player(Global.threatDragons, 0.1, False);
@@ -868,7 +867,7 @@ rule ("dragon stimulation") {
             Abort;
         End;
         If(Compare(((Victim).botA).cacheA, >=, If-Then-Else(Compare(Global.obj, ==, 1), 48, 24)));
-            Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} heehee, stop tickling me! dragon lactation initation!{0} 헤으응, 그만 간지럽혀♥ 용의 분출 활성화!{0} 嘻嘻嘻，不要弄我啦！奶龙出发！", Hero Icon String(Hero(Mauga))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Small Message(All Players(All Teams), String Replace(Value In Array(String Split(Custom String("ＴＬＥｒｒ(0.00, 1.00, 0.00) heehee, stop tickling me! dragon lactation initation!(0.00, 1.00, 0.00) 헤으응, 그만 간지럽혀♥ 용의 분출 활성화!(0{0}", Custom String(".00, 1.00, 0.00) 嘻嘻嘻，不要弄我啦！奶龙出发！(0.00, 1.00, 0.00) へへへ、くすぐるのはやめてください！ドラゴン乳分泌開始！")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Update Every Frame(Up), Hero Icon String(Hero(Mauga))));
             Set Player Variable((Victim).botA, mobTarget, Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))));
             Wait(0.016, Ignore Condition);
             Set Player Variable((Victim).botB, mobTarget, Random Value In Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element))));
@@ -919,7 +918,7 @@ rule ("TOES") {
         Set Damage Received(Global.threatToes, 0);
         Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), First Of(Global.threatToes), True, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Forcing Dummy Bot Name(Global.threatToes, Value In Array(Array(Custom String("toepples"), Custom String("발꼭지"), Custom String("奶趾")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatToes, Value In Array(Array(Custom String("toepples"), Custom String("발꼭지"), Custom String("奶趾"), Custom String("足乳")), (Global.nipman).__languageIndex__));
         While(Not(Has Status(First Of(Global.threatToes), Knocked Down)));
             Start Forcing Player Position(Global.threatToes, World Vector Of(Vector(2.499, 27.342, -5.439), Global.nipman, Rotation And Translation), True);
             Wait(0.48, Ignore Condition);
@@ -949,7 +948,7 @@ rule ("toe medusa") {
                 Set Move Speed(Event Player, Subtract(100, Multiply((Event Player).cacheA, 100)));
                 Damage(Event Player, First Of(Global.threatToes), 3);
                 If(Compare((Event Player).cacheA, >=, 1));
-                    Small Message(Event Player, String Replace(String Replace(String Replace(String Replace(Value In Array(String Split(Custom String("ＴＬＥｒｒ(0.00, 1.00, 0.00) petrified! (0.00, -1.00, 0.00) (1.00, 0.00, 0.00) (-1.00, 0.00, 0.00)(0.00, 1.00, 0.00) 석화됨! 시그마의 발{0}", Custom String("을 쳐다보지 마세요, 이 변태♥(0.00, 1.00, 0.00) 你已被石化！别看住西格玛")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Update Every Frame(Up), Icon String(Eye)), Update Every Frame(Down), String("Avoid")), Update Every Frame(Left), String("Facing")), Update Every Frame(Right), Update Every Frame(Hero(Sigma))));
+                    Small Message(Event Player, String Replace(String Replace(String Replace(String Replace(Value In Array(String Split(Custom String("ＴＬＥｒｒ(0.00, 1.00, 0.00) petrified! (0.00, -1.00, 0.00) (1.00, 0.00, 0.00) (-1.00, 0.00, 0.00)(0.00, 1.00, 0.00) 석화됨! 시그마의 발{0}", Custom String("을 쳐다보지 마세요, 이 변태♥(0.00, 1.00, 0.00) 你已被石化！别看住西格玛(0.00, 1.00, 0.00) 石化！(0.00, -1.00, 0.00) (1.00, 0.00, 0.00) (-1.00, 0.00, {0}", Custom String("0.00)"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Update Every Frame(Up), Icon String(Eye)), Update Every Frame(Down), String("Avoid")), Update Every Frame(Left), String("Facing")), Update Every Frame(Right), Update Every Frame(Hero(Sigma))));
                     Set Player Variable(Event Player, cacheA, 1);
                     Set Status(Event Player, First Of(Global.threatToes), Frozen, 1.2);
                     Damage(Event Player, First Of(Global.threatToes), 80);
@@ -979,7 +978,7 @@ rule ("init weak spots") {
     }
     actions {
         Start Scaling Player(Event Player, 0.8, False);
-        Start Forcing Dummy Bot Name(Event Player, Value In Array(Array(Custom String("sensitive spot"), Custom String("약점♥"), Custom String("过敏部位")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Event Player, Value In Array(Array(Custom String("sensitive spot"), Custom String("약점♥"), Custom String("过敏部位"), Custom String("敏感部位")), (Global.nipman).__languageIndex__));
         Create Icon(All Players(All Teams), Event Player, Warning, Visible To and Color, Custom Color(255, Add(205, Divide(Multiply(50, Sine From Radians(Multiply(Total Time Elapsed, 4))), 2)), 0, 255), True);
         Modify Global Variable(weakSpots, Append To Array, Event Player);
         Wait(0.16, Ignore Condition);
@@ -1012,7 +1011,7 @@ rule ("more maugas charge attack") {
             "createBeam(getAllPlayers(), Beam.WINSTON_TESLA_CANNON, attackingClone.smallRNip, LeftNip if attackingClone.smallRNip.x > 0 else RightNip, Color.TEAM_2, EffectReeval.VISIBILITY)"
             Create Beam Effect(All Players(All Teams), Winston Tesla Cannon Beam, (Global.attackingClone).cacheB, (Global.nipman).cacheB, Color(Team 2), Visible To);
             Modify Global Variable(moreFx, Append To Array, Last Created Entity);
-            Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} deadly attack incoming! attack the sensitive spots! {0}{0} 자, 치명적인 공격이 옵니다! 약점♥을 공격하세요! {0}{0} 毛加准备着强大的攻击！快打过敏部位！", Icon String(Warning)), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Big Message(All Players(All Teams), String Replace(Value In Array(String Split(Custom String("ＴＬＥｒｒ(0.00, 1.00, 0.00) deadly attack incoming! attack the sensitive spots! (0.00, 1.00, 0.00)(0.00, 1.00, 0.00) 자, 치명적인 공격{0}", Custom String("이 옵니다! 약점♥을 공격하세요! (0.00, 1.00, 0.00)(0.00, 1.00, 0.00) 毛加准备着强大的攻击！快打过敏部位！(0.00, 1.00, 0.00) 超危険な攻撃が来ます！弱点を攻撃してください！ (0.00,{0}", Custom String(" 1.00, 0.00)"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Update Every Frame(Up), Icon String(Warning)));
             Communicate(Random Value In Array(Filtered Array(All Living Players(Team 1), And(Has Spawned(Current Array Element), Compare((Current Array Element).cacheB, ==, False)))), Press the Attack);
             "all hammond dummies get weak spot init"
             Create Dummy Bot(Hero(Wrecking Ball), Team 2, -1, Up, Up);
@@ -1048,7 +1047,7 @@ rule ("more maugas charge attack") {
                 Set Global Variable(attackingClone, Null);
                 Skip(33);
             End;
-            Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} failed to stop the attack. brace for impact!{0} 실패... 충격을 조심하세요!{0} 阻止攻击失败。", Icon String(Sad)), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} failed to stop the attack. brace for impact!{0} 실패... 충격을 조심하세요!{0} 阻止攻击失败。{0} 攻撃を止められませんでした 衝撃に備えてください！", Icon String(Sad)), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             For Global Variable(iMores, 0, Count Of(Global.weakSpots), 1);
                 Destroy Dummy Bot(Team 2, Slot Of(Value In Array(Global.weakSpots, Global.iMores)));
             End;
@@ -1117,7 +1116,7 @@ rule ("niplets + dupe") {
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Create Effect(All Players(All Teams), Lúcio Sound Barrier Protected Effect, Color(Team 2), (Event Player).botB, 1, Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Forcing Dummy Bot Name(Global.threatNiplets, Value In Array(Array(Custom String("niplets"), Custom String("젖먹이"), Custom String("贝乳塔")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatNiplets, Value In Array(Array(Custom String("niplets"), Custom String("젖먹이"), Custom String("贝乳塔"), Custom String("ニップレット")), (Global.nipman).__languageIndex__));
         "eventPlayer.iniplets = 0"
         While(Compare(Global.obj, !=, -1));
             Wait(0.24, Ignore Condition);
@@ -1175,12 +1174,12 @@ rule ("grab") {
             "check landing"
             Set Global Variable(grabLeftPlayer, Filtered Array(Players Within Radius(Global.grabLeft, 2, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))));
             Start Forcing Player Position(Global.grabLeftPlayer, Global.grabLeft, True);
-            Small Message(Global.grabLeftPlayer, Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} you were grabbed!{0} 잡혔습니다!{0} 你被抓到了！", Ability Icon String(Hero(Moira), Button(Secondary Fire))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Small Message(Global.grabLeftPlayer, Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} you were grabbed!{0} 잡혔습니다!{0} 你被抓到了！{0} つかまれました！", Ability Icon String(Hero(Moira), Button(Secondary Fire))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             Play Effect(All Players(All Teams), Orisa Halt Implosion Sound, Color(Team 2), Global.grabLeft, 20);
             Play Effect(All Players(All Teams), Orisa Halt Implosion Effect, Color(Team 2), Global.grabLeft, 20);
             Set Global Variable(grabRightPlayer, Filtered Array(Players Within Radius(Global.grabRight, 2, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))));
             Start Forcing Player Position(Global.grabRightPlayer, Global.grabRight, True);
-            Small Message(Global.grabRightPlayer, Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} you were grabbed!{0} 잡혔습니다!{0} 你被抓到了！", Ability Icon String(Hero(Moira), Button(Secondary Fire))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Small Message(Global.grabRightPlayer, Value In Array(String Split(Custom String("ＴＬＥｒｒ{0} you were grabbed!{0} 잡혔습니다!{0} 你被抓到了！{0} つかまれました！", Ability Icon String(Hero(Moira), Button(Secondary Fire))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             Play Effect(All Players(All Teams), Orisa Halt Implosion Sound, Color(Team 2), Global.grabRight, 20);
             Play Effect(All Players(All Teams), Orisa Halt Implosion Effect, Color(Team 2), Global.grabRight, 20);
             "pull"
@@ -1371,7 +1370,7 @@ rule ("sun loop") {
             Wait(0.64, Ignore Condition);
             Set Invisible(Global.threatSuns, Enemies);
             Set Status(Global.threatSuns, Null, Phased Out, 99999);
-            Start Forcing Dummy Bot Name(Global.threatSuns, Value In Array(Array(Custom String("sunkissed nips"), Custom String("아침에젖스"), Custom String("太阳公主")), (Global.nipman).__languageIndex__));
+            Start Forcing Dummy Bot Name(Global.threatSuns, Value In Array(Array(Custom String("sunkissed nips"), Custom String("아침에젖스"), Custom String("太阳公主"), Custom String("日焼け乳 首")), (Global.nipman).__languageIndex__));
             Set Projectile Speed(Global.threatSuns, 30);
             Disable Nameplates(Global.threatSuns, All Players(All Teams));
             Set Damage Dealt(Global.threatSuns, Max(45, Divide(180, Count Of(Global.threatSuns))));
@@ -1497,7 +1496,7 @@ rule ("discharge") {
         "eventPlayer.botB.startFacing(worldVector(vect(sin(getTotalTimeElapsed() * 33)*0.45, sin(getTotalTimeElapsed() * 47)*0.32 - 0.09, -1), eventPlayer, Transform.ROTATION) + eventPlayer.getFacingDirection() * 3, 50, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)"
         Wait(0.36, Ignore Condition);
         Start Modifying Hero Voice Lines(Global.threatLactaters, Add(1, Multiply(0.5, Sine From Radians(Multiply(Total Time Elapsed, 2)))), True);
-        Start Forcing Dummy Bot Name(Global.threatLactaters, Value In Array(Array(Custom String("overheating glands"), Custom String("과열된 돌출부"), Custom String("乳腺上火")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatLactaters, Value In Array(Array(Custom String("overheating glands"), Custom String("과열된 돌출부"), Custom String("乳腺上火"), Custom String("熱々突起物")), (Global.nipman).__languageIndex__));
         Disable Nameplates(Global.threatLactaters, All Players(All Teams));
         "main mauga torbs are higher"
         Set Projectile Gravity((Global.nipman).botA, 140);
@@ -1829,7 +1828,7 @@ rule ("dupe + normal sniper") {
         Create Beam Effect(All Players(All Teams), Torbjörn Turret Sight Beam, Eye Position((Event Player).botB), Add(Eye Position((Event Player).botB), Multiply(60, Facing Direction Of((Event Player).botB))), Color(Team 2), Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Start Holding Button(Global.threatSnipers, Button(Secondary Fire));
-        Start Forcing Dummy Bot Name(Global.threatSnipers, Value In Array(Array(Custom String("s-nip-ers"), Custom String("젖-격수"), Custom String("狙挤手")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatSnipers, Value In Array(Array(Custom String("s-nip-ers"), Custom String("젖-격수"), Custom String("狙挤手"), Custom String("乳 首狙撃手")), (Global.nipman).__languageIndex__));
         Set Status(Global.threatSnipers, Null, Phased Out, 9999);
         Start Scaling Player(Global.threatSnipers, 0.1, False);
         Disable Nameplates(Global.threatSnipers, All Players(All Teams));
@@ -1947,7 +1946,7 @@ rule ("Subroutine moreMaugasSetup") {
             Wait(0.096, Ignore Condition);
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheA, World Vector Of(Vector(5.399999999999999, 20.565, 3.99), Value In Array(Global.objPos, Global.iMores), Rotation And Translation));
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheB, World Vector Of(Vector(-2.055, 20.669999999999998, 6.99), Value In Array(Global.objPos, Global.iMores), Rotation And Translation));
-            Start Forcing Dummy Bot Name(Value In Array(Global.objPos, Global.iMores), Value In Array(Array(Custom String("mauga jr."), Custom String("마우가 JR."), Custom String("小毛加")), (Global.nipman).__languageIndex__));
+            Start Forcing Dummy Bot Name(Value In Array(Global.objPos, Global.iMores), Value In Array(Array(Custom String("mauga jr."), Custom String("마우가 JR."), Custom String("小毛加"), Custom String("マウガ Jr.")), (Global.nipman).__languageIndex__));
             "WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400"
             Create Progress Bar In-World Text(All Players(All Teams), Multiply(Divide(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), 100), Custom String("{0} / {1} HP", Round To Integer(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Up), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), Add(Eye Position(Value In Array(Global.objPos, Global.iMores)), Vector(0, 2, 0)), 1, Do Not Clip, Color(Red), Color(White), Visible To and Values, Default Visibility);
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheC, Last Text ID);
@@ -1973,7 +1972,7 @@ rule ("missing maugas") {
         Wait(2, Abort When False);
         Call Subroutine(moreMaugasSetup);
         Wait(2, Abort When False);
-        Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒsomething went wrong. skipping phase...무언가가 잘못되었다, 페이즈 스킵 중...游戏错误。"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒsomething went wrong. skipping phase...무언가가 잘못되었다, 페이즈 스킵 중...游戏错误。何か問題が発生しました フェーズをスキップしています..."), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         Set Global Variable(objProg, Global.objGoal);
         Wait(2, Abort When False);
         Loop If Condition Is True;
@@ -2035,7 +2034,7 @@ rule ("miniboss") {
             Set Damage Dealt(Global.objPos, 55);
         End;
         Start Forcing Throttle(Global.objPos, 1, 1, 0, 0, 0, 1);
-        Start Forcing Dummy Bot Name(Global.objPos, Value In Array(Array(Custom String("miniboss"), Custom String("미니보스"), Custom String("大怪物")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.objPos, Value In Array(Array(Custom String("miniboss"), Custom String("미니보스"), Custom String("大怪物"), Custom String("ミニボス")), (Global.nipman).__languageIndex__));
         Start Facing(Global.objPos, Direction Towards(Position Of(Global.objPos), Position Of((Global.objPos).mobTarget)), 400, To World, Direction and Turn Rate);
         If(Compare(Hero Of(Global.objPos), ==, Hero(Mauga)));
             Set Max Health(Global.objPos, Absolute Value(1200));
@@ -2228,7 +2227,7 @@ rule ("page found") {
         Distance Between(Event Player, Global.objPos) < 1.3;
     }
     actions {
-        Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ {0} found a page!  {0}(이)가 페이지를 찾았다! {0}找到了一页纸！", Event Player), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒ {0} found a page!  {0}(이)가 페이지를 찾았다! {0}找到了一页纸！  {0}がページを見つけました！", Event Player), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
         Play Effect(All Players(All Teams), Buff Impact Sound, Color(White), Global.objPos, 65);
         Play Effect(All Players(All Teams), Good Explosion, Color(Team 1), Global.objPos, 1);
         "sound"
@@ -2434,7 +2433,7 @@ rule ("charge no breaky") {
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
         Cancel Primary Action(Event Player);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2452,7 +2451,7 @@ rule ("charge no breaky more maugas") {
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
         Cancel Primary Action(Event Player);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2471,7 +2470,7 @@ rule ("echo charge no breaky") {
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
         Cancel Primary Action(Event Player);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2490,7 +2489,7 @@ rule ("echo charge no breaky more maugas") {
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
         Cancel Primary Action(Event Player);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2508,7 +2507,7 @@ disabled rule ("punch no breaky") {
     }
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2525,7 +2524,7 @@ disabled rule ("hook no breaky") {
     }
     actions {
         Set Status(Event Player, Null, Hacked, 0.5);
-        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the mauga"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+        Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒdo not the mauga마우가 끌고우가지 마시오do not the maugaマウガをしないでください"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
     }
 }
 
@@ -2782,7 +2781,7 @@ rule ("you are dead, not big surprise + chungus explode") {
     actions {
         "smallMessage(hostPlayer, eventPlayer.scale)"
         If(Compare((Event Player).cacheC, >, 2));
-            Big Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒmega milk explode!너무 성장해버렸다...mega milk explode!"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+            Big Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒmega milk explode!너무 성장해버렸다...mega milk explode!巨大化ミルク爆発！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             "if checking los with 20 players isn't too expensive can turn it on"
             Damage(Players Within Radius(Position Of(Event Player), Multiply((Event Player).cacheC, 1.5), All Teams, Off), Event Player, Multiply((Event Player).cacheC, 40));
             Play Effect(All Players(All Teams), DVa Self Destruct Explosion Sound, Color(Team 1), Event Player, Multiply(15, (Event Player).cacheC));
@@ -2799,7 +2798,7 @@ rule ("you are dead, not big surprise + chungus explode") {
         If(Compare(Global.obj, ==, -1));
             If(Not(Is Button Held(Event Player, Button(Crouch))));
                 Respawn(Event Player);
-                Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒif you need to change heroes, hold crouch as you die.영웅 변경을 원하신다면, 사망 시 앉기를 누르세요.if you need to change heroes, hold c{0}", Custom String("rouch as you die.")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+                Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒif you need to change heroes, hold crouch as you die.영웅 변경을 원하신다면, 사망 시 앉기를 누르세요.if you need to change heroes, hold c{0}", Custom String("rouch as you die.ヒーローを変更する必要がある場合は 死ぬときにしゃがみを保持してください")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             End;
         Else;
             Modify Team Score(Team 2, 1);
@@ -2808,7 +2807,7 @@ rule ("you are dead, not big surprise + chungus explode") {
         If(Compare(Global.hardcoreLevel, >, 0));
             "eventPlayer.setRespawnTime(99999)"
             If(Compare(Filtered Array(All Players(Team 1), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), ==, Empty Array));
-                Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒgame over. all players died.게임 오버. 모든 플레이어가 사망했습니다.游戏结束。所有玩家已死亡。"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+                Big Message(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒgame over. all players died.게임 오버. 모든 플레이어가 사망했습니다.游戏结束。所有玩家已死亡。ゲームオーバー すべてのプレイヤーが死亡しました"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
                 Set Slow Motion(50);
                 Wait(1, Ignore Condition);
                 Declare Team Victory(Team 2);
