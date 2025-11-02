@@ -19,7 +19,9 @@ when i get unbanned, please endorse me (`OMGIDIED`) if you ever see me in a matc
 
 if you're interested in any of my other modes you can just compile the overpy (on my github/workshop.codes) and paste in the resulting code, or contact me on discord.
 
-*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*
+~~*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*~~
+
+my other import codes seem to work, which confirms that mauga nipple pve wasn't blanket banned, and blizzard apparently took issue with it. it's unlikely that the mode will return in its current state. i'm also unaware of which parts exactly i would need to change for the mode to be acceptable.
 
 # contributing
 
