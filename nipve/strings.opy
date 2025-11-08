@@ -29,13 +29,24 @@ rule "strings":
 # since they're in bot names i can't use the translation features
 # ! add translated names here, in the same format and following the order of the language codes
 enum BOTNAME:
+	# SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影","スレンダーマン"])
+	# TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火","熱々突起物"])
+	# SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手","乳 首狙撃手"])
+	# NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔","ニップレット"])
+	# ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主","日焼け乳 首"])
+	# TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾","足乳"])
+	# DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙","ドラゴンニップル"])
+	# WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位","敏感部位"])
+	# MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加","マウガ Jr."])
+	# MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物","ミニボス"]),
+	# DRILLS = serverSideTranslate(["double drills", "찌찌드릴", "双钻头","ダブルドリル"])
 	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影","スレンダーマン"])
 	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火","熱々突起物"])
-	SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手","乳 首狙撃手"])
-	NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔","ニップレット"])
-	ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主","日焼け乳 首"])
-	TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾","足乳"])
-	DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙","ドラゴンニップル"])
+	SNIPERS = serverSideTranslate(["snipers", "젖-격수", "狙挤手","乳 首狙撃手"])
+	NIPLETS = serverSideTranslate(["mauglets", "젖먹이", "贝乳塔","ニップレット"])
+	ILLARIS = serverSideTranslate(["ultraviolet rays", "아침에젖스", "太阳公主","日焼け乳 首"])
+	TOEPPLES = serverSideTranslate(["toes", "발꼭지", "奶趾","足乳"])
+	DRAGONIPS = serverSideTranslate(["dragons", "용의 일겨헉♥", "奶龙","ドラゴンニップル"])
 	WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位","敏感部位"])
 	MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加","マウガ Jr."])
 	MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物","ミニボス"]),
@@ -65,7 +76,7 @@ globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips
 # these are references to strings in other parts of the program. i've moved them here for your convenience.
 # if you would like context for where these strings are used, you can CTRL+F the enum key in pvnip.opy.
 enum STRINGS:
-	PROMO = t"MAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganip"
+	PROMO = t"MAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganip"
 	OBJCOUNTDOWN = t"next objective in 3 seconds!"
 	ROUNDSTART = t"round start!"
 	MAUGAVULNERABLE = t"objective complete! mauga is vulnerable!"
@@ -98,7 +109,7 @@ enum STRINGS:
 	SPECTATORS = __("spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)")
 	# supposed to show the korean flag but no worky. deprecated.
 	# KR_MODE = (t"\n{}TX 000000009D14> 한국어: K08WD".format(bracket))
-	IMPORT_CODE = t"use code DS2MD for the latest version"
+	IMPORT_CODE = t"use code {} for the latest version".format(CODE)
 	LOAD_1 = t"peak: {} | average: {}"
 	LOAD_2 = t"server load: {}\n"
 	DEBUG_TITLE = t"debug version"

@@ -9,7 +9,7 @@ https://workshop.codes/u/_yubz
 
 # notice on takedown
 
-my account has been temp banned for naughty custom content. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
+my account has been temp banned and the mode has been removed. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
 
 you can still play: copy the contents of [export.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export.txt) to paste it into your lobby as a workshop script.
 

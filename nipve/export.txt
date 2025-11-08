@@ -2,8 +2,8 @@ settings
 {
 	main
 	{
-		Description: "it's like rein invasion but with mauga's milkers\n1984 b­lizzard\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역\nグルメスパイザー\nでお願いします"
-		Mode Name: "mauga n!pple pve"
+		Description: "it's like rein invasion but with mauga's \"guns\"\n1984 b­lizzard\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역\nグルメスパイザー\nでお願いします"
+		Mode Name: "mauga's investor friendly pve"
 	}
 	lobby
 	{
@@ -272,9 +272,9 @@ rule ("hey... wanna play some secret gamemodes?") {
     actions {
         "inflation gamemode (pvp or add bots): 9YX9G"
         Respawn(Null);
-        "[!] the following games are extremely vulgаr and sехuаl. may be upsetting to viewers. [!]\nkiriko рrоstate exam sim: 032QT"
+        "[!] the following games are extremely vulgаr and siхuаl. may be upsetting to viewers. [!]\nkiriko рrrоstate exam sim: 032QT"
         Respawn(Null);
-        "the below mode also features extreme fеtish content, sеxually aggressive behavior and a mention of pеdophiliа. viewer discretion advised.\noverwatch dating sim: 7GRX3"
+        "the below mode also features extreme fеhtish content, sеxually aggressive behavior and a mention of pеhdophiliа. viewer discretion advised.\noverwatch dating sim: 7GRX3"
         Respawn(Null);
     }
 }
@@ -293,10 +293,10 @@ rule ("init") {
         Destroy All Dummy Bots;
         Wait(0.016, Ignore Condition);
         "## PROMO"
-        Create In-World Text(If-Then-Else(Is Dead(Global.nipman), All Players(All Teams), Null), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10.2, 35), 4, Clip Against Surfaces, Visible To Position String and Color, Custom Color(Add(110, Multiply(90, Cosine From Degrees(Multiply(Total Time Elapsed, 150)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 120)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 240)))), 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10, -200), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
-        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps:{0}", Custom String("//tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N!PPLE PVE: THE DOCVMENTA{0}", Custom String("RY\nout now\nhttps://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(-200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(If-Then-Else(Is Dead(Global.nipman), All Players(All Teams), Null), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10.2, 35), 4, Clip Against Surfaces, Visible To Position String and Color, Custom Color(Add(110, Multiply(90, Cosine From Degrees(Multiply(Total Time Elapsed, 150)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 120)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 240)))), 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10, -200), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
+        Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(-200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
         "print(len(getPlayers(Team.2)))\nhudText(hostPlayer, iconString(Icon.EYE), \"eye position\", localPlayer.getEyePosition(), HudPosition.ACTUALLY_LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)"
         Create HUD Text(All Players(All Teams), Null, Custom String("peak: {0} | average: {1}", Server Load Peak, Server Load Average), Value In Array(String Split(Custom String("ＴＬＥｒｒserver load: {0}\n서버 로드: {0}\n服务器压力：{0}\nサーバー負荷: {0}\n", Server Load), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Right, -2, Color(Orange), Color(Gray), Color(Gray), Visible To and String, Visible Always);
         "hudSubtext(getAllPlayers(), STRINGS.IMPORT_CODE, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)\nif DEBUG == false:"
@@ -349,15 +349,21 @@ rule ("init") {
         "objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there"
         Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, ==, -1), All Players(All Teams), Empty Array), Divide(Multiply(100, Health(Global.nipman)), 57500), Custom String("{0} {1} / 57500 hp", Hero Icon String(Hero(Mauga)), Round To Integer(Health(Global.nipman), Up)), Top, 1, Color(Team 2), Color(White), Visible To Values and Color, Default Visibility);
         Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("{0}: {1}! {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒobjective목표目标目標"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Value In Array(Global.objDescs, Global.obj), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("{0} / {1}", Global.objProg, Global.objGoal)), Top, 1, Color(Team 1), Color(White), Visible To Values and Color, Default Visibility);
-        Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　{0}: {1} {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒthreats위험 요인危险警告"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Global.threatIcons, First Of(Global.threatList)), Custom String("{0}{1}{2}", Value In Array(Value In Array(Global.threatNames, First Of(Global.threatList)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String(", "), Custom String("")), Custom String("{0}{1}{2}", If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 1))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 1)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")), Custom String("{0}{1}{2}　", If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String(", "), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 2))), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Value In Array(Value In Array(Global.threatNames, Value In Array(Global.threatList, 2)), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("")))))), Null, Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
+        "_(threatNames[threatList[2]]) if len(threatList) > 2 else \"\"\n), \"\", \" \\n \", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)"
+        Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　{0}: censored　", Value In Array(String Split(Custom String("ＴＬＥｒｒthreats위험 요인危险警告"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array))))), Null, Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
         Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
         Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
         Set Player Variable(Global.nipman, __languageIndex__, Index Of Array Value(Array(Custom String("White"), Custom String("흰색"), Custom String("白色"), Custom String("白色")), Custom String("{0}", Color(White))));
+        "investor friendly clouds"
+        For Global Variable(i, -2, 2, 1);
+            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), Add((Global.nipman).cacheA, Multiply(Up, Global.i)), 1.5, Visible To);
+            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), Add((Global.nipman).cacheB, Multiply(Up, Global.i)), 1.5, Visible To);
+        End;
         "hardcore huds"
         If(Compare(Global.hardcoreLevel, ==, 1));
             Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhardcore mode is on하드코어 모드 활성화硬核模式ハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning until round ends라운드가 끝날 때까지 리스폰 불가玩家仅在回合完成后重生ラウンド終了まで復活しません"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
         Else If(Compare(Global.hardcoreLevel, ==, 2));
-            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒultra hardcore mode is on울트라 하드코어 모드 활성화超硬核模式ウルトラハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning ever!부활할 수 없습니다!玩家重生復活できません！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
+            Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒultra hardcore mode is on울트라 하드코어 모드 활성화超硬核模式ウルトラハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning ever!부활할 수 없습니다!玩家不重生復活できません！"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
         End;
         Set Match Time(5);
     }
@@ -833,7 +839,7 @@ rule ("dragon init") {
         Modify Global Variable(threatDragons, Append To Array, (Event Player).botB);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Disable Nameplates(Global.threatDragons, All Players(All Teams));
-        Start Forcing Dummy Bot Name(Global.threatDragons, Value In Array(Array(Custom String("dragoniррles"), Custom String("용의 일겨헉♥"), Custom String("奶龙"), Custom String("ドラゴンニップル")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatDragons, Value In Array(Array(Custom String("dragons"), Custom String("용의 일겨헉♥"), Custom String("奶龙"), Custom String("ドラゴンニップル")), (Global.nipman).__languageIndex__));
         Set Status(Global.threatDragons, Null, Phased Out, 9999);
         Set Invisible(Global.threatDragons, Enemies);
         Start Scaling Player(Global.threatDragons, 0.1, False);
@@ -918,7 +924,7 @@ rule ("TOES") {
         Set Damage Received(Global.threatToes, 0);
         Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), First Of(Global.threatToes), True, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Forcing Dummy Bot Name(Global.threatToes, Value In Array(Array(Custom String("toepples"), Custom String("발꼭지"), Custom String("奶趾"), Custom String("足乳")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatToes, Value In Array(Array(Custom String("toes"), Custom String("발꼭지"), Custom String("奶趾"), Custom String("足乳")), (Global.nipman).__languageIndex__));
         While(Not(Has Status(First Of(Global.threatToes), Knocked Down)));
             Start Forcing Player Position(Global.threatToes, World Vector Of(Vector(2.499, 27.342, -5.439), Global.nipman, Rotation And Translation), True);
             Wait(0.48, Ignore Condition);
@@ -1116,7 +1122,7 @@ rule ("niplets + dupe") {
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Create Effect(All Players(All Teams), Lúcio Sound Barrier Protected Effect, Color(Team 2), (Event Player).botB, 1, Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Start Forcing Dummy Bot Name(Global.threatNiplets, Value In Array(Array(Custom String("niplets"), Custom String("젖먹이"), Custom String("贝乳塔"), Custom String("ニップレット")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatNiplets, Value In Array(Array(Custom String("mauglets"), Custom String("젖먹이"), Custom String("贝乳塔"), Custom String("ニップレット")), (Global.nipman).__languageIndex__));
         "eventPlayer.iniplets = 0"
         While(Compare(Global.obj, !=, -1));
             Wait(0.24, Ignore Condition);
@@ -1370,7 +1376,7 @@ rule ("sun loop") {
             Wait(0.64, Ignore Condition);
             Set Invisible(Global.threatSuns, Enemies);
             Set Status(Global.threatSuns, Null, Phased Out, 99999);
-            Start Forcing Dummy Bot Name(Global.threatSuns, Value In Array(Array(Custom String("sunkissed nips"), Custom String("아침에젖스"), Custom String("太阳公主"), Custom String("日焼け乳 首")), (Global.nipman).__languageIndex__));
+            Start Forcing Dummy Bot Name(Global.threatSuns, Value In Array(Array(Custom String("ultraviolet rays"), Custom String("아침에젖스"), Custom String("太阳公主"), Custom String("日焼け乳 首")), (Global.nipman).__languageIndex__));
             Set Projectile Speed(Global.threatSuns, 30);
             Disable Nameplates(Global.threatSuns, All Players(All Teams));
             Set Damage Dealt(Global.threatSuns, Max(45, Divide(180, Count Of(Global.threatSuns))));
@@ -1828,7 +1834,7 @@ rule ("dupe + normal sniper") {
         Create Beam Effect(All Players(All Teams), Torbjörn Turret Sight Beam, Eye Position((Event Player).botB), Add(Eye Position((Event Player).botB), Multiply(60, Facing Direction Of((Event Player).botB))), Color(Team 2), Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Start Holding Button(Global.threatSnipers, Button(Secondary Fire));
-        Start Forcing Dummy Bot Name(Global.threatSnipers, Value In Array(Array(Custom String("s-nip-ers"), Custom String("젖-격수"), Custom String("狙挤手"), Custom String("乳 首狙撃手")), (Global.nipman).__languageIndex__));
+        Start Forcing Dummy Bot Name(Global.threatSnipers, Value In Array(Array(Custom String("snipers"), Custom String("젖-격수"), Custom String("狙挤手"), Custom String("乳 首狙撃手")), (Global.nipman).__languageIndex__));
         Set Status(Global.threatSnipers, Null, Phased Out, 9999);
         Start Scaling Player(Global.threatSnipers, 0.1, False);
         Disable Nameplates(Global.threatSnipers, All Players(All Teams));
@@ -1951,6 +1957,11 @@ rule ("Subroutine moreMaugasSetup") {
             Create Progress Bar In-World Text(All Players(All Teams), Multiply(Divide(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), 100), Custom String("{0} / {1} HP", Round To Integer(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Up), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), Add(Eye Position(Value In Array(Global.objPos, Global.iMores)), Vector(0, 2, 0)), 1, Do Not Clip, Color(Red), Color(White), Visible To and Values, Default Visibility);
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheC, Last Text ID);
             Modify Global Variable(threatFx, Append To Array, Last Text ID);
+            "investor friendly clouds"
+            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheA, 1, Visible To);
+            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
+            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheB, 1, Visible To);
+            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         End;
         Wait(0.8, Ignore Condition);
         Set Status(Global.objPos, Null, Frozen, 99999);
@@ -2798,7 +2809,7 @@ rule ("you are dead, not big surprise + chungus explode") {
         If(Compare(Global.obj, ==, -1));
             If(Not(Is Button Held(Event Player, Button(Crouch))));
                 Respawn(Event Player);
-                Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒif you need to change heroes, hold crouch as you die.영웅 변경을 원하신다면, 사망 시 앉기를 누르세요.if you need to change heroes, hold c{0}", Custom String("rouch as you die.ヒーローを変更する必要がある場合は 死ぬときにしゃがみを保持してください")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
+                Small Message(Event Player, Value In Array(String Split(Custom String("ＴＬＥｒｒif you need to change heroes, hold crouch as you die.영웅 변경을 원하신다면, 사망 시 앉기를 누르세요.若要换英雄，淹死的时候要把蹲按键按下ヒーローを変更する必要がある場合は{0}", Custom String(" 死ぬときにしゃがみを保持してください")), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))));
             End;
         Else;
             Modify Team Score(Team 2, 1);

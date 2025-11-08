@@ -4,256 +4,256 @@ msgstr ""
 "Language: zh_cn\n"
 "X-Generator: OverPy\n"
 
-#. file pvnip.opy, line 260, rule "init"
+#. file pvnip.opy, line 261, rule "init"
 msgid "objective"
 msgstr "目标"
 
-#. file pvnip.opy, line 261, rule "init"
+#. file pvnip.opy, line 274, rule "init"
 msgid "threats"
 msgstr "危险"
 
-#. file pvnip.opy, line 2184, rule "you are dead, not big surprise + chungus explode"
+#. file pvnip.opy, line 2199, rule "you are dead, not big surprise + chungus explode"
 msgid "mega milk explode!"
 msgstr ""
 
-#. file strings.opy, line 61, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "collect pages"
 msgstr "收集八页纸"
 
-#. file strings.opy, line 61, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "defeat the mini maugas"
 msgstr "消灭小毛加"
 
-#. file strings.opy, line 61, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "slay enemies"
 msgstr "消除怪物"
 
-#. file strings.opy, line 61, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "slay the miniboss"
 msgstr "消灭小头目"
 
-#. file strings.opy, line 61, rule "strings"
+#. file strings.opy, line 72, rule "strings"
 msgid "capture the point"
 msgstr "控制点"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "slenderman"
 msgstr "瘦长鬼影"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "more maugas"
 msgstr "毛+++"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "frosty nips"
 msgstr "冰冻馒头"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "dragon stimulation"
 msgstr "奶龙"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "toepples"
 msgstr "奶趾"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "grabbyteats"
 msgstr ""
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "niplets"
 msgstr "贝乳塔"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "cup fight"
 msgstr "罩杯中斗"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "tiddy twister"
 msgstr "乳卷风"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "n!pple nuke"
 msgstr "核馒头"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "dairy deaths"
 msgstr ""
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "milk wall"
 msgstr "万里奶城"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "scalding discharge"
 msgstr "阳盛则热"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "s-nip-ers"
 msgstr "狙挤手"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "boobsted mobs"
 msgstr "小康怪物"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "booblet hell"
 msgstr "弹波波"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "gravitatas"
 msgstr ""
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "sun exposure"
 msgstr "阳光明咪"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "lazer"
 msgstr "咪光束"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "lactic hail"
 msgstr "奶雹"
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "mega milk"
 msgstr ""
 
-#. file strings.opy, line 62, rule "strings"
+#. file strings.opy, line 73, rule "strings"
 msgid "lactation excavation"
 msgstr ""
 
-#. file strings.opy, line 68, rule "strings"
+#. file strings.opy, line 79, rule "strings"
 msgid ""
-"MAUGA N!PPLE PVE: THE DOCVMENTARY\n"
+"MAUGA N? PVE: THE DOCVMENTARY\n"
 "out now\n"
 "https://tinyurl.com/mauganip"
 msgstr ""
 
-#. file strings.opy, line 69, rule "strings"
+#. file strings.opy, line 80, rule "strings"
 msgid "next objective in 3 seconds!"
 msgstr "下个目标3秒后出现！"
 
-#. file strings.opy, line 70, rule "strings"
+#. file strings.opy, line 81, rule "strings"
 msgid "round start!"
 msgstr "下一轮开始！"
 
-#. file strings.opy, line 71, rule "strings"
+#. file strings.opy, line 82, rule "strings"
 msgid "objective complete! mauga is vulnerable!"
 msgstr "目标完成！毛加易受打击！"
 
-#. file strings.opy, line 73, rule "strings"
+#. file strings.opy, line 84, rule "strings"
 msgid "{0} deadly attack incoming! attack the sensitive spots! {0}"
 msgstr "{0} 毛加准备着强大的攻击！快打过敏部位！"
 
-#. file strings.opy, line 74, rule "strings"
+#. file strings.opy, line 85, rule "strings"
 msgid "{0} failed to stop the attack. brace for impact!"
 msgstr "{0} 阻止攻击失败。"
 
-#. file strings.opy, line 76, rule "strings"
+#. file strings.opy, line 87, rule "strings"
 msgid "{0} found a page!"
 msgstr "{0}找到了一页纸！"
 
-#. file strings.opy, line 77, rule "strings"
+#. file strings.opy, line 88, rule "strings"
 msgid "game over. all players died."
 msgstr "游戏结束。所有玩家已死亡。"
 
 # TODO: check if all occurrences have the same translation
-#. file strings.opy, line 79, rule "strings"
+#. file strings.opy, line 90, rule "strings"
 #, hasMultipleOccurrencesNotification
 msgid "do not the mauga"
 msgstr ""
 
-#. file strings.opy, line 81, rule "strings"
+#. file strings.opy, line 92, rule "strings"
 msgid "{0} petrified! {1} {2} {3}"
 msgstr "{0} 你已被石化！别看住西格玛"
 
-#. file strings.opy, line 84, rule "strings"
+#. file strings.opy, line 95, rule "strings"
 msgid "{0} heehee, stop tickling me! dragon lactation initation!"
 msgstr "{0} 嘻嘻嘻，不要弄我啦！奶龙出发！"
 
-#. file strings.opy, line 85, rule "strings"
+#. file strings.opy, line 96, rule "strings"
 msgid "remember to check inside mauga's guns for the pages."
 msgstr "八页纸可能藏在毛加的火枪里。"
 
 # TODO: check if all occurrences have the same translation
-#. file strings.opy, line 86, rule "strings"
+#. file strings.opy, line 97, rule "strings"
 #, hasMultipleOccurrencesNotification
 msgid "{0} you were grabbed!"
 msgstr "{0} 你被抓到了！"
 
-#. file strings.opy, line 87, rule "strings"
+#. file strings.opy, line 98, rule "strings"
 msgid "something went wrong. skipping phase..."
 msgstr "游戏错误。"
 
-#. file strings.opy, line 88, rule "strings"
+#. file strings.opy, line 99, rule "strings"
 msgid "timeout exceeded, skipping phase in case of softlock."
 msgstr ""
 
-#. file strings.opy, line 89, rule "strings"
+#. file strings.opy, line 100, rule "strings"
 msgid "hardcore mode is on"
 msgstr "硬核模式"
 
-#. file strings.opy, line 90, rule "strings"
+#. file strings.opy, line 101, rule "strings"
 msgid "ultra hardcore mode is on"
 msgstr "超硬核模式"
 
-#. file strings.opy, line 91, rule "strings"
+#. file strings.opy, line 102, rule "strings"
 msgid "no respawning until round ends"
 msgstr "玩家仅在回合完成后重生"
 
-#. file strings.opy, line 92, rule "strings"
+#. file strings.opy, line 103, rule "strings"
 msgid "no respawning ever!"
-msgstr "玩家重生"
+msgstr "玩家不重生"
 
-#. file strings.opy, line 94, rule "strings"
+#. file strings.opy, line 105, rule "strings"
 msgid "team deaths"
 msgstr ""
 
-#. file strings.opy, line 95, rule "strings"
+#. file strings.opy, line 106, rule "strings"
 msgid "rounds elapsed"
 msgstr "轮数"
 
-#. file strings.opy, line 96, rule "strings"
+#. file strings.opy, line 107, rule "strings"
 msgid "time elapsed"
 msgstr "游戏时间"
 
-#. file strings.opy, line 98, rule "strings"
+#. file strings.opy, line 109, rule "strings"
 msgid ""
 "spectators, please turn off team 1 & 2 heroes\n"
 "and game mode hud in spectator options\n"
 "(press b)"
 msgstr ""
 
-#. file strings.opy, line 101, rule "strings"
-msgid "use code DS2MD for the latest version"
-msgstr "用DS2MD代码导入最新的版本"
+#. file strings.opy, line 112, rule "strings"
+msgid "use code {0} for the latest version"
+msgstr "用{0}代码导入最新的版本"
 
-#. file strings.opy, line 102, rule "strings"
+#. file strings.opy, line 113, rule "strings"
 msgid "peak: {0} | average: {1}"
 msgstr "最高：{0} | 平均：{1}"
 
-#. file strings.opy, line 103, rule "strings"
+#. file strings.opy, line 114, rule "strings"
 msgid "server load: {0}"
 msgstr "服务器压力：{0}"
 
-#. file strings.opy, line 104, rule "strings"
+#. file strings.opy, line 115, rule "strings"
 msgid "debug version"
 msgstr "调式版本"
 
-#. file strings.opy, line 105, rule "strings"
+#. file strings.opy, line 116, rule "strings"
 msgid "host may be afk. please report bugs in match chat"
 msgstr "若有错误，请在游戏聊天里说一说。"
 
-#. file strings.opy, line 106, rule "strings"
+#. file strings.opy, line 117, rule "strings"
 msgid "high server load detected"
 msgstr "服务器压力高"
 
-#. file strings.opy, line 107, rule "strings"
+#. file strings.opy, line 118, rule "strings"
 msgid "slowing game speed to prevent crashing"
 msgstr "游戏速度已放慢，以免游戏崩溃"
 
-#. file strings.opy, line 108, rule "strings"
+#. file strings.opy, line 119, rule "strings"
 msgid "if you need to change heroes, hold crouch as you die."
-msgstr ""
+msgstr "若要换英雄，淹死的时候要把蹲按键按下"

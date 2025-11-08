@@ -1,10 +1,11 @@
 macro DEBUG = false
+macro CODE = "?????"
 macro PlayerSlots = 9
 
 settings {
     "main": {
-        "description":"it's like rein invasion but with mauga's milkers\n1984 blizzard\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역\nグルメスパイザー\nでお願いします",
-        "modeName": "mauga n!pple pve (test version)" if DEBUG else "mauga n!pple pve"
+        "description":"it's like rein invasion but with mauga's \"guns\"\n1984 blizzard\nworkshop.codes/ds2md\n^ see above to contribute translations\n\nyubz made it\nyubz 제작, Lonepier 번역\nグルメスパイザー\nでお願いします",
+        "modeName": "mauga's investor friendly pve (test version)" if DEBUG else "mauga's investor friendly pve"
 		# "description": "마우가의 찌!찌!를 공략하는 보스레이드\nDS2MD\n\nyubz 제작, Lonepier 번역",
         # "modeName": "마우가 찌!찌! pve"
     },
@@ -172,10 +173,10 @@ rule "hey... wanna play some secret gamemodes?":
 	@Condition false
 	# inflation gamemode (pvp or add bots): 9YX9G
 	null.respawn()
-	# [!] the following games are extremely vulgаr and sехuаl. may be upsetting to viewers. [!]
-	# kiriko рrоstate exam sim: 032QT
+	# [!] the following games are extremely vulgаr and siхuаl. may be upsetting to viewers. [!]
+	# kiriko рrrоstate exam sim: 032QT
 	null.respawn()
-	# the below mode also features extreme fеtish content, sеxually aggressive behavior and a mention of pеdophiliа. viewer discretion advised.
+	# the below mode also features extreme fеhtish content, sеxually aggressive behavior and a mention of pеhdophiliа. viewer discretion advised.
 	# overwatch dating sim: 7GRX3
 	null.respawn()
 
@@ -258,21 +259,29 @@ rule "init":
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
 	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {}! {} / {}".format(t"objective", _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [], "\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
-		f"{threatIcons[threatList[0]]} ",
-		_(threatNames[threatList[0]]),
-		", " if len(threatList) > 1 else "",
-		f"{threatIcons[threatList[1]]} " if len(threatList) > 1 else "",
-		_(threatNames[threatList[1]]) if len(threatList) > 1 else "",
-		", " if len(threatList) > 2 else "",
-		f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else "",
-		_(threatNames[threatList[2]]) if len(threatList) > 2 else ""
-	), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    # hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
+	# 	"\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
+	# 	f"{threatIcons[threatList[0]]} ",
+	# 	_(threatNames[threatList[0]]),
+	# 	", " if len(threatList) > 1 else "",
+	# 	f"{threatIcons[threatList[1]]} " if len(threatList) > 1 else "",
+	# 	_(threatNames[threatList[1]]) if len(threatList) > 1 else "",
+	# 	", " if len(threatList) > 2 else "",
+	# 	f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else "",
+	# 	_(threatNames[threatList[2]]) if len(threatList) > 2 else ""
+	# ), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
+		"\&fullwidth_space;{}: censored\&fullwidth_space;".format(t"threats"), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 
 	nipman.smallLNip = NipmanLeftConst
 	nipman.smallRNip= NipmanRightConst
 
 	nipman.__languageIndex__ = LANG_LIST.index("{}".format(Color.WHITE))
+
+	# investor friendly clouds
+	for i in range(-2, 2, 1):
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallLNip + Vector.UP * i, 1.5, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallRNip + Vector.UP * i, 1.5, EffectReeval.VISIBILITY)
 
 	# hardcore huds
 	if hardcoreLevel == 1:
@@ -1646,6 +1655,12 @@ def moreMaugasSetup():
 		createProgressBarInWorldText(getAllPlayers(), (evalOnce(objPos[iMores]).getHealth() / evalOnce(ceil(objPos[iMores].getMaxHealth()))) * 100, "{} / {} HP".format(ceil(evalOnce(objPos[iMores]).getHealth()), evalOnce(ceil(objPos[iMores].getMaxHealth()))), objPos[iMores].getEyePosition() + Vector.UP * 2, 1, Clip.NONE, Color.RED, Color.WHITE, ProgressWorldTextReeval.VISIBILITY_AND_VALUES, SpecVisibility.DEFAULT)
 		objPos[iMores].hpBar = getLastCreatedText()
 		threatFx.append(getLastCreatedText())
+		# investor friendly clouds
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallLNip, 1, EffectReeval.VISIBILITY)
+		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallRNip, 1, EffectReeval.VISIBILITY)
+		threatFx.append(getLastCreatedEntity())
+
 	wait(0.8)
 	objPos.setStatusEffect(null, Status.FROZEN, 99999)
 	wait(0.8)
