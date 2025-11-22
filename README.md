@@ -2,12 +2,15 @@ overpy source code for mauga nipple game modes for the overwatch workshop
 https://workshop.codes/u/_yubz
 
 ## mauga nipple pve
-[DS2MD](https://workshop.codes/DS2MD) **(currently taken down, please see below)**
+it's back!
+[SANFT](https://workshop.codes/DS2MD)
 
 ## mauga nipple: where is it?
 [W5PMC](https://workshop.codes/W5PMC)
 
 # notice on takedown
+
+the mode has been reuploaded by a fan. this message is obsolete.
 
 my account has been temp banned and the mode has been removed. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
 

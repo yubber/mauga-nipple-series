@@ -1,5 +1,5 @@
 macro DEBUG = false
-macro CODE = "?????"
+macro CODE = 'SANFT'
 macro PlayerSlots = 9
 
 settings {
@@ -271,8 +271,13 @@ rule "init":
 	# 	_(threatNames[threatList[2]]) if len(threatList) > 2 else ""
 	# ), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
     hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
-		"\&fullwidth_space;{}: censored\&fullwidth_space;".format(t"threats"), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-
+		"\&fullwidth_space;{}: {}{}{}{}{}\&fullwidth_space;".format(t"threats",
+		f"{threatIcons[threatList[0]]} ",
+		", " if len(threatList) > 1 else "",
+		f"{threatIcons[threatList[1]]} " if len(threatList) > 1 else "",
+		", " if len(threatList) > 2 else "",
+		f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else ""
+	), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
 	nipman.smallLNip = NipmanLeftConst
 	nipman.smallRNip= NipmanRightConst
 
@@ -280,8 +285,10 @@ rule "init":
 
 	# investor friendly clouds
 	for i in range(-2, 2, 1):
-		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallLNip + Vector.UP * i, 1.5, EffectReeval.VISIBILITY)
-		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallRNip + Vector.UP * i, 1.5, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallLNip + Vector.UP * i * 0.3 + Vector.BACKWARD, 3, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, nipman.smallRNip + Vector.UP * i * 0.3 + Vector.BACKWARD, 3, EffectReeval.VISIBILITY)
+	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.BAD_AURA, Color.BLACK, nipman.smallRNip + Vector.BACKWARD, 2, EffectReeval.VISIBILITY)
+	createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.BAD_AURA, Color.BLACK, nipman.smallLNip + Vector.BACKWARD, 2, EffectReeval.VISIBILITY)
 
 	# hardcore huds
 	if hardcoreLevel == 1:
@@ -1656,9 +1663,13 @@ def moreMaugasSetup():
 		objPos[iMores].hpBar = getLastCreatedText()
 		threatFx.append(getLastCreatedText())
 		# investor friendly clouds
-		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallLNip, 1, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallLNip, 2, EffectReeval.VISIBILITY)
 		threatFx.append(getLastCreatedEntity())
-		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallRNip, 1, EffectReeval.VISIBILITY)
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallLNip, 2, EffectReeval.VISIBILITY)
+		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallRNip, 2, EffectReeval.VISIBILITY)
+		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.CLOUD, Color.BLACK, objPos[iMores].smallRNip, 2, EffectReeval.VISIBILITY)
 		threatFx.append(getLastCreatedEntity())
 
 	wait(0.8)
