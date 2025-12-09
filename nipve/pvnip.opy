@@ -194,7 +194,7 @@ rule "init":
 
 	wait()
 	### PROMO
-	createInWorldText(getAllPlayers() if nipman.isDead() else null, STRINGS.PROMO, NipmanForcePosConst + Vector.UP * 30, 4, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Rainbow, SpecVisibility.ALWAYS)
+	createInWorldText(getAllPlayers() if nipman.isDead() else null, STRINGS.PROMO, NipmanForcePosConst + Vector.UP * 30, 4, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Rainbow, SpecVisibility.DEFAULT)
 	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(0,10,-200), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
 	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(200,10,0), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
 	createInWorldText(getAllPlayers(), STRINGS.PROMO, vect(-200,10,0), 1.1, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.LIGHT_VIOLET, SpecVisibility.ALWAYS)
