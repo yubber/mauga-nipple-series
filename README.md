@@ -10,7 +10,7 @@ it's back!
 
 # notice on takedown
 
-the mode has been reuploaded by a fan. this message is obsolete.
+the mode has been reuploaded by a fan. use code `SANFT`. this message is obsolete.
 
 my account has been temp banned and the mode has been removed. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
 
