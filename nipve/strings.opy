@@ -88,7 +88,7 @@ enum STRINGS:
 	ALLDEAD = t"game over. all players died."
 	# this string is for players that try to hook/charge the mauga. write whatever's funniest in the target language.
 	CHIDING = t"do not the mauga"
-	# if you are translating the petrified text, delete the next line and use the line after it instead. also get rid of the "# " at the start.
+	# if you are translating the petrified text, translate using the line after it instead.
 	PETRIFIED = t"{} petrified! {} {} {}".format(iconString(Icon.EYE), l"Avoid", l"Facing", Hero.SIGMA)
 	# PETRIFIED = t"petrified! avoid facing sigma.".format(iconString(Icon.EYE))
 	# {} is mauga's icon
