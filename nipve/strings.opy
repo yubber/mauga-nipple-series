@@ -29,17 +29,6 @@ rule "strings":
 # since they're in bot names i can't use the translation features
 # ! add translated names here, in the same format and following the order of the language codes
 enum BOTNAME:
-	# SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影","スレンダーマン"])
-	# TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火","熱々突起物"])
-	# SNIPERS = serverSideTranslate(["s-nip-ers", "젖-격수", "狙挤手","乳 首狙撃手"])
-	# NIPLETS = serverSideTranslate(["niplets", "젖먹이", "贝乳塔","ニップレット"])
-	# ILLARIS = serverSideTranslate(["sunkissed nips", "아침에젖스", "太阳公主","日焼け乳 首"])
-	# TOEPPLES = serverSideTranslate(["toepples", "발꼭지", "奶趾","足乳"])
-	# DRAGONIPS = serverSideTranslate(["dragoniррles", "용의 일겨헉♥", "奶龙","ドラゴンニップル"])
-	# WEAK_SPOT = serverSideTranslate(["sensitive spot", "약점♥", "过敏部位","敏感部位"])
-	# MAUGA_JR = serverSideTranslate(["mauga jr.", "마우가 JR.", "小毛加","マウガ Jr."])
-	# MINIBOSS = serverSideTranslate(["miniboss", "미니보스", "大怪物","ミニボス"]),
-	# DRILLS = serverSideTranslate(["double drills", "찌찌드릴", "双钻头","ダブルドリル"])
 	SLENDY = serverSideTranslate(["slenderman", "슬렌더맨", "瘦长鬼影","スレンダーマン"])
 	TORBS = serverSideTranslate(["overheating glands", "과열된 돌출부", "乳腺上火","熱々突起物"])
 	SNIPERS = serverSideTranslate(["snipers", "젖-격수", "狙挤手","乳 首狙撃手"])
@@ -69,8 +58,8 @@ enum SETTING_RESPAWN:
 ###
 # thank you for translating!
 
-globalvar objDescs = [___("collect pages"), ___("defeat the mini maugas"), ___("slay enemies"), ___("slay the miniboss"), ___("capture the point")] # keep point as last
-globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), ___("lactation excavation"), /*"the third nipact",*/ ___("dragon stimulation"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("dairy deaths"), ___("milk wall"), ___("mega milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
+globalvar objDescs = [___("collect pages"), ___("defeat the mini maugas"), ___("slay enemies"), ___("slay the miniboss"), ___("get blood drives score"), ___("capture the point")] # keep point as last
+globalvar threatNames = [___("slenderman"), ___("more maugas"), ___("frosty nips"), ___("lactation excavation"), /*"the third nipact",*/ ___("dragon stimulation"), ___("moo moo mortar"), ___("toepples"), ___("grabbyteats"), ___("niplets"), ___("cup fight"), ___("tiddy twister"), ___("lactic hail"), ___("n!pple nuke"), ___("milk bleb mobs"), ___("milk wall"), ___("mega milk"), ___("scalding discharge"), ___("s-nip-ers"), ___("boobsted mobs"), ___("booblet hell"), ___("gravitatas"), ___("sun exposure"), ___("lazer")]
 
 #!suppressWarnings w_enum_constant
 # these are references to strings in other parts of the program. i've moved them here for your convenience.

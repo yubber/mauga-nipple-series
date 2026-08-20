@@ -53,7 +53,7 @@ settings
 			Ultimate Generation: 160%
 			Lifeweaver
 			{
-				Life Grip and Healing Blossom Range: 200%
+				Life Grip and Healing Blossom Range: 100%
 				Tree of Life Health: 300%
 			}
 			Widowmaker
@@ -73,6 +73,11 @@ settings
 			{
 				Quick Dash Cooldown Time: 65%
 				Updraft Cooldown Time: 120%
+			}
+			Domina
+			{
+				Sonic Repulsors Cooldown Time: 90%
+				Crystal Charge Cooldown Time: 90%
 			}
 			Zarya
 			{
@@ -101,6 +106,10 @@ settings
 			Reinhardt
 			{
 				Charge Cooldown Time: 40%
+			}
+			Jetpack Cat
+			{
+				Health: 55%
 			}
 		}
 		Team 2
@@ -152,6 +161,7 @@ settings
 		Explosion Sounds
 	}
 }
+
 variables {
     global:
         0: nipman
@@ -160,54 +170,59 @@ variables {
         3: threatNames
         4: obj
         5: objWeights
-        6: lastObj
-        7: objProg
-        8: objGoal
-        9: objPos
-        10: roundNo
-        11: threatList
-        12: dummyThreats
-        13: threatIcons
-        14: enemies
-        15: mobDmg
-        16: i
-        17: upto
-        18: target1
-        19: target2
-        20: area1
-        21: area2
-        22: twisterPos
-        23: twisterCache
-        24: wallPos
-        25: wallI
-        26: wallEffects
-        27: missilePos
-        28: missileFx
-        29: missileTemp
-        30: rainVar
-        31: grabLeft
-        32: grabLeftPlayer
-        33: grabRight
-        34: grabRightPlayer
-        35: iMores
-        36: moreFx
-        37: attackingClone
-        38: weakSpots
-        39: isun
-        40: threatSnipers
-        41: threatLactaters
-        42: threatSuns
-        43: threatNiplets
-        44: threatToes
-        45: threatDragons
-        46: threatDrills
-        47: mobs
-        48: threatFx
-        49: antiCrashOn
-        50: hammerProg
-        51: hammerSide
-        52: hardcoreLevel
-        53: nipmanLastHP
+        6: objIcons
+        7: lastObj
+        8: objProg
+        9: objGoal
+        10: objPos
+        11: roundNo
+        12: threatList
+        13: dummyThreats
+        14: threatIcons
+        15: enemies
+        16: mobDmg
+        17: i
+        18: upto
+        19: target1
+        20: target2
+        21: area1
+        22: area2
+        23: twisterPos
+        24: twisterCache
+        25: wallPos
+        26: wallI
+        27: wallEffects
+        28: missilePos
+        29: missileFx
+        30: missileTemp
+        31: rainVar
+        32: grabLeft
+        33: grabLeftPlayer
+        34: grabRight
+        35: grabRightPlayer
+        36: iMores
+        37: moreFx
+        38: attackingClone
+        39: weakSpots
+        40: isun
+        41: threatSnipers
+        42: threatLactaters
+        43: threatSuns
+        44: threatNiplets
+        45: threatToes
+        46: threatDragons
+        47: threatDrills
+        48: mobs
+        49: threatFx
+        50: antiCrashOn
+        51: hammerProg
+        52: hammerSide
+        53: mortarPos
+        54: mortarI
+        55: mortarTimes
+        56: hardcoreLevel
+        57: nipmanLastHP
+        126: __holygrail__
         127: __overpyTranslationHelper__
     player:
         0: mobTarget
@@ -219,26 +234,47 @@ variables {
         6: iniplets
         127: __languageIndex__
 }
+
 subroutines {
     0: mobsInit
     1: moreMaugasSetup
 }
+
+rule ("OverPy <­tx> / <­fg> setup code") {
+    event {
+        Ongoing - Global;
+    }
+    actions {
+        "By Zezombye"
+        Create Dummy Bot(All Heroes, If-Then-Else(Number Of Slots(Team 1), Team 1, If-Then-Else(Number Of Slots(Team 2), Team 2, True)), False, Null, Null);
+        "More info: https://workshop.codes/wiki/articles/tx-reference-sheet"
+        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("______________________________________________________________________________________________________________________________〼"));
+        Set Global Variable(__holygrail__, String Split(First Of(Last Created Entity), Empty Array));
+        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("______________________________________________________________________________________________________________________________ࡀ"));
+        Set Global Variable(__holygrail__, String Slice(String Replace(Custom String("______________________________________________________________________________________________________________________________〼"), Global.__holygrail__, First Of(Last Created Entity)), 126, True));
+        Destroy All Dummy Bots;
+    }
+}
+
 rule ("Initialize global variables") {
     event {
         Ongoing - Global;
     }
     actions {
-        Set Global Variable(__overpyTranslationHelper__, String Split(Custom String("0White0흰색0白色0白"), First Of(Null)));
-        Set Global Variable(objDescs, Array(String Split(Custom String("ＴＬＥｒｒcollect pages페이지를 모아라收集八页纸乳 首を集めろ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdefeat the mini maugas스몰우가들을 처치해라消灭小毛加ミニマウガを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay enemies적들을 처치해라消除怪物敵を倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay the miniboss미니보스를 처치해라消灭小头目ミニボスを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcapture the point거점을 점령해라控制点エリアを占拠せよ"), Global.__overpyTranslationHelper__)));
-        Set Global Variable(threatNames, Array(String Split(Custom String("ＴＬＥｒｒslenderman슬렌더맨瘦长鬼影スレンダーマン"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmore maugas마우(추)가毛+++集団マウガ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒfrosty nips냉동찌찌冰冻馒头冷凍乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactation excavation찌찌드릴lactation excavation乳 首ドリル"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdragon stimulation용의 일겨헉♥奶龙ドラゴンの刺激"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtoepples발꼭지奶趾つま先乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgrabbyteats하우두유두?grabbyteatsつかみ乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒniplets바운스 모핑贝乳塔弾性乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcup fight케이찌찌 혈투罩杯中斗カップファイト"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtiddy twister공포의 트위스트乳卷风乳 首台風"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactic hail유당지옥奶雹乳酸のあられ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒn!pple nuke툭튀미사일核馒头乳 首 nuke"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdairy deaths우유 알러지dairy deaths乳 死"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmilk wall젖벽대전万里奶城乳 汁 ウォール"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmega milk성장촉진 우유mega milk巨大化ミルク"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒscalding discharge화끈한 분비물阳盛则热熱々乳 汁放出"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒs-nip-ers젖-격수狙挤手乳 首狙撃手"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒboobsted mobs버젖커 몹들小康怪物つよモブ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒbooblet hell찌찌피하기弹波波乳 首地獄"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgravitatas젖력... 아니 중력gravitatas重乳力"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒsun exposure노출 (햇빛에)阳光明咪日光暴露"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlazer레이젖咪光束乳 首ビーム"), Global.__overpyTranslationHelper__)));
-        Set Global Variable(objWeights, Array(0.06, 0.12, 0.3, 0.3, 0.22));
+        Set Global Variable(__overpyTranslationHelper__, String Split(Custom String("0White0흰색0白色0ホワイト"), First Of(Null)));
+        Set Global Variable(objDescs, Array(String Split(Custom String("ＴＬＥｒｒcollect pages페이지를 모아라收集八页纸乳 首を集めろ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdefeat the mini maugas스몰우가들을 처치해라消灭小毛加ミニマウガを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay enemies적들을 처치해라消除怪物敵を倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒslay the miniboss미니보스를 처치해라消灭小头目ミニボスを倒せ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒget blood drives scoreget blood drives scoreget blood drives scoreget blood drives score"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcapture the point거점을 점령해라控制点エリアを占拠せよ"), Global.__overpyTranslationHelper__)));
+        Set Global Variable(threatNames, Array(String Split(Custom String("ＴＬＥｒｒslenderman슬렌더맨瘦长鬼影スレンダーマン"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmore maugas마우(추)가毛+++集団マウガ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒfrosty nips냉동찌찌冰冻馒头冷凍乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactation excavation찌찌드릴lactation excavation乳 首ドリル"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒdragon stimulation용의 일겨헉♥奶龙ドラゴンの刺激"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmoo moo mortarmoo moo mortarmoo moo mortarmoo moo mortar"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtoepples발꼭지奶趾つま先乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgrabbyteats하우두유두?grabbyteatsつかみ乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒniplets바운스 모핑贝乳塔弾性乳 首"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒcup fight케이찌찌 혈투罩杯中斗カップファイト"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒtiddy twister공포의 트위스트乳卷风乳 首台風"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlactic hail유당지옥奶雹乳酸のあられ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒn!pple nuke툭튀미사일核馒头乳 首 nuke"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmilk bleb mobs우유 알러지milk bleb mobs乳 死"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmilk wall젖벽대전万里奶城乳 汁 ウォール"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒmega milk성장촉진 우유mega milk巨大化ミルク"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒscalding discharge화끈한 분비물阳盛则热熱々乳 汁放出"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒs-nip-ers젖-격수狙挤手乳 首狙撃手"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒboobsted mobs버젖커 몹들小康怪物つよモブ"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒbooblet hell찌찌피하기弹波波乳 首地獄"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒgravitatas젖력... 아니 중력gravitatas重乳力"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒsun exposure노출 (햇빛에)阳光明咪日光暴露"), Global.__overpyTranslationHelper__), String Split(Custom String("ＴＬＥｒｒlazer레이젖咪光束乳 首ビーム"), Global.__overpyTranslationHelper__)));
+        Set Global Variable(objWeights, Array(0.06, 0.12, 0.27, 0.27, 0.12, 0.16));
+        Set Global Variable(objIcons, Array(Custom String("{0}tx0C0000000000ABAB>", Global.__holygrail__), Hero Icon String(Hero(Mauga)), Icon String(Skull), Custom String("{0}tx0C00000000020AF5>", Global.__holygrail__), Custom String("{0}tx0C0000000000906E>", Global.__holygrail__), Custom String("{0}tx0C00000000020AF8>", Global.__holygrail__)));
         Set Global Variable(threatList, Empty Array);
-        Set Global Variable(dummyThreats, Array(0, 15, 16, 20, 7, 4, 5, 3));
-        Set Global Variable(threatIcons, Array(Hero Icon String(Hero(Reaper)), Ability Icon String(Hero(Mauga), Button(Ability 1)), Ability Icon String(Hero(Mei), Button(Ultimate)), Ability Icon String(Hero(Venture), Button(Melee)), Ability Icon String(Hero(Hanzo), Button(Ultimate)), Hero Icon String(Hero(Sigma)), Ability Icon String(Hero(Moira), Button(Secondary Fire)), Ability Icon String(Hero(Sigma), Button(Ability 1)), Ability Icon String(Hero(Mauga), Button(Ultimate)), Ability Icon String(Hero(Junker Queen), Button(Ultimate)), Ability Icon String(Hero(Hazard), Button(Ultimate)), Icon String(Radioactive), Ability Icon String(Hero(Reaper), Button(Ultimate)), Ability Icon String(Hero(Mei), Button(Ability 2)), Icon String(Plus), Ability Icon String(Hero(Torbjörn), Button(Ultimate)), Ability Icon String(Hero(Widowmaker), Button(Ultimate)), Ability Icon String(Hero(Ana), Button(Ultimate)), Ability Icon String(Hero(Pharah), Button(Ultimate)), Ability Icon String(Hero(Zarya), Button(Ultimate)), Ability Icon String(Hero(Illari), Button(Ultimate)), Ability Icon String(Hero(Echo), Button(Ability 2))));
-        Set Global Variable(enemies, Array(Hero(Winston), Hero(Torbjörn), Hero(Reinhardt), Hero(Mauga)));
-        Set Global Variable(mobDmg, Array(75, 130, 75, 80));
+        Set Global Variable(dummyThreats, Array(0, 16, 17, 21, 8, 4, 6, 3));
+        Set Global Variable(threatIcons, Array(Hero Icon String(Hero(Reaper)), Ability Icon String(Hero(Mauga), Button(Ability 1)), Ability Icon String(Hero(Mei), Button(Ultimate)), Ability Icon String(Hero(Venture), Button(Melee)), Ability Icon String(Hero(Hanzo), Button(Ultimate)), Ability Icon String(Hero(Bastion), Button(Ultimate)), Hero Icon String(Hero(Sigma)), Ability Icon String(Hero(Moira), Button(Secondary Fire)), Ability Icon String(Hero(Sigma), Button(Ability 1)), Ability Icon String(Hero(Mauga), Button(Ultimate)), Ability Icon String(Hero(Junker Queen), Button(Ultimate)), Ability Icon String(Hero(Hazard), Button(Ultimate)), Icon String(Radioactive), Ability Icon String(Hero(Reaper), Button(Ultimate)), Ability Icon String(Hero(Mei), Button(Ability 2)), Icon String(Plus), Ability Icon String(Hero(Torbjörn), Button(Ultimate)), Ability Icon String(Hero(Widowmaker), Button(Ultimate)), Ability Icon String(Hero(Ana), Button(Ultimate)), Ability Icon String(Hero(Pharah), Button(Ultimate)), Ability Icon String(Hero(Zarya), Button(Ultimate)), Ability Icon String(Hero(Illari), Button(Ultimate)), Ability Icon String(Hero(Echo), Button(Ability 2))));
+        Set Global Variable(enemies, Array(Hero(Winston), Hero(Torbjörn), Hero(Reinhardt), Hero(Mauga), Hero(D.Mon)));
+        Set Global Variable(mobDmg, Array(75, 130, 75, 80, 65));
         Set Global Variable(weakSpots, Empty Array);
         Set Global Variable(mobs, Empty Array);
+        Set Global Variable(mortarPos, Array(Null, Null, Null, Null, Null));
+        Set Global Variable(mortarTimes, Array(Null, Null, Null, Null, Null));
         Set Global Variable(hardcoreLevel, Workshop Setting Combo(Custom String("difficulty | 난이도"), Custom String("player respawning 󠁼 플레이어 리스폰 󠁼 玩家重生 󠁼 プレイヤーリスポーン"), 0, Array(Custom String("always | 항상 | 正常 | 常に"), Custom String("only when round ends! | 라운드가 끝났을 시에만 | 回合完毕后 | ラウンドが終わったら"), Custom String("never!!! | 리스폰 불가 | 不重生 | 不可能")), 0));
     }
 }
@@ -284,14 +320,7 @@ rule ("init") {
         Ongoing - Global;
     }
     actions {
-        "set up TX bracket\nScript Created By Zezombye.\nMore Info: https://workshop.codes/wiki/articles/tx-reference-sheet"
-        Create Dummy Bot(All Heroes, If-Then-Else(Number Of Slots(Team 1), Team 1, If-Then-Else(Number Of Slots(Team 2), Team 2, True)), False, Null, Null);
-        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­〼"));
-        Set Global Variable(bracket, String Split(First Of(Last Created Entity), Empty Array));
-        Start Forcing Dummy Bot Name(Last Created Entity, Custom String("­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­ࡀ"));
-        Set Global Variable(bracket, String Slice(String Replace(Custom String("­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­­〼"), Global.bracket, First Of(Last Created Entity)), 63, True));
-        Destroy All Dummy Bots;
-        Wait(0.016, Ignore Condition);
+        Wait(0.096, Ignore Condition);
         "## PROMO"
         Create In-World Text(If-Then-Else(Is Dead(Global.nipman), All Players(All Teams), Null), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10.2, 35), 4, Clip Against Surfaces, Visible To Position String and Color, Custom Color(Add(110, Multiply(90, Cosine From Degrees(Multiply(Total Time Elapsed, 150)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 120)))), Add(110, Multiply(90, Cosine From Degrees(Add(Multiply(Total Time Elapsed, 150), 240)))), 255), Default Visibility);
         Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(0, 10, -200), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
@@ -299,7 +328,6 @@ rule ("init") {
         Create In-World Text(All Players(All Teams), Value In Array(String Split(Custom String("ＴＬＥｒｒMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyur{0}", Custom String("l.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps://tinyurl.com/mauganipMAUGA N? PVE: THE DOCVMENTARY\nout now\nhttps{0}", Custom String("://tinyurl.com/mauganip"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Vector(-200, 10, 0), 1.1, Clip Against Surfaces, Visible To Position and String, Custom Color(203, 135, 255, 255), Visible Always);
         "print(len(getPlayers(Team.2)))\nhudText(hostPlayer, iconString(Icon.EYE), \"eye position\", localPlayer.getEyePosition(), HudPosition.ACTUALLY_LEFT, 0, Color.SKY_BLUE, Color.SKY_BLUE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)"
         Create HUD Text(All Players(All Teams), Null, Custom String("peak: {0} | average: {1}", Server Load Peak, Server Load Average), Value In Array(String Split(Custom String("ＴＬＥｒｒserver load: {0}\n서버 로드: {0}\n服务器压力：{0}\nサーバー負荷: {0}\n", Server Load), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Right, -2, Color(Orange), Color(Gray), Color(Gray), Visible To and String, Visible Always);
-        "hudSubtext(getAllPlayers(), STRINGS.IMPORT_CODE, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)\nif DEBUG == false:"
         Disable Inspector Recording;
         Set Global Variable(obj, -1);
         Create Dummy Bot(Hero(Mauga), Team 2, -1, Up, Backward);
@@ -332,8 +360,6 @@ rule ("init") {
         Create HUD Text(All Players(All Teams), Icon String(Skull), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒteam deaths사망 수team deathsチーム死亡数"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Team Score(Team 2), Left, 2, Color(Red), Color(White), Color(White), Visible To and String, Default Visibility);
         Create HUD Text(All Players(All Teams), Icon String(Flag), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒrounds elapsed지난 라운드 수轮数ラウンド経過数"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Global.roundNo, Left, 2, Color(Yellow), Color(White), Color(White), Visible To and String, Default Visibility);
         Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Baptiste Immortality Field Protected Effect, Color(Team 2), Global.nipman, 1, Visible To Position and Radius);
-        If(False);
-        End;
         Create HUD Text(If-Then-Else(Global.antiCrashOn, All Players(All Teams), Null), Icon String(Sad), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhigh server load detected서버 로드 높음服务器压力高高いサーバー負荷を検出"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒslowing game speed to prevent crashing크래시 방지를 위해 게임 속도가 늦춰집니다游戏速度已放慢，以免游戏崩溃クラッシュ防止のためゲーム速度を低下"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 4, Color(Orange), Color(Orange), Color(White), Visible To and String, Default Visibility);
         Create HUD Text(If-Then-Else(Array Contains(All Players(Team 1), Local Player), Null, All Players(All Teams)), Null, Null, Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒspectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)관전자는 1팀/2팀 영웅들 설정과\n게임 모드{0}", Custom String(" HUD 설정을 꺼 주십시오\n(B 키)spectators, please turn off team 1 & 2 heroes\nand game mode hud in spectator options\n(press b)観戦者は観戦オプ{0}", Custom String("ションで\nチーム1＆2のヒーローとゲームモードHUDをオフにしてください\n（Bキーを押す）"))), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Left, 9, Null, Null, Color(Gray), Visible To and String, Visible Always);
         "objective effects"
@@ -343,25 +369,18 @@ rule ("init") {
             Wait(0.016, Ignore Condition);
         End;
         Create Effect(If-Then-Else(Compare(Global.obj, ==, 0), All Players(All Teams), Null), Orb, Color(White), Add(Global.objPos, Multiply(Up, Add(1, Multiply(0.2, Sine From Radians(Multiply(Total Time Elapsed, 5)))))), True, Visible To Position and Radius);
-        Create Effect(If-Then-Else(Compare(Global.obj, ==, 4), All Players(All Teams), Empty Array), Ring, Color(Blue), Global.objPos, 12, Visible To Position and Radius);
-        Create Icon(If-Then-Else(Compare(Global.obj, ==, 4), All Players(All Teams), Empty Array), Add(Global.objPos, Multiply(Up, Add(1, Multiply(0.3, Sine From Radians(Multiply(Total Time Elapsed, 5)))))), Arrow: Down, Visible To and Position, Color(Team 1), True);
+        Create Effect(If-Then-Else(Or(Compare(Global.obj, ==, 5), Compare(Global.obj, ==, 4)), All Players(All Teams), Empty Array), Ring, If-Then-Else(Compare(Global.obj, ==, 5), Color(Blue), Custom Color(255, 112, 122, 255)), Global.objPos, 12, Visible To Position and Radius);
+        Create Icon(If-Then-Else(Or(Compare(Global.obj, ==, 5), Compare(Global.obj, ==, 4)), All Players(All Teams), Empty Array), Add(Global.objPos, Multiply(Up, Add(1, Multiply(0.3, Sine From Radians(Multiply(Total Time Elapsed, 5)))))), Arrow: Down, Visible To and Position, Color(Team 1), True);
         Wait(0.16, Ignore Condition);
         "objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there"
         Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, ==, -1), All Players(All Teams), Empty Array), Divide(Multiply(100, Health(Global.nipman)), 57500), Custom String("{0} {1} / 57500 hp", Hero Icon String(Hero(Mauga)), Round To Integer(Health(Global.nipman), Up)), Top, 1, Color(Team 2), Color(White), Visible To Values and Color, Default Visibility);
-        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("{0}: {1}! {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒobjective목표目标目標"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Value In Array(Global.objDescs, Global.obj), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("{0} / {1}", Global.objProg, Global.objGoal)), Top, 1, Color(Team 1), Color(White), Visible To Values and Color, Default Visibility);
+        Create Progress Bar HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Multiply(Divide(Global.objProg, Global.objGoal), 100), Custom String("{0}: {1} {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒobjective목표目标目標"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Global.objIcons, Global.obj), Custom String("{0}! {1} / {2}", Value In Array(Value In Array(Global.objDescs, Global.obj), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Global.objProg, Global.objGoal)), Top, 1, Color(Team 1), Color(White), Visible To Values and Color, Default Visibility);
         "_(threatNames[threatList[2]]) if len(threatList) > 2 else \"\"\n), \"\", \" \\n \", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)"
         Create HUD Text(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Empty Array), Custom String("　{0}: {1} {2}", Value In Array(String Split(Custom String("ＴＬＥｒｒthreats위험 요인危险警告"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Value In Array(Global.threatIcons, First Of(Global.threatList)), Custom String("{0}{1}{2}", If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String(", "), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 1), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 1))), Custom String("")), Custom String("{0}{1}　", If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String(", "), Custom String("")), If-Then-Else(Compare(Count Of(Global.threatList), >, 2), Custom String("{0} ", Value In Array(Global.threatIcons, Value In Array(Global.threatList, 2))), Custom String(""))))), Null, Custom String(" \n "), Top, 0, Color(Orange), Color(Gray), Color(Gray), Visible To String and Color, Default Visibility);
         Set Player Variable(Global.nipman, cacheA, Vector(2.93, 8.04, 26.15));
         Set Player Variable(Global.nipman, cacheB, Vector(-7.19, 8, 30.27));
         Set Player Variable(Global.nipman, __languageIndex__, Index Of Array Value(Array(Custom String("White"), Custom String("흰색"), Custom String("白色"), Custom String("白色")), Custom String("{0}", Color(White))));
-        "investor friendly clouds"
-        For Global Variable(i, -2, 2, 1);
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), Add(Add((Global.nipman).cacheA, Multiply(Multiply(Up, Global.i), 0.3)), Backward), 3, Visible To);
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), Add(Add((Global.nipman).cacheB, Multiply(Multiply(Up, Global.i), 0.3)), Backward), 3, Visible To);
-        End;
-        Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Bad Aura, Color(Black), Add((Global.nipman).cacheB, Backward), 2, Visible To);
-        Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Bad Aura, Color(Black), Add((Global.nipman).cacheA, Backward), 2, Visible To);
-        "hardcore huds"
+        "createEffect(getAllPlayers() if obj != OBJ.INTERMISSION else null, Effect.BAD_AURA, Color.BLACK, nipman.smallLNip + Vector.BACKWARD, 2, EffectReeval.VISIBILITY)\nhardcore huds"
         If(Compare(Global.hardcoreLevel, ==, 1));
             Create HUD Text(All Players(All Teams), Icon String(Exclamation Mark), Custom String("{0}                                                                                                                          {1}", Value In Array(String Split(Custom String("ＴＬＥｒｒhardcore mode is on하드코어 모드 활성화硬核模式ハードコアモード有効"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Custom String("                                                ")), Value In Array(String Split(Custom String("ＴＬＥｒｒno respawning until round ends라운드가 끝날 때까지 리스폰 불가玩家仅在回合完成后重生ラウンド終了まで復活しません"), Global.__overpyTranslationHelper__), Absolute Value(Index Of Array Value(Global.__overpyTranslationHelper__, String Split(Color(White), Empty Array)))), Left, 3, Color(Black), Color(White), Color(White), Visible To and String, Default Visibility);
         Else If(Compare(Global.hardcoreLevel, ==, 2));
@@ -443,9 +462,7 @@ rule ("loop") {
         Wait(0.36, Ignore Condition);
         "# guaranteed threats\nguarantee a threat that will get copied by mauga clones"
         If(Compare(Global.objGoal, ==, 1));
-            Modify Global Variable(threatList, Append To Array, Random Value In Array(Array(2, 15, 18, 16, 20)));
-        End;
-        If(False);
+            Modify Global Variable(threatList, Append To Array, Random Value In Array(Array(2, 16, 19, 17, 21)));
         End;
         "# insert objective threats"
         If(Compare(Global.objGoal, ==, 0));
@@ -456,14 +473,14 @@ rule ("loop") {
         "# add threats until 2 non-obj ones are reached\nlastObj is used as temp storage for the candidate threat"
         While(Compare(Count Of(Global.threatList), <, If-Then-Else(Or(Compare(Global.obj, ==, 0), Compare(Global.obj, ==, 1)), 3, 2)));
             Wait(0.016, Ignore Condition);
-            Set Global Variable(lastObj, Random Integer(2, 21));
-            Skip If(And(Compare(Global.objGoal, ==, 1), Array Contains(Array(17, 12), Global.lastObj)), 6);
+            Set Global Variable(lastObj, Random Integer(2, 22));
+            Skip If(And(Compare(Global.objGoal, ==, 1), Array Contains(Array(18, 13), Global.lastObj)), 6);
             "prevent dupes"
             If(And(Not(Array Contains(Global.threatList, Global.lastObj)), Or(Not(Array Contains(Global.dummyThreats, Global.lastObj)), Compare(Count Of(Filtered Array(Global.threatList, Array Contains(Global.dummyThreats, Current Array Element))), ==, 0))));
                 Modify Global Variable(threatList, Append To Array, Global.lastObj);
             End;
             "forbidden combinations"
-            If(And(Array Contains(Global.threatList, 3), Array Contains(Global.threatList, 8)));
+            If(And(Array Contains(Global.threatList, 3), Array Contains(Global.threatList, 9)));
                 Modify Global Variable(threatList, Remove From Array By Index, Subtract(Count Of(Global.threatList), 1));
             End;
             //__label_continue_2__:
@@ -479,7 +496,7 @@ rule ("loop") {
         Press Button(Global.nipman, Button(Ability 2));
         Wait(0.48, Ignore Condition);
         Set Global Variable(obj, Global.objGoal);
-        Set Global Variable(objGoal, Value In Array(Array(8, 3, 50, 1, 100), Global.obj));
+        Set Global Variable(objGoal, Value In Array(Array(8, 3, 50, 1, Multiply(300, Number Of Players(Team 1)), 100), Global.obj));
         "i forgot why this can't be 0. surely nothing bad happens :clueless:"
         Set Damage Received(Global.nipman, 0.001);
         "i rember now. it's to detect hook, punch, etc. now also for dragonipples"
@@ -543,7 +560,7 @@ rule ("Subroutine mobsInit") {
             Modify Global Variable(mobs, Append To Array, Last Created Entity);
             Wait(0.124, Ignore Condition);
             "mobs.last().startFacing(directionTowards(mobs[evalOnce(i)].getEyePosition(), mobs[evalOnce(i)].mobTarget), 500, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)"
-            If(Array Contains(Global.threatList, 17));
+            If(Array Contains(Global.threatList, 18));
                 Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), Value In Array(Global.mobs, Evaluate Once(Global.i)), 1, Visible To Position and Radius);
                 Modify Global Variable(threatFx, Append To Array, Last Created Entity);
             End;
@@ -556,18 +573,29 @@ rule ("Subroutine mobsInit") {
         Set Damage Dealt(Global.mobs, Value In Array(Global.mobDmg, Modulo(Global.roundNo, Count Of(Global.mobDmg))));
         Set Move Speed(Global.mobs, 70);
         Wait(0.016, Ignore Condition);
-        If(Compare(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), ==, Hero(Torbjörn)));
-            Set Damage Received(Global.mobs, 85);
-        Else If(Compare(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), ==, Hero(Mauga)));
-            Set Max Health(Global.mobs, 55);
-            Set Move Speed(Global.mobs, 40);
-            Set Knockback Dealt(Global.mobs, 40);
-            Set Damage Received(Global.mobs, 115);
+        If(True);
+            Skip(Value In Array(Array(11, 0, 2, 7), Add(1, Index Of Array Value(Array(Hero(Torbjörn), Hero(Mauga), Hero(D.Mon)), Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies)))))));
+        //__label_switch_3_0__:
+        Set Damage Received(Global.mobs, 85);
         Else;
-            Set Damage Received(Global.mobs, 100);
+        //__label_switch_3_1__:
+        Set Max Health(Global.mobs, 55);
+        Set Move Speed(Global.mobs, 40);
+        Set Knockback Dealt(Global.mobs, 40);
+        Set Damage Received(Global.mobs, 115);
+        Else;
+        //__label_switch_3_2__:
+        Set Max Health(Global.mobs, 50);
+        Start Scaling Player(Global.mobs, 0.7, False);
+        Set Move Speed(Global.mobs, 70);
+        Else;
+        //__label_switch_3_default__:
+        Set Damage Received(Global.mobs, 100);
+        Stop Scaling Player(Global.mobs);
+        Else;
         End;
         "kill(mobs, null)\nmobs.resurrect()\nif obj == OBJ.KILL:\nobjProg -= len(mobs)"
-        If(Array Contains(Global.threatList, 17));
+        If(Array Contains(Global.threatList, 18));
             Start Damage Modification(All Players(Team 1), Global.mobs, 130, Receivers and Damagers);
         End;
     }
@@ -609,13 +637,13 @@ rule ("slendy") {
         Wait(0.016, Ignore Condition);
         Create Effect(All Players(All Teams), Reaper Wraith Form Effect, Color(Team 2), Last Of(Global.mobs), 1, Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        If(Array Contains(Global.threatList, 17));
+        If(Array Contains(Global.threatList, 18));
             Create Effect(All Players(All Teams), Ana Nano Boosted Effect, Color(Team 2), Last Of(Global.mobs), 1, Visible To Position and Radius);
             Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         End;
         Wait(0.4, Ignore Condition);
         Start Forcing Throttle(Global.mobs, 1, 1, 0, 0, 0, 1);
-        Set Damage Dealt(Global.mobs, If-Then-Else(Array Contains(Global.threatList, 17), 650, 500));
+        Set Damage Dealt(Global.mobs, If-Then-Else(Array Contains(Global.threatList, 18), 650, 500));
         Set Move Speed(Global.mobs, 99);
         Start Scaling Player(Global.mobs, 2, False);
         Set Max Health(Global.mobs, Absolute Value(1200));
@@ -710,7 +738,7 @@ rule ("mob retarget") {
                 If(Is Alive(Value In Array(Global.mobs, Global.i)));
                     Set Player Variable(Value In Array(Global.mobs, Global.i), mobTarget, Value In Array(Sorted Array(Filtered Array(All Living Players(Team 1), Has Spawned(Current Array Element)), Distance Between(Current Array Element, Position Of(Value In Array(Global.mobs, Global.i)))), Modulo(Random Integer(0, 2), Number Of Living Players(Team 1))));
                     Wait(0.08, Ignore Condition);
-                    Start Facing(Value In Array(Global.mobs, Global.i), Direction Towards(Eye Position(Evaluate Once(Value In Array(Global.mobs, Global.i))), (Evaluate Once(Value In Array(Global.mobs, Global.i))).mobTarget), 500, To World, Direction and Turn Rate);
+                    Start Facing(Value In Array(Global.mobs, Global.i), Direction Towards(Eye Position(Evaluate Once(Value In Array(Global.mobs, Global.i))), Eye Position((Evaluate Once(Value In Array(Global.mobs, Global.i))).mobTarget)), If-Then-Else(Compare(Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))), ==, Hero(D.Mon)), 130, 500), To World, Direction and Turn Rate);
                 End;
             End;
             Start Forcing Throttle(Global.mobs, 1, 1, 0, 0, 0, 1);
@@ -731,7 +759,7 @@ rule ("mob retarget") {
 rule ("mauga mob behavior") {
     event {
         Ongoing - Each Player;
-        All;
+        Team 2;
         Mauga;
     }
     conditions {
@@ -739,6 +767,7 @@ rule ("mauga mob behavior") {
     }
     actions {
         Wait(0.48, Ignore Condition);
+        "if i am not a niplet prop"
         If(Or(Array Contains(Global.mobs, Event Player), And(Compare(Global.obj, ==, 3), Compare(Event Player, ==, Global.objPos))));
             While(True);
                 Wait(0.64, Ignore Condition);
@@ -746,6 +775,28 @@ rule ("mauga mob behavior") {
                 If(And(And(And(Not(Is Using Ability 1(Event Player)), Or(Is On Ground(Event Player), Compare(Normalized Health(Event Player), <, 1))), Is Alive((Event Player).mobTarget)), Entity Exists((Event Player).mobTarget)));
                     Press Button(Event Player, Button(Ability 1));
                 End;
+            End;
+    }
+}
+
+rule ("dmon charge") {
+    event {
+        Ongoing - Each Player;
+        Team 2;
+        D.Mon;
+    }
+    actions {
+        Wait(0.48, Ignore Condition);
+        If(Or(Array Contains(Global.mobs, Event Player), And(Compare(Global.obj, ==, 3), Compare(Event Player, ==, Global.objPos))));
+            While(True);
+                Wait(Random Real(5.5, 10), Ignore Condition);
+                Stop Holding Button(Event Player, Button(Primary Fire));
+                Start Holding Button(Event Player, Button(Secondary Fire));
+                Wait(0.24, Ignore Condition);
+                Press Button(Event Player, Button(Primary Fire));
+                Stop Holding Button(Event Player, Button(Secondary Fire));
+                Wait(0.016, Ignore Condition);
+                Start Holding Button(Event Player, Button(Primary Fire));
             End;
     }
 }
@@ -769,19 +820,19 @@ rule ("drills setup and act") {
         Set Status(Global.threatDrills, Null, Phased Out, 99999);
         Start Forcing Dummy Bot Name(Global.threatDrills, Value In Array(Array(Custom String("double drills"), Custom String("찌찌드릴"), Custom String("双钻头"), Custom String("ダブルドリル")), (Global.nipman).__languageIndex__));
         "place hole"
-        Set Player Variable(First Of(Global.threatDrills), cacheA, Add(Multiply(Forward, Random Real(-11, 11)), Multiply(Right, Random Real(-11, 11))));
-        If(Array Contains(Global.threatList, 19));
-            Teleport(Filtered Array(Players Within Radius((First Of(Global.threatDrills)).cacheA, 9, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), Vector(Multiply(Divide(Divide(Multiply(Multiply(X Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15), 1, Multiply(Divide(Divide(Multiply(Multiply(Z Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15)));
+        Set Player Variable(First Of(Global.threatDrills), cacheA, Add(Multiply(Forward, Random Real(-9, 9)), Multiply(Right, Random Real(-9, 9))));
+        If(Array Contains(Global.threatList, 20));
+            Teleport(Filtered Array(Players Within Radius((First Of(Global.threatDrills)).cacheA, 11, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), Vector(Multiply(Divide(Divide(Multiply(Multiply(X Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15), 1, Multiply(Divide(Divide(Multiply(Multiply(Z Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15)));
         End;
-        Apply Impulse(Filtered Array(Players Within Radius((First Of(Global.threatDrills)).cacheA, 12, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), Up, 20, To World, Cancel Contrary Motion XYZ);
+        Apply Impulse(Filtered Array(Players Within Radius((First Of(Global.threatDrills)).cacheA, 14, Team 1, Off), And(Is Alive(Current Array Element), Has Spawned(Current Array Element))), Up, 20, To World, Cancel Contrary Motion XYZ);
         Wait(0.016, Ignore Condition);
         Play Effect(All Players(All Teams), Lúcio Sound Barrier Cast Effect, Color(Team 2), (First Of(Global.threatDrills)).cacheA, 1);
         Play Effect(All Players(All Teams), Bastion Tank Cannon Explosion Sound, Color(Team 2), (First Of(Global.threatDrills)).cacheA, 90);
         "createProjectile(Projectile.RAMATTRA_RAVENOUS_VORTEX_SPHERE, threatDrills[0], holePos, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, holeRadius, DynamicEffect.BAD_EXPLOSION, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, 0, getTotalTimeElapsed(), 1, 50, 0,0)"
-        Create Effect(All Players(All Teams), Ring, Color(Black), (First Of(Global.threatDrills)).cacheA, 7.5, Visible To);
+        Create Effect(All Players(All Teams), Ring, Color(Black), (First Of(Global.threatDrills)).cacheA, 9.5, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         For Player Variable(First Of(Global.threatDrills), cacheB, 0, 20, 1);
-            Create Effect(All Players(All Teams), Sphere, Color(Black), Add((First Of(Global.threatDrills)).cacheA, Multiply(Multiply(Down, Square Root(Subtract(2500, Raise To Power(Add(Divide(Multiply(7, Add(Modulo((First Of(Global.threatDrills)).cacheB, 10), 1)), 10), 0.5), 2)))), 0.998959)), 50.052104240514375, Visible To);
+            Create Effect(All Players(All Teams), Sphere, Color(Black), Add((First Of(Global.threatDrills)).cacheA, Multiply(Multiply(Down, Square Root(Subtract(4900, Raise To Power(Add(Divide(Multiply(9, Add(Modulo((First Of(Global.threatDrills)).cacheB, 10), 1)), 10), 0.5), 2)))), 0.998959)), 70.07294593672012, Visible To);
             Modify Global Variable(threatFx, Append To Array, Last Created Entity);
             Wait(0.016, Ignore Condition);
         End;
@@ -807,7 +858,7 @@ rule ("hole action") {
     actions {
         Wait(0.64, Ignore Condition);
         While(Compare(Global.obj, !=, -1));
-            If(And(Compare(Y Component Of(Position Of(Event Player)), <, 0.5), Compare(Distance Between(Multiply(Position Of(Event Player), Vector(1, 0, 1)), (First Of(Global.threatDrills)).cacheA), <, 7)));
+            If(And(Compare(Y Component Of(Position Of(Event Player)), <, 0.5), Compare(Distance Between(Multiply(Position Of(Event Player), Vector(1, 0, 1)), (First Of(Global.threatDrills)).cacheA), <, 9)));
                 Disable Movement Collision With Environment(Event Player, True);
                 Set Environment Credit Player(Event Player, First Of(Global.threatDrills));
             Else If(Compare(Y Component Of(Position Of(Event Player)), >, -0.3));
@@ -903,6 +954,35 @@ rule ("dragon stimulation") {
     }
 }
 
+rule ("mortar") {
+    event {
+        Ongoing - Global;
+    }
+    conditions {
+        Global.obj != -1;
+        Array Contains(Global.threatList, 5) == True;
+    }
+    actions {
+        Wait(0.16, Ignore Condition);
+        For Global Variable(mortarI, 0, 5, 1);
+            Create Effect(If-Then-Else(Value In Array(Global.mortarPos, Evaluate Once(Global.mortarI)), All Players(All Teams), Null), Light Shaft, Color(Orange), Subtract(Value In Array(Global.mortarPos, Evaluate Once(Global.mortarI)), Vector(0, 10, 0)), Multiply(4.5, Min(1, Divide(Subtract(Total Time Elapsed, Value In Array(Global.mortarTimes, Evaluate Once(Global.mortarI))), 1.5))), Visible To Position and Radius);
+            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
+            Set Global Variable At Index(mortarPos, Global.mortarI, 0);
+        End;
+        Set Global Variable(mortarI, 0);
+        While(Compare(Global.obj, !=, -1));
+            "mortarPos[mortarI] = null"
+            Set Global Variable(mortarI, Modulo(Add(Global.mortarI, 1), 5));
+            Set Global Variable At Index(mortarPos, Global.mortarI, Vector(Random Real(-18, 18), 0, Random Real(-18, 18)));
+            Set Global Variable At Index(mortarTimes, Global.mortarI, Total Time Elapsed);
+            Wait(0.375, Abort When False);
+            Create Projectile(Baptiste Biotic Launcher, Null, If-Then-Else(Modulo(Global.mortarI, 2), (Global.nipman).cacheA, (Global.nipman).cacheB), Direction Towards(If-Then-Else(Modulo(Global.mortarI, 2), (Global.nipman).cacheA, (Global.nipman).cacheB), Add(Value In Array(Global.mortarPos, Global.mortarI), Vector(0, 60, 0))), To World, Heal, Team 1, 0, 0, 0, Brigitte Whip Shot Heal Area Effect, Brigitte Whip Shot Heal Area Sound, 0.4, 133.33333333333334, 0.675, 0, 0, 0);
+            Wait(0.375, Abort When False);
+            Create Projectile(Pharah Rocket, Null, Add(Value In Array(Global.mortarPos, Global.mortarI), Vector(0, 50, 0)), Down, To World, Damage, Team 1, 220, 110, 4.5, Bad Explosion, Bastion Tank Cannon Explosion Sound, 0.8, 16.666666666666668, 999999999999, 0, 0, 0);
+        End;
+    }
+}
+
 rule ("TOES") {
     event {
         Ongoing - Global;
@@ -910,7 +990,7 @@ rule ("TOES") {
     conditions {
         "@Event eachPlayer\n@Hero mauga\n@Team 2\n@Condition eventPlayer == nipman"
         Global.obj != -1;
-        Array Contains(Global.threatList, 5) == True;
+        Array Contains(Global.threatList, 6) == True;
     }
     actions {
         Wait(1.2, Abort When False);
@@ -943,7 +1023,7 @@ rule ("toe medusa") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 5) == True;
+        Array Contains(Global.threatList, 6) == True;
         Is Dummy Bot(Event Player) == False;
     }
     actions {
@@ -952,7 +1032,7 @@ rule ("toe medusa") {
         While(Compare(Global.obj, !=, -1));
             Wait(0.192, Ignore Condition);
             If(Compare(Angle Between Vectors(Facing Direction Of(Event Player), Direction Towards(Eye Position(Event Player), First Of(Global.threatToes))), <, 40));
-                Modify Player Variable(Event Player, cacheA, Add, 0.04);
+                Modify Player Variable(Event Player, cacheA, Add, 0.045);
                 Set Move Speed(Event Player, Subtract(100, Multiply((Event Player).cacheA, 100)));
                 Damage(Event Player, First Of(Global.threatToes), 3);
                 If(Compare((Event Player).cacheA, >=, 1));
@@ -1087,7 +1167,7 @@ rule ("more maugas charge attack") {
             Destroy Effect(Global.moreFx);
             Set Global Variable(moreFx, Empty Array);
             Communicate(Global.nipman, Goodbye);
-            //__label_continue_3__:
+            //__label_continue_4__:
         End;
     }
 }
@@ -1100,7 +1180,7 @@ rule ("niplets + dupe") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 7) == True;
+        Array Contains(Global.threatList, 8) == True;
         "or (eventPlayer in objPos and obj == OBJ.MORE)"
         Event Player == Global.nipman;
     }
@@ -1111,7 +1191,7 @@ rule ("niplets + dupe") {
         Create Dummy Bot(Hero(Mauga), Team 2, -1, Down, Facing Direction Of(Event Player));
         Set Player Variable(Event Player, botB, Last Created Entity);
         Modify Global Variable(threatNiplets, Append To Array, Last Created Entity);
-        Wait(0.224, Ignore Condition);
+        Wait(0.256, Ignore Condition);
         "threatNiplets.setStatusEffect(null, Status.FROZEN, 99999)"
         Set Status(Global.threatNiplets, Null, Phased Out, 99999);
         Start Forcing Player Position((Event Player).botA, Add((Event Player).cacheA, Vector(-0.5, -3.5, -1)), False);
@@ -1143,10 +1223,10 @@ rule ("grab") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 6) == True;
+        Array Contains(Global.threatList, 7) == True;
     }
     actions {
-        Wait(0.192, Ignore Condition);
+        Wait(0.224, Ignore Condition);
         "grabplayer changes between player, position, list of players"
         Create Beam Effect(All Players(All Teams), Moira Grasp Connected Beam, (Global.nipman).cacheA, Global.grabLeft, Color(Team 1), Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
@@ -1215,11 +1295,11 @@ rule ("cage") {
         Global.obj != -1;
         Is Dummy Bot(Event Player) == False;
         Has Spawned(Event Player) == True;
-        Array Contains(Global.threatList, 8) == True;
+        Array Contains(Global.threatList, 9) == True;
     }
     actions {
         "threatFx.append(getLastCreatedEntity())\nwait()"
-        Wait(0.256, Abort When False);
+        Wait(0.288000000000000, Abort When False);
         Create Beam Effect(All Players(All Teams), Junkrat Trap Chain Beam, Evaluate Once(If-Then-Else(Compare(Modulo(Slot Of(Event Player), 2), ==, 0), (Global.nipman).cacheA, (Global.nipman).cacheB)), Event Player, Color(Team 1), Visible To Position and Radius);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         Wait(Multiply(Slot Of(Event Player), 0.016), Ignore Condition);
@@ -1238,7 +1318,7 @@ rule ("cage boundary") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 8) == True;
+        Array Contains(Global.threatList, 9) == True;
     }
     actions {
         "threatFx.append(getLastCreatedEntity())\nwait()"
@@ -1253,10 +1333,10 @@ rule ("milk wall + collision") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 13) == True;
+        Array Contains(Global.threatList, 14) == True;
     }
     actions {
-        Wait(0.416000000000000, Ignore Condition);
+        Wait(0.448, Ignore Condition);
         Set Global Variable(wallEffects, Empty Array);
         While(Compare(Global.obj, !=, -1));
             Set Global Variable(wallPos, Vector(Random Real(-20, 6.799999999999999), 0, 20));
@@ -1302,10 +1382,10 @@ rule ("rain") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 10) == True;
+        Array Contains(Global.threatList, 11) == True;
     }
     actions {
-        Wait(0.32, Ignore Condition);
+        Wait(0.352, Ignore Condition);
         Create Effect(All Players(All Teams), Cloud, Color(Gray), Vector(0, 30, 0), 40, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         For Global Variable(rainVar, 0, 5, 1);
@@ -1334,10 +1414,10 @@ rule ("twister") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 9) == True;
+        Array Contains(Global.threatList, 10) == True;
     }
     actions {
-        Wait(0.288000000000000, Ignore Condition);
+        Wait(0.32, Ignore Condition);
         For Global Variable(twisterCache, 3, 12, 2);
             "smallMessage(getAllPlayers(), i)"
             Create Effect(All Players(All Teams), Bad Aura, Color(Gray), Add(Multiply(Up, Evaluate Once(Subtract(Multiply(Global.twisterCache, 2.5), 6))), Global.twisterPos), Evaluate Once(Multiply(Global.twisterCache, 0.7)), Visible To Position and Radius);
@@ -1371,7 +1451,7 @@ rule ("sun loop") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 20) == True;
+        Array Contains(Global.threatList, 21) == True;
     }
     actions {
         While(Compare(Global.obj, !=, -1));
@@ -1407,7 +1487,7 @@ rule ("gravitatas") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 19) == True;
+        Array Contains(Global.threatList, 20) == True;
     }
     actions {
         Create Projectile Effect(All Players(All Teams), Zarya Graviton, Null, (Global.nipman).cacheA, Backward, 0.27, Visible To);
@@ -1428,10 +1508,10 @@ rule ("boolet") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 18) == True;
+        Array Contains(Global.threatList, 19) == True;
     }
     actions {
-        Wait(0.576000000000000, Ignore Condition);
+        Wait(0.608, Ignore Condition);
         While(Compare(Global.obj, !=, -1));
             Create Projectile(Orisa Fusion Driver, Null, (Global.nipman).cacheA, Vector(Multiply(Sine From Radians(Multiply(Total Time Elapsed, 2)), 0.5), Subtract(Multiply(Cosine From Radians(Total Time Elapsed), 0.1), 0.2), -1), To World, Damage, Team 1, 130, 1, 0, DVa Micro Missiles Explosion Effect, DVa Micro Missiles Explosion Sound, 0.04, 14, 4, 0, 0, 0);
             Wait(0.08, Ignore Condition);
@@ -1447,10 +1527,10 @@ rule ("laser") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 21) == True;
+        Array Contains(Global.threatList, 22) == True;
     }
     actions {
-        Wait(0.672, Ignore Condition);
+        Wait(0.704, Ignore Condition);
         Set Global Variable(area1, Vector(10, 0, 20));
         Set Global Variable(area2, Vector(-10, 0, 20));
         Create Beam Effect(All Players(All Teams), Omnic Slicer Beam, (Global.nipman).cacheA, Global.area1, Color(Team 2), Visible To Position and Radius);
@@ -1481,10 +1561,10 @@ rule ("discharge") {
     conditions {
         Or(Compare(Event Player, ==, Global.nipman), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player))) == True;
         Global.obj != -1;
-        Array Contains(Global.threatList, 15) == True;
+        Array Contains(Global.threatList, 16) == True;
     }
     actions {
-        Wait(0.48, Ignore Condition);
+        Wait(0.512, Ignore Condition);
         Create Dummy Bot(Hero(Torbjörn), Team 2, -1, Up, Backward);
         Set Player Variable(Event Player, botA, Last Created Entity);
         Modify Global Variable(threatLactaters, Append To Array, Last Created Entity);
@@ -1518,10 +1598,10 @@ rule ("everybody discharge") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 15) == True;
+        Array Contains(Global.threatList, 16) == True;
     }
     actions {
-        While(Array Contains(Global.threatList, 15));
+        While(Array Contains(Global.threatList, 16));
             Wait(3, Ignore Condition);
             Set Ultimate Charge(Global.threatLactaters, 100);
             Set Damage Dealt(Global.threatLactaters, Divide(80, Count Of(Global.threatLactaters)));
@@ -1541,7 +1621,7 @@ rule ("heal milk") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 14) == True;
+        Array Contains(Global.threatList, 15) == True;
         Array Contains(Global.mobs, Event Player) == False;
         Or(Compare(Event Player, ==, Global.nipman), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player))) == True;
     }
@@ -1552,7 +1632,7 @@ rule ("heal milk") {
         Create Projectile Effect(All Players(All Teams), Moira Heal Orb, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         While(And(Compare(Global.obj, !=, -1), Is Alive(Event Player)));
-            Wait(1.2, Ignore Condition);
+            Wait(0.8, Ignore Condition);
             Create Homing Projectile(Echo Sticky Bomb, Event Player, (Event Player).cacheA, Facing Direction Of(Event Player), To World, Heal, Team 1, 40, 20, 1, Brigitte Whip Shot Heal Area Effect, Baptiste Biotic Launcher Explosion Sound, 0.05, 50, 1, 0, Random Value In Array(Filtered Array(All Living Players(Team 1), Compare(Normalized Health(Current Array Element), <, 1))), 1);
             Create Homing Projectile(Echo Sticky Bomb, Event Player, (Event Player).cacheB, Facing Direction Of(Event Player), To World, Heal, Team 1, 40, 20, 1, Brigitte Whip Shot Heal Area Effect, Baptiste Biotic Launcher Explosion Sound, 0.05, 50, 1, 0, Random Value In Array(Filtered Array(All Living Players(Team 1), Compare(Normalized Health(Current Array Element), <, 1))), 1);
         End;
@@ -1569,7 +1649,7 @@ rule ("chungus") {
         Healer == Global.nipman;
     }
     actions {
-        Modify Player Variable(Event Player, cacheC, Add, Multiply(Event Healing, 0.0095));
+        Modify Player Variable(Event Player, cacheC, Add, Multiply(Event Healing, 0.012));
         Start Scaling Player(Event Player, (Event Player).cacheC, False);
     }
 }
@@ -1580,10 +1660,10 @@ rule ("nuke") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 11) == True;
+        Array Contains(Global.threatList, 12) == True;
     }
     actions {
-        Wait(0.352, Ignore Condition);
+        Wait(0.384, Ignore Condition);
         "debug\ncreateEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)"
         While(Compare(Global.obj, !=, -1));
             Set Global Variable(missileFx, Empty Array);
@@ -1742,7 +1822,7 @@ disabled rule ("feetpples TOO MANY") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 16) == True;
+        Array Contains(Global.threatList, 17) == True;
         Or(Compare((Event Player).cacheA, ==, (Global.nipman).cacheA), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player))) == True;
     }
     actions {
@@ -1796,7 +1876,7 @@ rule ("dupe boolet") {
     }
     conditions {
         Global.obj == 1;
-        Array Contains(Global.threatList, 18) == True;
+        Array Contains(Global.threatList, 19) == True;
         Array Contains(Global.objPos, Event Player) == True;
     }
     actions {
@@ -1818,7 +1898,7 @@ rule ("dupe + normal sniper") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 16) == True;
+        Array Contains(Global.threatList, 17) == True;
         Or(And(Compare((Event Player).cacheA, ==, (Global.nipman).cacheA), Compare(Event Player, ==, Global.nipman)), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player))) == True;
     }
     actions {
@@ -1883,7 +1963,7 @@ rule ("sniper fire") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 16) == True;
+        Array Contains(Global.threatList, 17) == True;
     }
     actions {
         Wait(1.504, Ignore Condition);
@@ -1902,7 +1982,7 @@ rule ("init suns") {
     }
     conditions {
         Global.obj != -1;
-        Array Contains(Global.threatList, 20) == True;
+        Array Contains(Global.threatList, 21) == True;
         Or(Compare((Event Player).cacheA, ==, (Global.nipman).cacheA), And(Compare(Global.obj, ==, 1), Array Contains(Global.objPos, Event Player))) == True;
     }
     actions {
@@ -1916,9 +1996,9 @@ rule ("init suns") {
         Start Forcing Player Position((Event Player).botB, (Event Player).cacheB, False);
         Wait(0.64, Ignore Condition);
         "eventPlayer.threatDecor = []"
-        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 20), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheA, Facing Direction Of(Event Player), 0, Visible To);
+        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 21), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheA, Facing Direction Of(Event Player), 0, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 20), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0.02, Visible To);
+        Create Projectile Effect(If-Then-Else(Array Contains(Global.threatList, 21), All Players(All Teams), Empty Array), Reinhardt Fire Strike, Null, (Event Player).cacheB, Facing Direction Of(Event Player), 0.02, Visible To);
         Modify Global Variable(threatFx, Append To Array, Last Created Entity);
     }
 }
@@ -1956,18 +2036,9 @@ rule ("Subroutine moreMaugasSetup") {
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheB, World Vector Of(Vector(-2.055, 20.669999999999998, 6.99), Value In Array(Global.objPos, Global.iMores), Rotation And Translation));
             Start Forcing Dummy Bot Name(Value In Array(Global.objPos, Global.iMores), Value In Array(Array(Custom String("mauga jr."), Custom String("마우가 JR."), Custom String("小毛加"), Custom String("マウガ Jr.")), (Global.nipman).__languageIndex__));
             "WHY IS IT 400. IT SHOULD BE 100 BUT THAT MAKES IT WRONG evalOnce(objPos[iMores]).getNormalizedHealth() * 400"
-            Create Progress Bar In-World Text(All Players(All Teams), Multiply(Divide(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), 100), Custom String("{0} / {1} HP", Round To Integer(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Up), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), Add(Eye Position(Value In Array(Global.objPos, Global.iMores)), Vector(0, 2, 0)), 1, Do Not Clip, Color(Red), Color(White), Visible To and Values, Default Visibility);
+            Create Progress Bar In-World Text(All Players(All Teams), Multiply(Divide(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), 100), Custom String("{0} / {1} HP", Round To Integer(Health(Evaluate Once(Value In Array(Global.objPos, Global.iMores))), Up), Evaluate Once(Round To Integer(Max Health(Value In Array(Global.objPos, Global.iMores)), Up))), Add(Eye Position(Value In Array(Global.objPos, Global.iMores)), Vector(0, 2, 0)), 1, Do Not Clip, Custom Color(255, 112, 122, 255), Color(White), Visible To and Values, Default Visibility);
             Set Player Variable(Value In Array(Global.objPos, Global.iMores), cacheC, Last Text ID);
             Modify Global Variable(threatFx, Append To Array, Last Text ID);
-            "investor friendly clouds"
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheA, 2, Visible To);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheA, 2, Visible To);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheB, 2, Visible To);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
-            Create Effect(If-Then-Else(Compare(Global.obj, !=, -1), All Players(All Teams), Null), Cloud, Color(Black), (Value In Array(Global.objPos, Global.iMores)).cacheB, 2, Visible To);
-            Modify Global Variable(threatFx, Append To Array, Last Created Entity);
         End;
         Wait(0.8, Ignore Condition);
         Set Status(Global.objPos, Null, Frozen, 99999);
@@ -2002,7 +2073,7 @@ rule ("NO BOTS?") {
     }
     conditions {
         "slendy is also a mob so don't check for empty arr"
-        Or(Or(Compare(Global.obj, ==, 2), Compare(Global.obj, ==, 4)), Compare(Global.obj, ==, 3)) == True;
+        Or(Or(Compare(Global.obj, ==, 2), Compare(Global.obj, ==, 5)), Compare(Global.obj, ==, 3)) == True;
         Number Of Players(Team 2) < 7;
     }
     actions {
@@ -2143,17 +2214,18 @@ rule ("setup & refresh forest") {
     }
 }
 
-rule ("place objective") {
+rule ("place point objectives: capture, drives") {
     event {
         Ongoing - Global;
     }
     conditions {
-        Global.obj == 4;
+        Or(Compare(Global.obj, ==, 5), Compare(Global.obj, ==, 4)) == True;
     }
     actions {
         Set Global Variable(objPos, Vector(Random Integer(-13, 13), 0, Random Integer(-13, 13)));
         Wait(0.016, Ignore Condition);
-        Loop If(And(Compare(Z Component Of(Global.objPos), <, -4), Array Contains(Global.threatList, 8)));
+        Loop If(And(Compare(Z Component Of(Global.objPos), <, -4), Array Contains(Global.threatList, 9)));
+        Loop If(And(Array Contains(Global.threatList, 3), Compare(Distance Between(Global.objPos, (First Of(Global.threatDrills)).cacheA), <, 5)));
     }
 }
 
@@ -2177,7 +2249,7 @@ rule ("kill/obj prog/weak spot + respawn timer") {
             Abort;
         End;
         Heal(Attacker, Event Player, 50);
-        If(Array Contains(Global.threatList, 12));
+        If(Array Contains(Global.threatList, 13));
             Play Effect(All Players(All Teams), Moira Fade Reappear Effect, Color(Team 2), Add(Position Of(Event Player), Up), 1);
             Play Effect(All Players(All Teams), Echo Sticky Bomb Explosion Sound, Color(Team 2), Add(Position Of(Event Player), Up), 10);
             Damage(Players Within Radius(Position Of(Event Player), 2, Team 1, Surfaces And Enemy Barriers), Event Player, 90);
@@ -2219,13 +2291,33 @@ rule ("point") {
         Ongoing - Global;
     }
     conditions {
-        Global.obj == 4;
+        Global.obj == 5;
     }
     actions {
         If(Compare(Players Within Radius(Global.objPos, 12, Team 1, Off), !=, Empty Array));
             Modify Global Variable(objProg, Add, Multiply(Divide(Count Of(Players Within Radius(Global.objPos, 12, Team 1, Off)), Number Of Players(Team 1)), 3));
             Play Effect(All Players(All Teams), Ring Explosion, Color(Team 1), Add(Global.objPos, Vector(0, -0.3, 0)), 25);
             Play Effect(All Players(All Teams), Widowmaker Venom Mine Explosion Sound, Color(Team 1), Global.objPos, 150);
+        End;
+        Wait(0.64, Ignore Condition);
+        Loop If Condition Is True;
+    }
+}
+
+rule ("drives") {
+    event {
+        Ongoing - Global;
+    }
+    conditions {
+        Global.obj == 4;
+    }
+    actions {
+        If(Compare(Players Within Radius(Global.objPos, 12, Team 1, Off), !=, Empty Array));
+            Modify Global Variable(objProg, Add, Multiply(Count Of(Players Within Radius(Global.objPos, 12, Team 1, Off)), 15));
+            Damage(Players Within Radius(Global.objPos, 12, Team 1, Off), Null, 15);
+            Play Effect(All Players(All Teams), Ring Explosion, Color(Red), Add(Global.objPos, Vector(0, -0.3, 0)), 25);
+            Play Effect(All Players(All Teams), Moira Fade Disappear Sound, Color(Team 1), Global.objPos, 150);
+            Play Effect(All Players(All Teams), Moira Fade Disappear Effect, Color(Team 2), Add(Global.objPos, Up), True);
         End;
         Wait(0.64, Ignore Condition);
         Loop If Condition Is True;
@@ -2251,7 +2343,45 @@ rule ("page found") {
         Modify Team Score(Team 1, 1);
         Set Team Score(Team 1, 0);
         Modify Global Variable(objProg, Add, 1);
-        Set Global Variable(objPos, Vector(Random Integer(-18, 18), 0, Random Integer(If-Then-Else(Array Contains(Global.threatList, 8), -4, -18), 16)));
+        Set Global Variable(objPos, Vector(Random Integer(-18, 18), 0, Random Integer(If-Then-Else(Array Contains(Global.threatList, 9), -4, -18), 16)));
+    }
+}
+
+rule ("hey gamers") {
+    event {
+        Ongoing - Global;
+    }
+    conditions {
+        Global.obj != -1;
+        Value In Array(Global.enemies, Modulo(Global.roundNo, Count Of(Global.enemies))) == Hero(D.Mon);
+    }
+    actions {
+        If(Compare(Random Integer(0, 5), ==, 0));
+            Big Message(All Players(All Teams), Custom String("{0} hey gamers, i'm yuna lee.", Hero Icon String(Hero(D.Mon))));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} and i'm hana song!", Hero Icon String(Hero(D.Va))));
+            Wait(0.8, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} And together we'll be hosting my meka mania!", Hero Icon String(Hero(D.Mon))));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} You may know meka 🇸quad as top competitiors...", Hero Icon String(Hero(D.Mon))));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("But this time we'll be turning the tables and competing against each other!"));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} EACH OTHER?!", Hero Icon String(Hero(D.Va))));
+            Wait(0.8, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} Oh you heard right.", Hero Icon String(Hero(D.Mon))));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("Players will vote between all five meka 🇸quad members to see who's this year's top meka talent."));
+            Wait(2.4, Abort When False);
+            Big Message(All Players(All Teams), Custom String("And for the record, I'm not losing to anyone, not even you Hana."));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} Hah! We'll see about that! I know I'm not going down easy, but neither will King, Casino, or OVERLOOOOORD!!!!!!!", Hero Icon String(Hero(D.Va))));
+            Wait(3.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} Just the way I like it.", Hero Icon String(Hero(D.Mon))));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("Well players, get voting!"));
+            Wait(1.2, Abort When False);
+            Big Message(All Players(All Teams), Custom String("{0} GAME ON!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", Hero Icon String(Hero(D.Va))));
     }
 }
 
@@ -2835,7 +2965,8 @@ rule ("you are dead, not big surprise + chungus explode") {
             End;
         End;
         Wait Until(Is Alive(Event Player), 99999);
-        If(And(Array Contains(Global.threatList, 3), Compare(Distance Between(Event Player, (First Of(Global.threatDrills)).cacheA), <, 7)));
+        Wait(0.12, Ignore Condition);
+        If(And(Array Contains(Global.threatList, 3), Compare(Distance Between(Event Player, (First Of(Global.threatDrills)).cacheA), <, 9)));
             Teleport(Event Player, Vector(Multiply(Divide(Divide(Multiply(Multiply(X Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15), 1, Multiply(Divide(Divide(Multiply(Multiply(Z Component Of((First Of(Global.threatDrills)).cacheA), 999999999999), 999999999999), 999999999999), 10), -15)));
             Enable Movement Collision With Environment(Event Player);
         End;

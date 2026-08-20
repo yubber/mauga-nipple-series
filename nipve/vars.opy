@@ -5,6 +5,7 @@ enum OBJ:
 	MORE,
 	KILL,
 	BOSS,
+	DRIVES,
 	CAPTURE # keep as last
 
 enum THREATS:
@@ -14,6 +15,7 @@ enum THREATS:
 	HOLE,
 	# NIPACT,
 	DRAGON,
+	MORTAR,
 	TOES,
 	GRAB,
 	FRACTAL,
@@ -43,7 +45,8 @@ macro NipmanRightConst = vect(-7.19, 10.8-2.8, 30.27)
 # globalvar LeftNip = vect(4.46, 21.7, 26.40) # phased out & floating values
 # globalvar RightNip = vect(-6.51, 22.1, 29.04)
 globalvar obj
-globalvar objWeights = [0.06, 0.12, 0.3, 0.3, 0.22] # pages, more, kill, boss, capture
+globalvar objWeights = [0.06, 0.12, 0.27, 0.27, 0.12, 0.16] # pages, more, kill, boss, drives, capture
+globalvar objIcons = ["<tx0C0000000000ABAB>", heroIcon(Hero.MAUGA), iconString(Icon.SKULL), "<tx0C00000000020AF5>", "<tx0C0000000000906E>", "<tx0C00000000020AF8>"]
 globalvar lastObj
 
 globalvar objProg
@@ -59,15 +62,15 @@ globalvar dummyThreats = [THREATS.SLENDY, THREATS.COOM, THREATS.SNIPER, THREATS.
 # threats that have extra behavior in more maugas and actually threaten players
 # niplets can't be there because they block weak spots
 macro moreFunThreats = [THREATS.ICE, THREATS.COOM, THREATS.DAKKA, /*THREATS.FRACTAL,*/ THREATS.SNIPER, THREATS.SUN]
-# threats that do nothing in more maugas
+# threats that affect mobs only and thus do nothing in more maugas
 macro moreMaugasExclude = [THREATS.BOOST, THREATS.DD]
 
 # keep lazer as last and frosty as 1st after slender
-globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.VENTURE, Button.MELEE), abilityIconString(Hero.HANZO, Button.ULTIMATE), /*abilityIconString(Hero.JUNO, Button.ABILITY_1),*/ heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
+globalvar threatIcons = [heroIcon(Hero.REAPER), abilityIconString(Hero.MAUGA, Button.ABILITY_1), abilityIconString(Hero.MEI, Button.ULTIMATE), abilityIconString(Hero.VENTURE, Button.MELEE), abilityIconString(Hero.HANZO, Button.ULTIMATE), abilityIconString(Hero.BASTION, Button.ULTIMATE), /*abilityIconString(Hero.JUNO, Button.ABILITY_1),*/ heroIcon(Hero.SIGMA), abilityIconString(Hero.MOIRA, Button.SECONDARY_FIRE), abilityIconString(Hero.SIGMA, Button.ABILITY_1), abilityIconString(Hero.MAUGA, Button.ULTIMATE), abilityIconString(Hero.JUNKER_QUEEN, Button.ULTIMATE), abilityIconString(Hero.HAZARD, Button.ULTIMATE), iconString(Icon.RADIOACTIVE), abilityIconString(Hero.REAPER, Button.ULTIMATE), abilityIconString(Hero.MEI, Button.ABILITY_2), iconString(Icon.PLUS), abilityIconString(Hero.TORBJORN, Button.ULTIMATE), abilityIconString(Hero.WIDOWMAKER, Button.ULTIMATE), abilityIconString(Hero.ANA, Button.ULTIMATE), abilityIconString(Hero.PHARAH, Button.ULTIMATE), abilityIconString(Hero.ZARYA, Button.ULTIMATE), abilityIconString(Hero.ILLARI, Button.ULTIMATE), abilityIconString(Hero.ECHO, Button.ABILITY_2)]
 #kitsunip rush, milk wall, mini mauga, tanky mobs 1 kill, heal, dd, milk rain (moving pillar beams), spoiled milk titties (global/big chasing dot?), maven degen like (chases then explodes after delay), restrict to 1 square of arena
 
-globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA]
-globalvar mobDmg = [75, 130, 75, 80]
+globalvar enemies = [Hero.WINSTON, Hero.TORBJORN, Hero.REINHARDT, Hero.MAUGA, Hero.DMON]
+globalvar mobDmg = [75, 130, 75, 80, 65]
 globalvar i # used in horde
 globalvar upto # used in init, phase change, hp set on bug
 
@@ -119,6 +122,10 @@ globalvar antiCrashOn
 
 globalvar hammerProg
 globalvar hammerSide
+
+globalvar mortarPos = [null,null,null,null,null]
+globalvar mortarI
+globalvar mortarTimes = [null,null,null,null,null]
 
 globalvar hardcoreLevel = createWorkshopSettingEnum(SETTING_DIFFICULTY, SETTING_RESPAWN.NAME, 0, [
 	SETTING_RESPAWN.ALWAYS,
