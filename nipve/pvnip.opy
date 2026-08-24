@@ -257,7 +257,8 @@ rule "init":
 	# objective huds. get max hp is fucking broken for mauga. and tank passive bonus doesn't even let him heal to there
 	progressBarHud(getAllPlayers() if obj == OBJ.INTERMISSION else [], 100 * nipman.getHealth() / 57500, "{} {} / {} hp".format(heroIcon(Hero.MAUGA), ceil(nipman.getHealth()), 57500), HudPosition.TOP, 1, Color.TEAM_2, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
 	progressBarHud(getAllPlayers() if obj != OBJ.INTERMISSION else [], objProg / objGoal * 100, "{}: {} {}! {} / {}".format(t"objective", objIcons[obj], _(objDescs[obj]), objProg, objGoal), HudPosition.TOP, 1, Color.TEAM_1, Color.WHITE, ProgressHudReeval.VISIBILITY_VALUES_AND_COLOR, SpecVisibility.DEFAULT)
-    # hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
+    ### threat names shown
+	# hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
 	# 	"\&fullwidth_space;{}: {}{}{}{}{}{}{}{}\&fullwidth_space;".format(t"threats",
 	# 	f"{threatIcons[threatList[0]]} ",
 	# 	_(threatNames[threatList[0]]),
@@ -268,7 +269,8 @@ rule "init":
 	# 	f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else "",
 	# 	_(threatNames[threatList[2]]) if len(threatList) > 2 else ""
 	# ), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-    hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
+    ### censored threat names
+	hudText(getAllPlayers() if obj != OBJ.INTERMISSION else [],
 		"\&fullwidth_space;{}: {}{}{}{}{}\&fullwidth_space;".format(t"threats",
 		f"{threatIcons[threatList[0]]} ",
 		", " if len(threatList) > 1 else "",
@@ -276,6 +278,7 @@ rule "init":
 		", " if len(threatList) > 2 else "",
 		f"{threatIcons[threatList[2]]} " if len(threatList) > 2 else ""
 	), "", " \n ", HudPosition.TOP, 0, Color.ORANGE, Color.GRAY, Color.GRAY, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+
 	nipman.smallLNip = NipmanLeftConst
 	nipman.smallRNip= NipmanRightConst
 

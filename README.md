@@ -2,31 +2,15 @@ overpy source code for mauga nipple game modes for the overwatch workshop
 https://workshop.codes/u/_yubz
 
 ## mauga nipple pve
-it's back!
-[SANFT](https://workshop.codes/DS2MD)
+it's back! now 100% more investor friendly!
+[SANFT](https://workshop.codes/SANFT)
+
+to play with threat names uncensored, copy the text in [export uncensored.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export_uncensored.txt) and click "paste" under lobby > settings. it's the orange button on the right column. you can share this as a new code, but your account might get banned and the code won't receive new updates (however infrequent they may be).
 
 watch the documentary: https://www.youtube.com/watch?v=ivFi0xhkBWc
 
 ## mauga nipple: where is it?
 [W5PMC](https://workshop.codes/W5PMC)
-
-# notice on takedown
-
-the mode has been reuploaded by a fan. use code `SANFT`. this message is obsolete.
-
-my account has been temp banned and the mode has been removed. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
-
-**you can still play**: copy the contents of [export.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export.txt) to paste it into your lobby as a workshop script.
-
-feel free to share it under a new code, but note that *the person who reshared the code has also been hit with a 1 month ban.*
-
-when i get unbanned, please endorse me (`OMGIDIED`) if you ever see me in a match, so i can get the mode up and running again <3
-
-if you're interested in any of my other modes you can just compile the overpy (on my github/workshop.codes) and paste in the resulting code, or contact me on discord.
-
-~~*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*~~
-
-my other import codes seem to work, which confirms that mauga nipple pve wasn't blanket banned, and blizzard apparently took issue with it. it's unlikely that the mode will return in its current state. i'm also unaware of which parts exactly i would need to change for the mode to be acceptable.
 
 # contributing
 
@@ -38,7 +22,7 @@ there are 2 files to create translations for.
 
 - `strings.opy`
 
-- create a `.po` file
+- create a `pvnip.langcode.po` file
 
 ### strings.opy
 
@@ -46,7 +30,7 @@ all text that needs translation is near the top. no need to go digging around fo
 
 you will need to link the .po file if you want to compile the code yourself. or you can just send me the files and i'll handle everything from there.
 
-to do this, add a [language code](https://github.com/Zezombye/overpy#translations) to the line `#!translations en ko`
+to do this, add a [language code](https://github.com/Zezombye/overpy#translations) to the line `#!translations en ko zh_CN ja`
 
 there are some strings that must be translated in `strings.opy` itself. i've marked them at the top.
 
@@ -109,3 +93,21 @@ for example if you put your new threat at the index right after frosty niрs, al
 	- for performance reasons you might want to have the exit/loop stop condition be `OBJ == OBJ.INTERMISSION` instead of checking if the threat is still in the threat list.
 
 	- `threatFx` is a list of effect IDs that are destroyed when the round ends. this list is emptied automatically. it's a convenient place to put effects that last throughout the round without needing to delete them later, such as nipple effects.
+
+# notice on takedown
+
+*the mode has been reuploaded by a fan. use code `SANFT`. this message is obsolete and is left here in memory of the nipplecide on 3/11/2025. RIP code DS2MD*
+
+> my account has been temp banned and the mode has been removed. ~~in the meantime, you can use code `VAW8Z` graciously shared by animatednerd.~~
+
+> **you can still play**: copy the contents of [export.txt](https://github.com/yubber/mauga-nipple-series/blob/main/nipve/export.txt) to paste it into your lobby as a workshop script.
+
+> feel free to share it under a new code, but note that *the person who reshared the code has also been hit with a 1 month ban.*
+
+> when i get unbanned, please endorse me (`OMGIDIED`) if you ever see me in a match, so i can get the mode up and running again <3
+
+> if you're interested in any of my other modes you can just compile the overpy (on my github/workshop.codes) and paste in the resulting code, or contact me on discord.
+
+> ~~*note: yes, it's ambiguous whether the inappropriate content in question was the PVE itself or my other modes. you'd have to import my other codes to check if it's a blanket ban or a targeted one.*~~
+
+> my other import codes seem to work, which confirms that mauga nipple pve wasn't blanket banned, and blizzard apparently took issue with it. it's unlikely that the mode will return in its current state. i'm also unaware of which parts exactly i would need to change for the mode to be acceptable.
