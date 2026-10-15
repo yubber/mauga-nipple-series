@@ -74,7 +74,9 @@ globalvar defaults = [1, vect(0,0,0), Vector.BACKWARD, Hero.VENTURE]
 /*how to add a new value
 - add enum in VARS
 - add name in varNames
-- add its type in types*/
+- add its type in types
+- add default for that type in defaults
+*/
 
 rule "refr valk":
 	@Event eachPlayer
