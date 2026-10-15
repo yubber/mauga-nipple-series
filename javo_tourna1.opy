@@ -201,9 +201,9 @@ rule "healing milk":
 	@Event global
 	@Condition entityExists(mauga)
 	@Condition mauga.isAlive()
-	createHomingProjectile(Projectile.ECHO_STICKY_BOMB, mauga, LeftNipLocalScaled, Vector.FORWARD + Vector.DOWN, Relativity.TO_PLAYER, ModifyHealth.HEAL, mauga.getTeam(), HealAmt, 1, 5, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE_SOUND, 0, 30, 5, 0, yubz, 1)
+	createHomingProjectile(Projectile.ECHO_STICKY_BOMB, mauga, LeftNipLocalScaled, Vector.FORWARD + Vector.DOWN * 0.2, Relativity.TO_PLAYER, ModifyHealth.HEAL, mauga.getTeam(), HealAmt, 1, 5, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0, 14, 10, 0, yubz, 1)
 	wait(0.12)
-	createHomingProjectile(Projectile.ECHO_STICKY_BOMB, mauga, RightNipLocalScaled, Vector.FORWARD + Vector.DOWN, Relativity.TO_PLAYER, ModifyHealth.HEAL, mauga.getTeam(), HealAmt, 1, 5, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE_SOUND, 0, 30, 5, 0, yubz, 1)
+	createHomingProjectile(Projectile.ECHO_STICKY_BOMB, mauga, RightNipLocalScaled, Vector.FORWARD + Vector.DOWN * 0.2, Relativity.TO_PLAYER, ModifyHealth.HEAL, mauga.getTeam(), HealAmt, 1, 5, DynamicEffect.ECHO_STICKY_BOMB_EXPLOSION, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0, 14, 10, 0, yubz, 1)
 	wait(0.12)
 	if ruleCondition:
 		loop()
@@ -258,9 +258,12 @@ rule "minion movement ai":
 		elif isInLoS(eventPlayer.getEyePosition(), yubzEnemy.getEyePosition()):
 			eventPlayer.stopThrottleInDirection()
 			eventPlayer.startForcingThrottle(1,1,0,0,0,0)
-		else:
+		elif distance(eventPlayer.getPosition(), yubz.getPosition()) > 3:
 			eventPlayer.stopForcingThrottle()
 			eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), yubz.getPosition()), 1, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
+		else:
+			eventPlayer.stopForcingThrottle()
+			eventPlayer.stopThrottleInDirection()
 		wait(0.24)
 
 rule "minions jump":
