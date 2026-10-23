@@ -1,19 +1,20 @@
-settings {
-    "lobby": {
-        "team1Slots": 1,
-        "team2Slots": 1
-    },
-    "gamemodes": {
-        "skirmish": {
-            "heroLimit": "off",
-            "respawnTime%": 30
-        }
-    }
-}
+# settings {
+#     "lobby": {
+#         "team1Slots": 1,
+#         "team2Slots": 1
+#     },
+#     "gamemodes": {
+#         "skirmish": {
+#             "heroLimit": "off",
+#             "respawnTime%": 30
+#         }
+#     }
+# }
+globalvar ROUNDCHANGEDEBUG
 
-
-
-globalvar MATCH
+globalvar MATCH 0 = createWorkshopSettingInt("match", "match no", 1, 1, 3, 0)
+macro roundChange = isMatchBetweenRounds() or ROUNDCHANGEDEBUG
+macro yubzBuffPlayerName = "AussieMedic"
 
 macro SMALL_ACTIVE = MATCH > 0
 macro MED_ACTIVE = MATCH > 1
@@ -28,7 +29,6 @@ macro dmgInfl = 0.12
 macro healInfl = 0.12
 macro TinyMaugaDmgPct = 1
 
-globalvar ROUNDCHANGEDEBUG
 globalvar yubz
 globalvar yubzEnemy
 globalvar yubz_i
@@ -39,7 +39,6 @@ playervar yubzScale
 playervar isMaugaMinion
 playervar yubzMinionTarget = false
 
-macro roundChange = isMatchBetweenRounds() or ROUNDCHANGEDEBUG
 macro Player.scaling = self.yubzScale
 macro minions = yubz.yubzMinions
 macro mauga = yubz.yubzMauga
@@ -63,6 +62,7 @@ def inflChangeHandler():
 		eventPlayer.disableEnvironmentCollision(false)
 
 rule "debug round no":
+	@Condition yubz == hostPlayer
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
 	MATCH++
@@ -80,7 +80,7 @@ rule "detect yubz":
 	@Condition isGameInProgress()
 	@Condition entityExists(yubz) == false
 	@Condition all([x.hasSpawned() for x in getAllPlayers()])
-	yubz = [x for x in getAllPlayers() if f"{x}" == "OMGIDIED"][0]
+	yubz = [x for x in getAllPlayers() if f"{x}" == yubzBuffPlayerName][0]
 	if yubz == null:
 		wait(0.96)
 		loop()
@@ -89,6 +89,9 @@ rule "detect enemy":
 	@Condition isGameInProgress()
 	@Condition entityExists(yubz)
 	@Condition entityExists(yubzEnemy) == false
+	# createDummy(Hero.REINHARDT, getOppositeTeam(yubz.getTeam()), -1, yubz.getPosition(), Vector.FORWARD)
+	# yubzEnemy = getLastCreatedEntity()
+	# yubzEnemy.startForcingButton(Button.PRIMARY_FIRE)
 	yubzEnemy = [x for x in getPlayers(getOppositeTeam(yubz.getTeam())) if x.isDummy() == false][0]
 	if yubzEnemy == null:
 		wait(0.96)
@@ -196,7 +199,7 @@ rule "sacrifice":
 	yubz.resurrect()
 	yubz.enableEnvironmentCollision()
 
-macro HealAmt = (55 if MED_ACTIVE else 30) / 2 * 0.12
+macro HealAmt = (55 if MED_ACTIVE else 35) / 2 * 0.12
 rule "healing milk":
 	@Event global
 	@Condition entityExists(mauga)
