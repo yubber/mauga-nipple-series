@@ -1,20 +1,19 @@
-# settings {
-#     "lobby": {
-#         "team1Slots": 1,
-#         "team2Slots": 1
-#     },
-#     "gamemodes": {
-#         "skirmish": {
-#             "heroLimit": "off",
-#             "respawnTime%": 30
-#         }
-#     }
-# }
+settings {
+    "lobby": {
+        "team1Slots": 1,
+        "team2Slots": 1
+    },
+    "gamemodes": {
+        "elimination": {
+        }
+    }
+}
 globalvar ROUNDCHANGEDEBUG
 
 globalvar MATCH 0 = createWorkshopSettingInt("match", "match no", 1, 1, 3, 0)
 macro roundChange = isMatchBetweenRounds() or ROUNDCHANGEDEBUG
 macro yubzBuffPlayerName = "AussieMedic"
+macro DEBUG = false
 
 macro SMALL_ACTIVE = MATCH > 0
 macro MED_ACTIVE = MATCH > 1
@@ -55,6 +54,21 @@ macro burstRadiusFormula = burstRadius * eventPlayer.scaling
 #!extension beamEffects
 #!extension explosionSounds
 
+macro attachOffset = vect(0,1.5,-2)
+def spawnBigMauga():
+	destroyDummy(mauga.getTeam(), mauga.getSlot())
+	if entityExists(mauga) == false or mauga == null:
+		smallMessage(yubz, "mauga")
+		createDummy(Hero.MAUGA, yubz.getTeam(), -1, yubz.getPosition(), Vector.UP)
+		mauga = getLastCreatedEntity()
+		wait(0.16)
+		mauga.disableEnvironmentCollision(true)
+		mauga.disablePlayerCollision()
+		mauga.setStatusEffect(null, Status.INVINCIBLE, 99999)
+		mauga.startScalingSize(bigMaugaScale, false)
+		mauga.startFacing(yubz.getFacingDirection() * vect(1,0,1), 999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+		mauga.attachTo(yubz, attachOffset)
+
 def inflChangeHandler():
 	eventPlayer.startScalingSize(eventPlayer.scaling, false)
 	eventPlayer.startModifyingVoicelinePitch(0.99 - 0.33 * eventPlayer.scaling, false)
@@ -77,24 +91,27 @@ rule "debug nip pos":
 	yubz.stopCamera()
 
 rule "detect yubz":
-	@Condition isGameInProgress()
 	@Condition entityExists(yubz) == false
 	@Condition all([x.hasSpawned() for x in getAllPlayers()])
 	yubz = [x for x in getAllPlayers() if f"{x}" == yubzBuffPlayerName][0]
+	wait(0.96)
 	if yubz == null:
-		wait(0.96)
 		loop()
+	else:
+		wait(2.4)
+		spawnBigMauga()
 
 rule "detect enemy":
-	@Condition isGameInProgress()
 	@Condition entityExists(yubz)
 	@Condition entityExists(yubzEnemy) == false
-	# createDummy(Hero.REINHARDT, getOppositeTeam(yubz.getTeam()), -1, yubz.getPosition(), Vector.FORWARD)
-	# yubzEnemy = getLastCreatedEntity()
-	# yubzEnemy.startForcingButton(Button.PRIMARY_FIRE)
-	yubzEnemy = [x for x in getPlayers(getOppositeTeam(yubz.getTeam())) if x.isDummy() == false][0]
+	if DEBUG:
+		createDummy(Hero.REINHARDT, getOppositeTeam(yubz.getTeam()), -1, yubz.getPosition(), Vector.FORWARD)
+		yubzEnemy = getLastCreatedEntity()
+		yubzEnemy.startForcingButton(Button.PRIMARY_FIRE)
+	else:
+		yubzEnemy = [x for x in getPlayers(getOppositeTeam(yubz.getTeam())) if x.isDummy() == false][0]
+	wait(0.96)
 	if yubzEnemy == null:
-		wait(0.96)
 		loop()
 
 rule "player huds":
@@ -158,29 +175,26 @@ rule "hurt me, no you won't hurt me, i'm about to detonate, pull you close and t
 	else:
 		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.RED, eventPlayer.getPosition(), burstRadius * eventPlayer.scaling / 2)
 
-	createProjectile(Projectile.ORB, eventPlayer, Vector.UP * eventPlayer.scaling, Vector.DOWN, Relativity.TO_PLAYER, ModifyHealth.DAMAGE, getOppositeTeam(eventPlayer.getTeam()), eventPlayer.scaling * baseExplodeDmg, 1, burstRadiusFormula, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 1, 0.08, knockbackBase * eventPlayer.scaling, 0, 0)
+	createProjectile(Projectile.ORB, eventPlayer, Vector.UP * eventPlayer.scaling, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, getOppositeTeam(eventPlayer.getTeam()), eventPlayer.scaling * baseExplodeDmg, 1, burstRadiusFormula, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 0, 999, 2, knockbackBase * eventPlayer.scaling, 0, 0)
 
 	eventPlayer.clearStatusEffect(Status.BURNING)
 	eventPlayer.scaling = 1
 	inflChangeHandler()
 
-macro attachOffset = vect(0,1.5,-2)
 rule "spawn The mauga":
+	@Condition yubz
+	@Condition yubz.hasSpawned()
+	@Condition entityExists(mauga) == false or mauga == null
+	spawnBigMauga()
+	wait(99999, Wait.IGNORE_CONDITION)
+
+rule "respawn The mauga":
 	@Event global
 	@Condition entityExists(yubz)
 	@Condition yubz.hasSpawned()
 	@Condition entityExists(mauga) == false or mauga == null
 	@Condition roundChange
-	smallMessage(yubz, "mauga")
-	createDummy(Hero.MAUGA, yubz.getTeam(), -1, yubz.getPosition(), Vector.UP)
-	mauga = getLastCreatedEntity()
-	wait(0.16)
-	mauga.disableEnvironmentCollision(true)
-	mauga.disablePlayerCollision()
-	mauga.setStatusEffect(null, Status.INVINCIBLE, 99999)
-	mauga.startScalingSize(bigMaugaScale, false)
-	mauga.startFacing(yubz.getFacingDirection() * vect(1,0,1), Math.INFINITY, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-	mauga.attachTo(yubz, attachOffset)
+	spawnBigMauga()
 
 rule "beeg mauga ded":
 	@Event playerDied
@@ -188,16 +202,15 @@ rule "beeg mauga ded":
 	@Condition eventPlayer == mauga
 	if eventWasEnvironment and yubz.isAlive():
 		mauga.respawn()
-	else:
-		destroyDummy(mauga.getTeam(), mauga.getSlot())
-		mauga = null
 
 rule "sacrifice":
 	@Condition yubz.isDead()
-	@Condition entityExists(mauga)
-	kill(mauga, yubz)
-	yubz.resurrect()
-	yubz.enableEnvironmentCollision()
+	if entityExists(mauga) and mauga.isAlive():
+		kill(mauga, yubz)
+		yubz.resurrect()
+		yubz.enableEnvironmentCollision()
+	else:
+		kill(minions, null)
 
 macro HealAmt = (55 if MED_ACTIVE else 35) / 2 * 0.12
 rule "healing milk":
@@ -212,8 +225,7 @@ rule "healing milk":
 		loop()
 
 rule "minions init":
-	@Condition isGameInProgress()
-	@Condition yubz.isAlive()
+	@Condition yubz.hasSpawned()
 	@Condition MED_ACTIVE
 	@Condition minions == null or minions == []
 	smallMessage(yubz, "minions")
@@ -221,7 +233,6 @@ rule "minions init":
 	for yubz_i in range(9):
 		createDummy(Hero.MAUGA, yubz.getTeam(), -1, yubz.getPosition())
 		minions.append(getLastCreatedEntity())
-		minions.last().startFacing(directionTowards(evalOnce(minions.last()).getEyePosition(), yubzEnemy.getEyePosition()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 		wait()
 
 	minions.scaling = minionsBaseScale
@@ -273,23 +284,44 @@ rule "minions jump":
 	@Condition yubz.isHoldingButton(Button.JUMP)
 	minions.forceButtonPress(Button.JUMP)
 
+rule "unkill minions":
+	@Event playerDied
+	@Hero mauga
+	@Condition eventPlayer.isMaugaMinion
+	wait()
+	eventPlayer.stopFacing()
+	if mauga.isAlive() and entityExists(mauga):
+		wait(4)
+		eventPlayer.respawn()
+
 rule "minions respawn":
 	@Event eachPlayer
 	@Condition eventPlayer.isMaugaMinion
 	@Condition eventPlayer.isAlive()
-	if mauga.isDead() or (entityExists(mauga) == false):
-		eventPlayer.disableRespawn()
+	# if mauga.isDead() or (entityExists(mauga) == false):
+	# 	eventPlayer.disableRespawn()
 	eventPlayer.scaling = minionsBaseScale
 	eventPlayer.setDamageDealt(TinyMaugaDmgPct)
 	eventPlayer.startScalingSize(minionsBaseScale, false)
 	eventPlayer.teleport(NipPos(LeftNipLocalScaled if eventPlayer.getSlot() % 2 == 0 else RightNipLocalScaled))
 	eventPlayer.applyImpulse(yubz.getFacingDirection(), 30, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+	eventPlayer.startFacing(directionTowards(eventPlayer.getEyePosition(), yubzEnemy.getEyePosition()), 9999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
 
 rule "minions chungusfy":
 	@Condition LARGE_ACTIVE
 	minions.setMaxHealth(50)
 	minions.scaling = minionsBaseScale
 	minions.startScalingSize(minionsBaseScale, false)
+
+rule "kill stranded minion":
+	@Event eachPlayer
+	@Hero mauga
+	@Condition eventPlayer.isMaugaMinion
+	@Condition eventPlayer.isAlive()
+	if distance(eventPlayer.getPosition(), yubz.getPosition()) > 30:
+		kill(eventPlayer)
+	wait(4.8)
+	loop()
 
 rule "freeze mauga":
 	mauga.setStatusEffect(null, Status.FROZEN, 99999)
