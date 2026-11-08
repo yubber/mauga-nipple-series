@@ -23,6 +23,12 @@ globalvar wallEffects
 globalvar wallPos
 globalvar wallI
 
+globalvar rainVar
+
+globalvar missileFx
+globalvar missilePos
+globalvar missileTemp
+
 enum THREATS:
 	JAIL,
 	MORE,
@@ -31,9 +37,9 @@ enum THREATS:
 	ICE,
 	WALL,
 	NUKE,
-	HAIL,
+	RAIN,
 	MEDUSA,
-	MORTAR
+	MORTAR # LAST
 
 macro chainThreatZLimit = -20 + threatStacks[THREATS.CHAIN] * 0.5
 
@@ -52,6 +58,22 @@ rule "threat info":
 		"moo-rtar", 4, 99999, iconString(Icon.DIZZY), "bombs random spaces on the map. each stack adds explosion radius.",
 	])
 	threatStacks = [0 for x in threatNames]
+
+rule "perma threat fx":
+	# medusa
+	createIcon(getAllPlayers() if gorgonPos else null, gorgonPos, Icon.EYE, IconReeval.VISIBILITY_AND_POSITION, Color.YELLOW, true)
+	createProjectileEffect(getAllPlayers() if gorgonPos else null, Projectile.ORISA_FUSION_DRIVER, getAllPlayers(), gorgonPos, Vector.DOWN, 1, ProjectileEffectReeval.VISIBILITY_FRIENDLINESS_POSITION_DIRECTION_AND_SIZE)
+	createInWorldText(getAllPlayers() if gorgonPos else null, t"avert your eyes!", gorgonPos + Vector.DOWN, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE)
+
+rule "round start threat init":
+	@Condition phase == PHASE.SURVIVE
+	# medusa
+	if threatStacks[THREATS.MEDUSA]:
+		gorgonPos = vect(random.uniform(-20, 20), 1, random.uniform(chainThreatZLimit, 20))
+
+rule "round end threat cleanup":
+	@Condition phase == PHASE.INTERMISSION
+	gorgonPos = null
 
 macro mortarN = 5
 macro mortarRad = 4.5 + threatStacks[THREATS.MORTAR]
@@ -77,8 +99,6 @@ rule "mortar":
 		wait(mortarDelay / 4, Wait.ABORT_WHEN_FALSE)
 		createProjectile(Projectile.PHARAH_ROCKET, null, mortarPos[mortarI] + Vector.UP * 50, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 220, 110, mortarRad, DynamicEffect.BAD_EXPLOSION, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, 0.8, 25/mortarDelay)
 
-rule "gorgon pos":
-
 rule "toe medusa":
 	@Event eachPlayer
 	@Team 1
@@ -93,7 +113,7 @@ rule "toe medusa":
 		wait(0.192)
 		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), gorgonPos)) < 40:
 			eventPlayer.feetSlow += 0.02 * threatStacks[THREATS.MEDUSA]
-			eventPlayer.setMoveSpeed((1 - eventPlayer.feetSlow) * SpeedFormula)
+			eventPlayer.setMoveSpeed((1 - eventPlayer.feetSlow) * SpeedFormula(eventPlayer))
 			damage(eventPlayer, gorgonPos, 3)
 			if eventPlayer.feetSlow >= 1:
 				smallMessage(eventPlayer, t"petrified! don't look at the gorgon!")
@@ -102,14 +122,14 @@ rule "toe medusa":
 				damage(eventPlayer, gorgonPos, 80)
 				wait(1)
 				eventPlayer.feetSlow = 0
-				eventPlayer.setMoveSpeed(SpeedFormula)
+				eventPlayer.setMoveSpeed(SpeedFormula(eventPlayer))
 				wait(0.48)
 		else:
 			eventPlayer.feetSlow = 0
-			eventPlayer.setMoveSpeed(SpeedFormula)
+			eventPlayer.setMoveSpeed(SpeedFormula(eventPlayer))
 
 	eventPlayer.feetSlow = 0
-	eventPlayer.setMoveSpeed(SpeedFormula)
+	eventPlayer.setMoveSpeed(SpeedFormula(eventPlayer))
 
 macro grabDelay = 2.7 * (0.85 ** threatStacks[THREATS.GRAB])
 rule "grab":
@@ -248,3 +268,145 @@ rule "milk wall + collision":
 		destroyEffect(wallEffects)
 		wallEffects = []
 		stopChasingVariable(wallPos)
+
+#!define RainPosFormula vect((sin(getTotalTimeElapsed() / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(16 - 8 * rainVar))
+rule "rain":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.RAIN] > 0
+	wait(THREATS.RAIN * 0.032)
+	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	for rainVar in range(5):
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula + Vector.DOWN * 21, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		threatFx.append(getLastCreatedEntity())
+
+	while phase == PHASE.SURVIVE:
+		for rainVar in range(5):
+			if rainVar % 2 != 0: # reduce the cloud seeding fx
+				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, 0.05, 30, 1, 0,0,-5)
+			wait(0.032)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20 * threatStacks[THREATS.RAIN], 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, 0.07, 200, 1,2,0,0)
+			wait(0.024)
+
+#!define NukeAoe 10
+rule "nuke":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.NUKE]
+	wait(THREATS.NUKE * 0.032)
+
+	# debug
+	# createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.ROSE, missilePos, 1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	while phase == PHASE.SURVIVE:
+		missileFx = []
+		missilePos = vect(0,1,20)
+		chaseAtRate(missilePos, getRealClosestPlayer(missilePos, Team.1).getPosition() * vect(1,0,1) + Vector.UP, 5 * threatStacks[THREATS.NUKE], ChaseRateReeval.DESTINATION_AND_RATE)
+		# chaser
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos, Vector.UP, 0.1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		missileFx.append(getLastCreatedEntity())
+		wait()
+		# closest player check, can't use wait until in case rule must break
+		while missileFx != []:
+			if phase == PHASE.INTERMISSION:
+				for missileTemp in range(len(missileFx)):
+					destroyEffect(missileFx[missileTemp])
+				return
+			# probably a bit more optimal since this stops checking on the first player found, instead of checking all players in radius
+			for missileTemp in range(getNumberOfLivingPlayers(Team.1)):
+				if getLivingPlayers(Team.1)[missileTemp].hasSpawned() and distance(getLivingPlayers(Team.1)[missileTemp].getPosition(), missilePos) < 3:
+					playEffect(getAllPlayers(), DynamicEffect.ORISA_HALT_IMPLOSION_SOUND, Color.TEAM_2, missilePos, 100)
+					destroyEffect(missileFx[0])
+					missileFx = []
+					break
+			wait(0.24)
+		# arming
+		lbl_0:
+		stopChasingVariable(missilePos)
+		missilePos -= Vector.UP
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_GRAVITON, null, missilePos + Vector.UP, Vector.UP, 0.1 + 0.1 * (getTotalTimeElapsed() - missileTemp), ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
+		missileFx.append(getLastCreatedEntity())
+		wait()
+		missileTemp = getTotalTimeElapsed()
+
+		wait(3)
+		# deto
+		if phase == PHASE.INTERMISSION:
+			for missileTemp in range(len(missileFx)):
+				destroyEffect(missileFx[missileTemp])
+			return
+
+		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, LeftNip, 1)
+		playEffect(getAllPlayers(), DynamicEffect.ZARYA_PARTICLE_CANNON_EXPLOSION, Color.TEAM_2, RightNip, 1)
+		createProjectile(Projectile.PHARAH_ROCKET, null, LeftNip, directionTowards(LeftNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,20, 0,0)
+		createProjectile(Projectile.PHARAH_ROCKET, null, RightNip, directionTowards(RightNip, missilePos + Vector.UP * 2), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1, 1, NukeAoe, DynamicEffect.SOMBRA_EMP_EXPLOSION_EFFECT, DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, 1, 100, 0.5,20, 0,0)
+		wait(0.012 * distance(LeftNip, missilePos))
+		# playEffect(getAllPlayers(), DynamicEffect.HANZO_SONIC_ARROW_INITIAL_PULSE, Color.TEAM_2, missilePos, 1)
+		# playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION, Color.TEAM_2, missilePos, 1)
+		playEffect(getAllPlayers(), DynamicEffect.LUCIO_SOUND_BARRIER_CAST, Color.TEAM_2, missilePos, 1)
+		playEffect(getAllPlayers(), DynamicEffect.DVA_SELF_DESTRUCT_EXPLOSION_SOUND, Color.TEAM_2, missilePos, 400)
+		destroyEffect(missileFx[0])
+		missileFx = []
+		missileTemp = getTotalTimeElapsed()
+		wait()
+		createProjectileEffect(getAllPlayers(), Projectile.ZARYA_PARTICLE_CANNON, null, missilePos + Vector.DOWN * 10, Vector.UP, 1, ProjectileEffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, missilePos, NukeAoe, EffectReeval.VISIBILITY)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos, missilePos + min(16, 20 * (getTotalTimeElapsed() - missileTemp)) * Vector.UP, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.LEFT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+		createBeam(getAllPlayers(), Beam.OMNIC_SLICER, missilePos + Vector.UP * 12, missilePos + Vector.UP * 12 + min(4, max(0.01, 20 * (getTotalTimeElapsed() - missileTemp - 0.6))) * Vector.RIGHT, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		missileFx.append(getLastCreatedEntity())
+
+		# start damage while eva anim plays
+		for missileTemp in range(20):
+			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 30)
+			getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
+			wait(0.112)
+
+		for missileTemp in range(2,len(missileFx)):
+			destroyEffect(missileFx[missileTemp])
+		missileFx = missileFx.slice(0,2)
+		# dot
+
+		for missileTemp in range(50):
+			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 30)
+			getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
+			wait(0.128)
+			if phase == PHASE.INTERMISSION:
+				break
+		for missileTemp in range(len(missileFx)):
+			destroyEffect(missileFx[missileTemp])
+		missileFx = []
+
+rule "make ice":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.ICE]
+	while phase == PHASE.SURVIVE:
+		wait(9)
+		createProjectile(Projectile.MEI_ICICLE, nipman, LeftNip, directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+		wait(0.36)
+		createProjectile(Projectile.MEI_ICICLE, nipman, RightNip, directionTowards(RightNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+
+rule "ice impact":
+	@Event playerTookDamage
+	@Team 1
+	@Condition eventAbility == null
+	@Condition attacker == nipman
+	@Condition threatStacks[THREATS.ICE]
+	victim.setStatusEffect(nipman, Status.FROZEN, 1.2)
+
+rule "ice effect init":
+	@Event eachPlayer
+	@Hero mauga
+	@Team 2
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.ICE]
+	@Condition (eventPlayer == nipman)
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, LeftNip/*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())
+	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, RightNip/*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
+	threatFx.append(getLastCreatedEntity())

@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": "measure where to put stuff on mauga's n!pples\nplay mauga n!pple pve at DS2MD\n\nyubz made it",
+        "description": "measure where to put stuff on mauga's n!pples\nplay mauga n!pple pve at SANFT\n\nyubz made it",
         "modeName": "mauga n!pple measurement"
     },
     "lobby": {

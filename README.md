@@ -12,6 +12,20 @@ watch the documentary: https://www.youtube.com/watch?v=ivFi0xhkBWc
 ## mauga nipple: where is it?
 [W5PMC](https://workshop.codes/W5PMC)
 
+## mauga nipple roguelike bullet hell
+
+WIP...
+
+## unpublished modes
+
+### [mauga nipple measuring suite](https://github.com/yubber/mauga-nipple-series/blob/main/nipmeasuresuite.opy)
+
+for when you want to find the position needed to put sigma feet over mauga's nipples.
+
+### [javofo workshopper tournament](https://github.com/yubber/mauga-nipple-series/blob/main/javo_tourna1.opy)
+
+code i used for javofo's workshopper tournament (8 nov 2026, scrapped because of poor planning.)
+
 # contributing
 
 ## translations

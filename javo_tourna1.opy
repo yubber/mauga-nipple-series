@@ -1,3 +1,7 @@
+#
+# code i used for javofo's workshopper tournament (8 nov 2026, scrapped because of poor planning.)
+#
+
 settings {
     "lobby": {
         "team1Slots": 1,
