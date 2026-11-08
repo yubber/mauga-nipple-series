@@ -12,8 +12,8 @@ globalvar ROUNDCHANGEDEBUG
 
 globalvar MATCH 0 = createWorkshopSettingInt("match", "match no", 1, 1, 3, 0)
 macro roundChange = isMatchBetweenRounds() or ROUNDCHANGEDEBUG
-macro yubzBuffPlayerName = "AussieMedic"
 macro DEBUG = false
+macro yubzBuffPlayerName = "OMGIDIED"
 
 macro SMALL_ACTIVE = MATCH > 0
 macro MED_ACTIVE = MATCH > 1
@@ -76,6 +76,7 @@ def inflChangeHandler():
 		eventPlayer.disableEnvironmentCollision(false)
 
 rule "debug round no":
+	@Disabled
 	@Condition yubz == hostPlayer
 	@Condition hostPlayer.isHoldingButton(Button.INTERACT)
 	@Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
@@ -85,6 +86,7 @@ rule "debug round no":
 	ROUNDCHANGEDEBUG = false
 
 rule "debug nip pos":
+	@Disabled
 	@Condition yubz.isHoldingButton(Button.INTERACT)
 	yubz.startCamera(mauga.getEyePosition() + yubz.getFacingDirection() * 4, NipPos(LeftNipLocalScaled), 99)
 	waitUntil(yubz.isHoldingButton(Button.INTERACT) == false, 30)
@@ -121,6 +123,9 @@ rule "player huds":
 	createEffect(getAllPlayers() if eventPlayer.scaling > minToBurst else [], Effect.RING, Color.ORANGE, eventPlayer.getPosition(), burstRadiusFormula, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 	createEffect(getAllPlayers() if eventPlayer.scaling > 5 else [], Effect.LIGHT_SHAFT, Color.RED, eventPlayer.getPosition(), burstRadiusFormula, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
+	# if DEBUG == false:
+	# 	disableInspector()
+
 rule "other player init: on alive":
 	@Event eachPlayer
 	@Condition eventPlayer.isAlive()
@@ -142,12 +147,9 @@ rule "heal inflation":
 
 rule "global init":
 	hudText(getAllPlayers(), iconString(Icon.ARROW_UP), "your size", localPlayer.scaling, HudPosition.ACTUALLY_LEFT, 0, Color.ORANGE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
-	createIcon(yubz, yubz.yubzMinionTarget, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.ROSE, true)
-	debug(MATCH)
-	debug(mauga)
-	debug(entityExists(mauga))
-	debug(minions)
-	debug(roundChange)
+	hudText(yubz, iconString(Icon.ARROW_DOWN) if yubz.yubzMinionTarget else iconString(Icon.DIZZY), "minion command", "interact to cancel" if yubz.yubzMinionTarget else "group up to direct", HudPosition.ACTUALLY_LEFT, 0, Color.GREEN, Color.GREEN, Color.WHITE, HudReeval.VISIBILITY)
+
+	createIcon(yubz if yubz.yubzMinionTarget else null, yubz.yubzMinionTarget, Icon.ARROW_DOWN, IconReeval.VISIBILITY_AND_POSITION, Color.ROSE, true)
 
 rule "explode notif":
 	@Event eachPlayer
@@ -212,7 +214,9 @@ rule "sacrifice":
 	else:
 		kill(minions, null)
 
-macro HealAmt = (55 if MED_ACTIVE else 35) / 2 * 0.12
+# macro HealAmt = (55 if MED_ACTIVE else 35) / 2 * 0.12
+macro HealAmt = [5, 10, 20][MATCH - 1] / 2 * 0.12
+
 rule "healing milk":
 	@Event global
 	@Condition entityExists(mauga)
@@ -248,7 +252,7 @@ rule "minions init":
 	minions.setRespawnTime(4)
 
 rule "minion control: stop shoot":
-	@Condition yubz.isCommunicating(Comms.NO)
+	@Condition yubz.isCommunicating(Comms.NO) or yubz.isCommunicating(Comms.INCOMING)
 	minions.stopForcingButton(Button.PRIMARY_FIRE)
 	minions.forceButtonPress(Button.RELOAD)
 	waitUntil(yubz.isFiringPrimaryFire(), 10)
@@ -269,7 +273,7 @@ rule "minion movement ai":
 		if yubz.yubzMinionTarget and isInLoS(eventPlayer.getEyePosition(), yubz.yubzMinionTarget):
 			eventPlayer.stopForcingThrottle()
 			eventPlayer.startThrottleInDirection(directionTowards(eventPlayer.getPosition(), yubz.yubzMinionTarget), 1, Relativity.TO_WORLD, Throttle.REPLACE_EXISTING, ThrottleReeval.DIRECTION_AND_MAGNITUDE)
-		elif isInLoS(eventPlayer.getEyePosition(), yubzEnemy.getEyePosition()):
+		elif distance(eventPlayer.getPosition(), yubzEnemy.getPosition()) > 2 and isInLoS(eventPlayer.getEyePosition(), yubzEnemy.getEyePosition()):
 			eventPlayer.stopThrottleInDirection()
 			eventPlayer.startForcingThrottle(1,1,0,0,0,0)
 		elif distance(eventPlayer.getPosition(), yubz.getPosition()) > 3:
@@ -283,6 +287,10 @@ rule "minion movement ai":
 rule "minions jump":
 	@Condition yubz.isHoldingButton(Button.JUMP)
 	minions.forceButtonPress(Button.JUMP)
+
+rule "minions crouch":
+	@Condition yubz.isHoldingButton(Button.CROUCH)
+	minions.forceButtonPress(Button.CROUCH)
 
 rule "unkill minions":
 	@Event playerDied
@@ -318,6 +326,7 @@ rule "kill stranded minion":
 	@Hero mauga
 	@Condition eventPlayer.isMaugaMinion
 	@Condition eventPlayer.isAlive()
+	@Condition not yubz.isCrouching()
 	if distance(eventPlayer.getPosition(), yubz.getPosition()) > 30:
 		kill(eventPlayer)
 	wait(4.8)
