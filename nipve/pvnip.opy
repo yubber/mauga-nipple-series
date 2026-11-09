@@ -1920,6 +1920,7 @@ rule "debug finish obj":
 # misc
 rule "hey gamers":
 	@Condition obj != OBJ.INTERMISSION
+	@Condition obj != OBJ.MORE
 	@Condition enemies[roundNo%len(enemies)] == Hero.DMON
 	if random.randint(0,5) == 0:
 		bigMessage(getAllPlayers(), f"{heroIcon(Hero.DMON)} hey gamers, i'm yuna lee.")

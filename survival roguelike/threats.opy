@@ -29,9 +29,21 @@ globalvar missileFx
 globalvar missilePos
 globalvar missileTemp
 
+enum BOTROLE:
+	NULL,
+	FIXED,
+	MOB
+
+globalvar threatDummies
+playervar botRole
+globalvar jailor
+
 enum THREATS:
 	JAIL,
 	MORE,
+	SHRAPNEL,
+	COUNTDOWN,
+	NIPLETS,
 	GRAB,
 	CHAIN,
 	ICE,
@@ -41,42 +53,125 @@ enum THREATS:
 	MEDUSA,
 	MORTAR # LAST
 
-macro chainThreatZLimit = -20 + threatStacks[THREATS.CHAIN] * 0.5
+macro chainThreatZLimit = 20 - (40 * 0.75 ** threatStacks[THREATS.CHAIN])
+macro isFacingGorgon(player):
+	angleBetweenVectors(player.getFacingDirection(), directionTowards(player.getEyePosition(), gorgonPos)) < 50
 
+macro threatMilkBonus(id):
+	threatScores[id] + 1
+macro threatMinRound(id):
+	threatScores[id] - 2
+
+# collection,
 rule "threat info":
 	tabular([threatNames,threatScores,threatMaxStacks,threatIcons,threatDescs], [
-		"jailor", 3, 99999, abilityIconString(Hero.MAUGA, Button.ULTIMATE), "spawns a small mauga that charges you and\ntraps you in his ult. kill him to stop it.\neach stack increases his speed.",
+		"jailor", 3, 99999, "<tx0C000000000039DA>", "spawns a small mauga that charges you and\ntraps you in his ult. kill him to stop it.\neach stack increases his health.",
 		"more maugas", 5, 99999, heroIcon(Hero.MAUGA), "spawns an extra mauga that charges a\ndeadly attack. kill him to stop it.\neach stack increases his health.",
+		"shrapnel", 6, 5, iconString(Icon.ASTERISK), "a shard falls from the sky,\nshattering into pieces that fly out.\neach stack increases shrapnel count.",
+		"pandora's box", 6, 5, "<tx0C00000000017C2A>", "a box spawns in the center and opens after 15s.\ntouch it to reset the timer.\nyou don't want to know what's inside...\neach stack makes it open faster.",
+		"niplets", 6, 5, "<tx0C0000000000ABAD>", "mauga launches milk glands that burst into\nexpanding waves of even more glands.\neach stack adds an extra wave.",
 		# og threats
-		"sticky handshake", 2, 99999, iconString(Icon.HAPPY), "mauga reaches out and tries to grab you to him. each stack increases \"hand\" speed.",
-		"chained together", 4, 40, abilityIconString(Hero.MAUGA, Button.ULTIMATE), "mauga pulls you in if you're on the far side of the arena.\neach stack reduces minimum distance to be pulled.",
-		"frostbitties", 2, 99999, iconString(Icon.DIAMOND), "mauga shoots freezing icicles.\neach stack increases fire rate.",
-		"milk wall", 5, 99999, iconString(Icon.STOP), "mauga sends forth a wall that stuns on impact.\neach stack increases build speed.",
-		"double d-day", 3, 99999, iconString(Icon.RADIOACTIVE), "a singularity follows players around.\non contact, mauga nukes it to create a deadly fallout zone.\neach stack increases singularity speed.",
-		"cloudy with a chance of milkballs", 4, 99999, iconString(Icon.BOLT), "storm clouds move back and forth in rows.\neach stack increases damage.",
-		"milkdusa", 7, 99999, iconString(Icon.EYE), "a gorgon spawns on the map. staring at it slows and eventually petrifies you.\neach stack increases buildup speed.",
-		"moo-rtar", 4, 99999, iconString(Icon.DIZZY), "bombs random spaces on the map. each stack adds explosion radius.",
+		"sticky handshake", 3, 99999, "<tx0C00000000005A0B>", "mauga reaches out and tries to grab you to him.\neach stack increases \"hand\" speed.",
+		"chained together", 6, 99999, abilityIconString(Hero.MAUGA, Button.ULTIMATE), "mauga pulls you in if you're on the far side of the arena.\neach stack reduces minimum distance to be pulled.",
+		"frostbitties", 3, 99999, "<tx0C0000000000B93A>", "mauga shoots freezing icicles.\neach stack increases fire rate.",
+		"milk wall", 5, 99999, "<tx0C00000000004121>", "mauga sends forth a wall that stuns on impact.\neach stack increases build speed.",
+		"double d-day", 2, 99999, iconString(Icon.RADIOACTIVE), "a singularity follows players around.\non contact, mauga nukes it to create a deadly fallout zone.\neach stack increases singularity speed.",
+		"flashing flood", 2, 99999, iconString(Icon.BOLT), "storm clouds move back and forth in rows.\neach stack increases damage.",
+		"milkdusa", 7, 99999, iconString(Icon.EYE), "a gorgon spawns on the map. staring at it slows\nand eventually petrifies you.\neach stack increases damage and petrify duration.",
+		"moo-rtar", 2, 99999, iconString(Icon.DIZZY), "bombs random spaces on the map.\neach stack adds explosion radius.",
 	])
 	threatStacks = [0 for x in threatNames]
 
 rule "perma threat fx":
 	# medusa
 	createIcon(getAllPlayers() if gorgonPos else null, gorgonPos, Icon.EYE, IconReeval.VISIBILITY_AND_POSITION, Color.YELLOW, true)
-	createProjectileEffect(getAllPlayers() if gorgonPos else null, Projectile.ORISA_FUSION_DRIVER, getAllPlayers(), gorgonPos, Vector.DOWN, 1, ProjectileEffectReeval.VISIBILITY_FRIENDLINESS_POSITION_DIRECTION_AND_SIZE)
-	createInWorldText(getAllPlayers() if gorgonPos else null, t"avert your eyes!", gorgonPos + Vector.DOWN, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE)
+	createProjectileEffect(getAllPlayers() if gorgonPos else null, Projectile.ORISA_FUSION_DRIVER, getAllPlayers(), gorgonPos + Vector.UP * (1 + sin(getTotalTimeElapsed())), Vector.DOWN, 0.5, ProjectileEffectReeval.VISIBILITY_FRIENDLINESS_POSITION_DIRECTION_AND_SIZE)
+	createInWorldText(getAllPlayers() if gorgonPos else null, t"don't look!", gorgonPos, 1.5, Clip.SURFACES, WorldTextReeval.VISIBILITY_POSITION_STRING_AND_COLOR, Color.LIGHT_RED if localPlayer.feetSlow != 0 and sin(getTotalTimeElapsed() * 3) > 0 else Color.WHITE)
+	createBeam(localPlayer if localPlayer.feetSlow != 0 and localPlayer.isAlive() else null, Beam.GOOD, gorgonPos, localPlayer.getEyePosition() + Vector.DOWN, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+	# ice
+	createProjectileEffect(getAllPlayers() if threatStacks[THREATS.ICE] and nipman.getHero() == Hero.MAUGA else null, Projectile.MEI_ICICLE, null, LeftNip, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
+	createProjectileEffect(getAllPlayers() if threatStacks[THREATS.ICE] and nipman.getHero() == Hero.MAUGA else null, Projectile.MEI_ICICLE, null, RightNip, Vector.BACKWARD, 0.5, ProjectileEffectReeval.VISIBILITY)
 
 rule "round start threat init":
 	@Condition phase == PHASE.SURVIVE
 	# medusa
 	if threatStacks[THREATS.MEDUSA]:
-		gorgonPos = vect(random.uniform(-20, 20), 1, random.uniform(chainThreatZLimit, 20))
+		gorgonPos = vect(random.uniform(-20, 20), 2, random.uniform(chainThreatZLimit, 20))
 
 rule "round end threat cleanup":
 	@Condition phase == PHASE.INTERMISSION
 	gorgonPos = null
 
+rule "launch mobs on respawn":
+	@Event eachPlayer
+	@Condition eventPlayer.isAlive()
+	@Condition eventPlayer.isDummy()
+	@Condition eventPlayer.botRole == BOTROLE.MOB
+	eventPlayer.teleport(LeftNip if random.randint(0,1) else RightNip)
+	eventPlayer.applyImpulse(vect(random.uniform(-0.15, 0.15), random.uniform(0.5, 0.76), -1), random.uniform(50,70), Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+	eventPlayer.stopForcingThrottle()
+	eventPlayer.setStatusEffect(null, Status.KNOCKED_DOWN, 5)
+
+rule "niplets":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.NIPLETS]
+	
+
+rule "niplets":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.COUNTDOWN]
+
+rule "jailor init":
+	@Condition phase == PHASE.SURVIVE
+	@Condition threatStacks[THREATS.JAIL]
+	createDummy(Hero.MAUGA, Team.2, -1, LeftNip, Vector.BACKWARD)
+	jailor = getLastCreatedEntity()
+	threatDummies.append(jailor)
+	jailor.botRole = BOTROLE.MOB
+	jailor.setRespawnTime(8)
+	jailor.setMaxHealth(5 * threatStacks[THREATS.JAIL]) # mauga has 500% hp
+	jailor.setHealingReceived(20)
+	jailor.setMoveSpeed(150)
+	jailor.startForcingName("jailor")
+	jailor.startFacing(directionTowards(jailor.getPosition(), jailor.mobTarget), 999, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+	# debug
+	createBeam(hostPlayer, Beam.ECHO_FOCUSING, jailor.getPosition(), jailor.mobTarget, Color.TEAM_2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+
+rule "jailor behavior":
+	@Condition entityExists(jailor)
+	@Condition jailor.isAlive()
+	waitUntil(jailor.getPosition().y > 10, 2)
+	jailor.startScalingSize(0.4, false)
+	waitUntil(jailor.getPosition().y < 1.8 or jailor.isDead(), 7)
+	if jailor.isDead():
+		return
+	jailor.setStatusEffect(null, Status.KNOCKED_DOWN, 1.6)
+	jailor.mobTarget = getRealClosestPlayer(jailor.getPosition(), Team.1).getPosition() * vect(1,0,1)
+	waitUntil(jailor.hasStatus(Status.KNOCKED_DOWN) == false, 1.6)
+	if jailor.isDead():
+		return
+	jailor.startForcingButton(Button.ABILITY_1)
+	jailor.startForcingThrottle(1,1,0,0,0,0)
+	waitUntil(distance(jailor.getPosition() * vect(1,0,1), jailor.mobTarget) < 6)
+	if jailor.isDead():
+		return
+	jailor.cancelPrimaryAction()
+	wait()
+	jailor.startForcingButton(Button.ABILITY_2)
+	jailor.setUltCharge(100)
+	jailor.startScalingSize(1.2, false)
+	wait(0.12)
+	jailor.startForcingButton(Button.ULTIMATE)
+	waitUntil(jailor.isDead() or jailor.isUsingUltimate(), 10)
+	wait(0.8)
+	jailor.stopForcingButton(Button.ABILITY_1)
+	jailor.stopForcingButton(Button.ABILITY_2)
+	jailor.stopForcingButton(Button.ULTIMATE)
+	jailor.stopForcingThrottle()
+	kill(jailor)
+
 macro mortarN = 5
-macro mortarRad = 4.5 + threatStacks[THREATS.MORTAR]
+macro mortarRad = 3.5 + threatStacks[THREATS.MORTAR]
 macro mortarDelay = 1.5
 rule "mortar":
 	@Condition phase == PHASE.SURVIVE
@@ -97,13 +192,13 @@ rule "mortar":
 		wait(mortarDelay / 4, Wait.ABORT_WHEN_FALSE)
 		createProjectile(Projectile.BAPTISTE_BIOTIC_LAUNCHER, null, LeftNip if mortarI % 2 else RightNip, directionTowards(LeftNip if mortarI % 2 else RightNip, mortarPos[mortarI] + Vector.UP * 60), Relativity.TO_WORLD, ModifyHealth.HEAL, Team.1, 0, 0, 0, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA_SOUND, 0.4, 200/mortarDelay, mortarDelay * 0.45)
 		wait(mortarDelay / 4, Wait.ABORT_WHEN_FALSE)
-		createProjectile(Projectile.PHARAH_ROCKET, null, mortarPos[mortarI] + Vector.UP * 50, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 220, 110, mortarRad, DynamicEffect.BAD_EXPLOSION, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, 0.8, 25/mortarDelay)
+		createProjectile(Projectile.PHARAH_ROCKET, null, mortarPos[mortarI] + Vector.UP * 50, Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 110, 0.8, mortarRad, DynamicEffect.BAD_EXPLOSION, DynamicEffect.BASTION_TANK_CANNON_EXPLOSION_SOUND, 0.8, 25/mortarDelay)
 
 rule "toe medusa":
 	@Event eachPlayer
 	@Team 1
 	@Condition phase == PHASE.SURVIVE
-	@Condition threatStacks[THREATS.MEDUSA] > 0
+	@Condition threatStacks[THREATS.MEDUSA]
 	@Condition eventPlayer.isDummy() == false
 	eventPlayer.feetSlow = 0
 
@@ -111,14 +206,14 @@ rule "toe medusa":
 
 	while phase == PHASE.SURVIVE:
 		wait(0.192)
-		if angleBetweenVectors(eventPlayer.getFacingDirection(), directionTowards(eventPlayer.getEyePosition(), gorgonPos)) < 40:
-			eventPlayer.feetSlow += 0.02 * threatStacks[THREATS.MEDUSA]
+		if isFacingGorgon(eventPlayer):
+			eventPlayer.feetSlow += 0.065
 			eventPlayer.setMoveSpeed((1 - eventPlayer.feetSlow) * SpeedFormula(eventPlayer))
-			damage(eventPlayer, gorgonPos, 3)
+			damage(eventPlayer, gorgonPos, 3 * threatStacks[THREATS.MEDUSA])
 			if eventPlayer.feetSlow >= 1:
 				smallMessage(eventPlayer, t"petrified! don't look at the gorgon!")
 				eventPlayer.feetSlow = 1
-				eventPlayer.setStatusEffect(gorgonPos, Status.FROZEN, 1.2)
+				eventPlayer.setStatusEffect(gorgonPos, Status.FROZEN, 1 * threatStacks[THREATS.MEDUSA])
 				damage(eventPlayer, gorgonPos, 80)
 				wait(1)
 				eventPlayer.feetSlow = 0
@@ -227,7 +322,7 @@ rule "cage boundary":
 	threatFx.append(getLastCreatedEntity())
 
 #!define WallGap 2.4
-#!define WallWidth 5
+#!define WallWidth 6
 rule "milk wall + collision":
 	@Condition phase == PHASE.SURVIVE
 	@Condition threatStacks[THREATS.WALL]
@@ -235,12 +330,12 @@ rule "milk wall + collision":
 	wallEffects = []
 	while phase == PHASE.SURVIVE:
 		wallPos = vect(random.uniform(-20, 20 - WallGap * WallWidth), 0, 20)
-		for wallI in range(54):
+		for wallI in range(42):
 			if phase == PHASE.INTERMISSION:
 				goto lbl_wallskip
 			createProjectile(Projectile.ECHO_STICKY_BOMB, nipman, LeftNip if wallI % 2 == 0 else RightNip, directionTowards(LeftNip if wallI % 2 == 0 else RightNip, wallPos + vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 0, 0, 0.1, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR, DynamicEffect.BRIGITTE_REPAIR_PACK_ARMOR_SOUND, 0.1, 50 * (1.1 ** threatStacks[THREATS.WALL]),
 				magnitude((LeftNip if wallI % 2 == 0 else RightNip) - wallPos + (vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap)) / 120 /*0.6 - 0.002 * wallI ** 2*/, 0,0,0)
-			wait(0.144 * (0.85 ** threatStacks[THREATS.WALL]))
+			wait(0.24 * (0.6 ** threatStacks[THREATS.WALL]))
 			createProjectileEffect(getAllPlayers(), Projectile.ECHO_STICKY_BOMB, null, wallPos + evalOnce(vect(wallI % WallWidth, floor(wallI / WallWidth), 0) * WallGap), Vector.BACKWARD, 0.1, ProjectileEffectReeval.VISIBILITY_POSITION_DIRECTION_AND_SIZE)
 			wallEffects.append(getLastCreatedEntity())
 
@@ -257,7 +352,7 @@ rule "milk wall + collision":
 				if abs(p.getPosition().z - wallPos.z) < 1.3
 				and p.getPosition().x > wallPos.x
 				and p.getPosition().x < wallPos.x + WallWidth * WallGap
-				and p.getPosition().y <= 54 / WallWidth * WallGap]
+				and p.getPosition().y <= 42 / WallWidth * WallGap]
 			nipman.mobTarget.setStatusEffect(null, Status.KNOCKED_DOWN, 1.5)
 			damage(nipman.mobTarget, null, 90) # multihits except when it doesn't
 
@@ -269,7 +364,8 @@ rule "milk wall + collision":
 		wallEffects = []
 		stopChasingVariable(wallPos)
 
-#!define RainPosFormula vect((sin(getTotalTimeElapsed() / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(16 - 8 * rainVar))
+macro RainPosFormula(offset=0):
+	vect((sin((getTotalTimeElapsed() + offset) / 3) * 20) * evalOnce((rainVar % 2) * 2 - 1), 0, evalOnce(16 - 8 * rainVar))
 rule "rain":
 	@Condition phase == PHASE.SURVIVE
 	@Condition threatStacks[THREATS.RAIN] > 0
@@ -277,18 +373,18 @@ rule "rain":
 	createEffect(getAllPlayers(), Effect.CLOUD, Color.GRAY, Vector.UP * 30, 40, EffectReeval.VISIBILITY)
 	threatFx.append(getLastCreatedEntity())
 	for rainVar in range(5):
-		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula + Vector.DOWN * 21, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.LIGHT_RED, RainPosFormula(0.42) + Vector.DOWN * 26, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
-		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula, 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+		createEffect(getAllPlayers(), Effect.RING, Color.TEAM_2, RainPosFormula(0.42), 4, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 		threatFx.append(getLastCreatedEntity())
 
 	while phase == PHASE.SURVIVE:
 		for rainVar in range(5):
 			if rainVar % 2 != 0: # reduce the cloud seeding fx
-				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, 0.05, 30, 1, 0,0,-5)
+				createProjectile(Projectile.ECHO_STICKY_BOMB, null, LeftNip if rainVar == 1 else RightNip, directionTowards(nipman.getEyePosition(), vect(random.uniform(-10,10), 30, random.uniform(-15,19))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 1,1,0,DynamicEffect.BRIGITTE_WHIP_SHOT_HEAL_AREA, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.05, 30, 1, 0,0,-5)
 			wait(0.032)
-			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula + Vector.UP * 30 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 20 * threatStacks[THREATS.RAIN], 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.TRACER_RECALL_REAPPEAR_SOUND, 0.07, 200, 1,2,0,0)
-			wait(0.024)
+			createProjectile(Projectile.MEI_ICICLE, null, RainPosFormula() + Vector.UP * 45 + vect(random.uniform(-0.5,0.5),0,random.uniform(-0.5,0.5)), Vector.DOWN, Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 35 * threatStacks[THREATS.RAIN], 1,3.2,DynamicEffect.BRIGITTE_REPAIR_PACK_IMPACT, DynamicEffect.BAPTISTE_BIOTIC_LAUNCHER_EXPLOSION_SOUND, 0.07, 200, 1,2,0,0)
+			wait(0.016)
 
 #!define NukeAoe 10
 rule "nuke":
@@ -363,7 +459,7 @@ rule "nuke":
 
 		# start damage while eva anim plays
 		for missileTemp in range(20):
-			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 30)
+			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 45)
 			getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
 			wait(0.112)
 
@@ -373,7 +469,7 @@ rule "nuke":
 		# dot
 
 		for missileTemp in range(50):
-			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 30)
+			damage(getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF), null, 45)
 			getPlayersInRadius(missilePos, NukeAoe, Team.1, LosCheck.OFF).setStatusEffect(null, Status.BURNING, 0.16)
 			wait(0.128)
 			if phase == PHASE.INTERMISSION:
@@ -386,10 +482,10 @@ rule "make ice":
 	@Condition phase == PHASE.SURVIVE
 	@Condition threatStacks[THREATS.ICE]
 	while phase == PHASE.SURVIVE:
-		wait(9)
 		createProjectile(Projectile.MEI_ICICLE, nipman, LeftNip, directionTowards(LeftNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
 		wait(0.36)
 		createProjectile(Projectile.MEI_ICICLE, nipman, RightNip, directionTowards(RightNip, random.choice(getLivingPlayers(Team.1))), Relativity.TO_WORLD, ModifyHealth.DAMAGE, Team.1, 70, 1, 1, DynamicEffect.TRACER_RECALL_REAPPEAR, DynamicEffect.SIGMA_HYPERSPHERE_IMPLOSION_SOUND, 0.2, 20, 10, 0, 0, 0)
+		wait(9)
 
 rule "ice impact":
 	@Event playerTookDamage
@@ -398,15 +494,3 @@ rule "ice impact":
 	@Condition attacker == nipman
 	@Condition threatStacks[THREATS.ICE]
 	victim.setStatusEffect(nipman, Status.FROZEN, 1.2)
-
-rule "ice effect init":
-	@Event eachPlayer
-	@Hero mauga
-	@Team 2
-	@Condition phase == PHASE.SURVIVE
-	@Condition threatStacks[THREATS.ICE]
-	@Condition (eventPlayer == nipman)
-	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, LeftNip/*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
-	threatFx.append(getLastCreatedEntity())
-	createProjectileEffect(getAllPlayers(), Projectile.MEI_ICICLE, null, RightNip/*+ eventPlayer.getFacingDirection() * 5.2/20 * (20 if eventPlayer == nipman else MiniScale)*/, eventPlayer.getFacingDirection(), 0.5, ProjectileEffectReeval.VISIBILITY)
-	threatFx.append(getLastCreatedEntity())

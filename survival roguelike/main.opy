@@ -8,7 +8,8 @@ settings {
         "allowPlayersInQueue": true,
         "spectatorSlots": 12,
         "team1Slots": maxPlayers,
-        "team2Slots": 0
+        "team2Slots": 0,
+        "returnToLobby": "never"
     },
     "gamemodes": {
         "tdm": {
@@ -19,9 +20,14 @@ settings {
             "perkGeneration%": 250
         },
         "general": {
+			"enablePerks": true,
+            "tankPassiveHealthBonus": "Disabled",
             "gamemodeStartTrigger": "immediately",
             "heroLimit": "off",
-            "enableKillCam": false
+            "enableKillCam": false,
+			"needsImbalancedTeamScoreToWin": true,
+            "team1ScoreToWin": 1,
+            "team2ScoreToWin": 200
         }
     },
     "heroes": {
@@ -31,12 +37,12 @@ settings {
 				"healingReceived%": 500
 			}
 		},
-        "allTeams": {
+        "team1": {
             "ashe": {
                 "ability1Cooldown%": 70,
                 "ability2Cooldown%": 50,
 				"projectileGravity%": 0,
-				"projectileSpeed%": 50,
+				"projectileSpeed%": 20,
             },
             "baptiste": {
                 "jumpVerticalSpeed%": 100,
@@ -63,7 +69,7 @@ settings {
             "juno": {
                 "ability1Cooldown%": 200,
                 "ability1Duration%": 70,
-                "movementGravity%": 175
+                "movementSpeed%": 80
             },
             "kiriko": {
                 "ability2Cooldown%": 200,
@@ -121,7 +127,7 @@ settings {
             "general": {
                 "healingReceived%": 25,
                 "jumpVerticalSpeed%": 130,
-            	# "Tank Passive Health Bonus": "disabled"
+            	"movementSpeed%": 110
             }
         }
     }
@@ -209,6 +215,7 @@ rule "global init":
 	nipman.setHealth(72500)
 	nipman.milk = 0
 	nipman.rerollCost = 10
+	milkGainMod = 1
 	setMatchTime(3)
 	waitUntil(isAssemblingHeroes() == false)
 
@@ -217,11 +224,14 @@ rule "global init":
 	hudHeader(getAllPlayers(), threatListText, HudPosition.TOP, 1.1, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING)
 	hudSubheader(getAllPlayers(), "== boons ==", HudPosition.TOP, 2, Color.SKY_BLUE, HudReeval.VISIBILITY_AND_STRING)
 	hudHeader(getAllPlayers(), boonListText, HudPosition.TOP, 2.1, Color.SKY_BLUE, HudReeval.VISIBILITY_AND_STRING)
+	# TODO time and alive players
+	hudSubtext(getAllPlayers(), f"<tx0C0000000004F73C> {getMatchTime()} | <tx0C0000000002A917> {getNumberOfLivingPlayers(Team.1)}", HudPosition.TOP, 3, Color.WHITE, HudReeval.VISIBILITY_AND_STRING)
+
+	hudSubtext(getAllPlayers(), tf"team lives: {'♥♥♥♥♥♥♥♥♥♥♥♥'.substring(0, teamLives)}", HudPosition.ACTUALLY_LEFT, 0, Color.ROSE, HudReeval.VISIBILITY_AND_STRING)
 	wait()
 
-	debug(phase)
-	debug(localPlayer.offeredChoices)
-	debug(threatStacks)
+	debug(localPlayer.boonStacks)
+	debug(HealthFormula(localPlayer))
 	setMatchTime(99999)
 	teamLives = 3
 	waitUntil(any([x.hasSpawned() for x in getPlayers(Team.1)]), 99999)
@@ -230,57 +240,96 @@ rule "global init":
 
 rule "player init":
 	@Event eachPlayer
+	@Team 1
 	@Condition eventPlayer.hasSpawned()
-	# getAllPlayers().disableGamemodeHud()
+	@Condition eventPlayer.isDummy() == false
+	getAllPlayers().disableGamemodeHud()
+	eventPlayer.disableRespawn()
+	eventPlayer.boonStacks = [0 for x in boonScores]
+	eventPlayer.milk = nipman.milk
+	if phase == PHASE.SURVIVE:
+		kill(eventPlayer, null)
+		smallMessage(eventPlayer, "you will join next round.")
 
 rule "round start, add threats":
 	@Condition phase == PHASE.INTERMISSION
-	@Condition getMatchTime() <= 0
+	@Condition getMatchTime() <= 1
+	wait(1, Wait.ABORT_WHEN_FALSE)
 	threatFx = []
 	nipman.startForcingHero(Hero.MAUGA)
 	wait()
-	phase = PHASE.SURVIVE
 	getPlayers(Team.1).ready = false
+	# add threat
 	if isThreatPickRound:
-		# get max vote number, excl abstains
+		# nipman.ready =  max vote number, excl abstains
 		for i in range(len(nipman.offeredChoices)):
 			nipman.ready = max(nipman.ready, nipman.bought[i])
 		# random pick from any tied winners
-		nipman.bought = random.choice([x for x in nipman.offeredChoices if x == nipman.ready])
+		nipman.bought = random.choice(nipman.offeredChoices.filter(lambda e, idx: nipman.bought[idx] == nipman.ready))
 		threatStacks[nipman.bought]++
-		bigMessage(getAllPlayers(), f"added threat: {threatIcons[nipman.bought]} {threatNames[nipman.bought]}")
-	setMatchTime(3)
-	wait(3.9)
+		nipman.rerollCost += threatMilkBonus(nipman.bought)
+		bigMessage(getAllPlayers(), f"added threat:  {threatIcons[nipman.bought]} {threatNames[nipman.bought]}")
 	getPlayers(Team.1).respawn()
 	bigMessage(getAllPlayers(), "round start!")
-	setMatchTime(min(90, 10 + 2 * teamScore(Team.1)))
+	wait(0.8)
+	# threat text
+	threatListText = f"{threatIcons[0] if threatStacks[0] else ''}{threatStacks[0] if threatStacks[0] else ''} " \
+		"{threatIcons[1] if threatStacks[1] else ''}{threatStacks[1] if threatStacks[1] else ''} " \
+		"{threatIcons[2] if threatStacks[2] else ''}{threatStacks[2] if threatStacks[2] else ''} " \
+		"{threatIcons[3] if threatStacks[3] else ''}{threatStacks[3] if threatStacks[3] else ''} " \
+		"{threatIcons[4] if threatStacks[4] else ''}{threatStacks[4] if threatStacks[4] else ''} " \
+		"{threatIcons[5] if threatStacks[5] else ''}{threatStacks[5] if threatStacks[5] else ''} " \
+		"{threatIcons[6] if threatStacks[6] else ''}{threatStacks[6] if threatStacks[6] else ''} " \
+		"{threatIcons[7] if threatStacks[7] else ''}{threatStacks[7] if threatStacks[7] else ''} " \
+		"{threatIcons[8] if threatStacks[8] else ''}{threatStacks[8] if threatStacks[8] else ''} " \
+		"{threatIcons[9] if threatStacks[9] else ''}{threatStacks[9] if threatStacks[9] else ''} " \
+		"{threatIcons[10] if threatStacks[10] else ''}{threatStacks[10] if threatStacks[10] else ''} "
+	# calc global buffs
+	nipman.boonStacks = [0 for x in boonScores]
+	for i in range(getNumberOfPlayers(Team.1)):
+		nipman.boonStacks[BOONS.MILK] += getPlayersInSlot(i, Team.1).boonStacks[BOONS.MILK]
+		nipman.boonStacks[BOONS.OVERTIME] += getPlayersInSlot(i, Team.1).boonStacks[BOONS.OVERTIME]
+		nipman.boonStacks[BOONS.TIME_OFF] += getPlayersInSlot(i, Team.1).boonStacks[BOONS.TIME_OFF]
+	setMatchTime(min(180, (10 + 2 * teamScore(Team.1)) + nipman.boonStacks[BOONS.OVERTIME] * 20) * 0.8 ** nipman.boonStacks[BOONS.TIME_OFF])
+	setTeamScore(Team.2, 199)
+	wait(0.24)
+	phase = PHASE.SURVIVE
 
 rule "round finish":
 	@Condition phase == PHASE.SURVIVE
-	@Condition getMatchTime() <= 0
+	@Condition getMatchTime() <= 1
+	wait(1, Wait.ABORT_WHEN_FALSE)
 	addToTeamScore(Team.1, 1)
 	setMatchTime(69)
 	destroyEffect(threatFx)
 	setMatchTime(30)
+	for i in range(len(threatDummies)):
+		destroyDummy(threatDummies[i].getTeam(), threatDummies[i].getSlot())
+	threatDummies = []
 	phase = PHASE.INTERMISSION
-	getPlayers(Team.1).milk += nipman.rerollCost
+	getPlayers(Team.1).milk += (nipman.rerollCost + 30 * nipman.boonStacks[BOONS.OVERTIME]) * (1 + 0.15 * nipman.boonStacks[BOONS.MILK])
+	nipman.milk += (nipman.rerollCost + 30 * nipman.boonStacks[BOONS.OVERTIME]) * (1 + 0.15 * nipman.boonStacks[BOONS.MILK])
 	if isShopRound:
 		nipman.startForcingHero(Hero.VENTURE)
 	getDeadPlayers(Team.1).respawn()
 	getPlayersOnHero(Hero.DMON, Team.1).respawn()
 	getPlayersOnHero(Hero.DVA, Team.1).respawn()
 	bigMessage(getAllPlayers(), "round complete!")
+	setTeamScore(Team.2, 0)
 
 rule "all dead":
 	@Condition phase == PHASE.SURVIVE
 	if [x for x in getLivingPlayers(Team.1) if x.hasSpawned()] == []:
-		teamLives--
-		if teamLives == 0:
-			bigMessage(getAllPlayers(), tf"game over. survived {teamScore(Team.1)} rounds!")
-			declareTeamVictory(Team.1)
-		else:
-			bigMessage(getAllPlayers(), tf"everybody's dead! {teamLives} team lives left.")
-			getPlayers(Team.1).respawn()
+		getPlayersOnHero(Hero.ANRAN, Team.1).forceButtonPress(Button.ULTIMATE)
+		wait(1.2)
+		if [x for x in getLivingPlayers(Team.1) if x.hasSpawned()] == []:
+			teamLives--
+			if teamLives == 0:
+				bigMessage(getAllPlayers(), tf"game over. survived {teamScore(Team.1)} rounds!")
+				declareTeamVictory(Team.1)
+			else:
+				bigMessage(getAllPlayers(), tf"everybody's dead! {teamLives} team lives left.")
+				getPlayers(Team.1).respawn()
 
 	wait(0.36)
 	if ruleCondition:
@@ -302,37 +351,42 @@ def rerollItems():
 			eventPlayer.offeredChoices[1] = (random.randint(0, BOONS.TIME_OFF))
 			wait(0.032)
 
-rule "shop / threat select huds":
+rule "shop / threat select / cam / hero select huds":
 	# shop: 2 items, reroll, ready
-	for i in range(2):
-		wait(0.24)
+	for i in range(4):
 		# ring
 		createEffect(getAllPlayers() if selectBoons else null, Effect.RING, Color.SKY_BLUE, shopOptionPos(i), shopOptionRad, EffectReeval.VISIBILITY)
+	for i in range(2):
+		wait(0.24)
 		# icon
-		createInWorldText(getAllPlayers() if selectBoons else null, boonIcons[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 10, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectBoons else null, boonIcons[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# title
-		createInWorldText(getAllPlayers() if selectBoons else null, boonNames[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 8, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.SKY_BLUE)
+		createInWorldText(getAllPlayers() if selectBoons else null, boonNames[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 5, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.SKY_BLUE)
 		# desc
-		createInWorldText(getAllPlayers() if selectBoons else null, boonDescs[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 4, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectBoons else null, boonDescs[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# buy
 		createInWorldText(getAllPlayers() if selectBoons else null, ft"{iconString(Icon.CHECKMARK)} bought!" if localPlayer.bought[evalOnce(i)] else tf"buy: {boonCost(localPlayer.offeredChoices[evalOnce(i)])} milk", shopOptionPos(i, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.GRAY if localPlayer.bought[evalOnce(i)] else Color.WHITE)
 	# reroll
-	createInWorldText(getAllPlayers() if selectBoons else null, ft"{buttonToString(Button.INTERACT)} - reroll ({localPlayer.rerollCost} milk)", shopOptionPos(2, 5, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.RECYCLE), shopOptionPos(2, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, ft"{buttonToString(Button.INTERACT)} - reroll ({localPlayer.rerollCost} milk)", shopOptionPos(2, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
 	# ready
-	createInWorldText(getAllPlayers() if selectBoons else null, "{} - {}".format(buttonToString(Button.INTERACT), t"cancel ready" if localPlayer.ready else t"ready up"), shopOptionPos(3, 5, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.CHECKMARK) if localPlayer.ready else iconString(Icon.EXCLAMATION_MARK), shopOptionPos(3, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, "{} - {}".format(buttonToString(Button.INTERACT), t"cancel ready" if localPlayer.ready else t"ready up"), shopOptionPos(3, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
 
 	# threats: 3, abstain
 	for i in range(4):
 		# ring
 		createEffect(getAllPlayers() if selectThreats else null, Effect.RING, Color.ORANGE, shopOptionPos(i), shopOptionRad, EffectReeval.VISIBILITY)
 	for i in range(3):
-		wait()
+		wait(0.24)
 		# icon
-		createInWorldText(getAllPlayers() if selectThreats else null, threatIcons[nipman.offeredChoices[i]], shopOptionPos(i, 10, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectThreats else null, threatIcons[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# title
-		createInWorldText(getAllPlayers() if selectThreats else null, evalOnce(threatNames[nipman.offeredChoices[i]]), shopOptionPos(i, 8, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.ORANGE)
+		createInWorldText(getAllPlayers() if selectThreats else null, threatNames[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 5, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.ORANGE)
 		# desc
-		createInWorldText(getAllPlayers() if selectThreats else null, evalOnce(threatDescs[nipman.offeredChoices[i]]), shopOptionPos(i, 4, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers()if selectThreats else null, threatDescs[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 2.7, 18), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		# milk bonus
+		createInWorldText(getAllPlayers()if selectThreats else null, tf"+{threatMilkBonus(evalOnce(i))} milk per round", shopOptionPos(i, 1.7, 18), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# buy
 		createInWorldText(getAllPlayers() if selectThreats else null, ft"{iconString(Icon.CHECKMARK)} voted!" if localPlayer.bought == evalOnce(i) else tf"{buttonToString(Button.INTERACT)} - vote", shopOptionPos(i, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 
@@ -354,8 +408,7 @@ rule "init select boons":
 
 rule "init select threats":
 	@Condition selectThreats
-	nipman.bought = threatStacks.map(lambda elem, index: index).filter(lambda e: threatStacks[e] < threatMaxStacks[e])
-	smallMessage(getAllPlayers(),nipman.bought)
+	nipman.bought = threatStacks.map(lambda elem, index: index).filter(lambda e: threatStacks[e] < threatMaxStacks[e] and teamScore(Team.1) >= threatMinRound(e))
     nipman.offeredChoices = random.shuffle(nipman.bought).slice(0, 3)
 	getPlayers(Team.1).bought = -1
 	nipman.bought = [0,0,0,0]
@@ -368,7 +421,7 @@ rule "shop select":
 	if distance(eventPlayer.getPosition(), heroSwapPos()) <= 4:
 		eventPlayer.setAllowedHeroes(getTankHeroes().exclude(eventPlayer.getHero()))
 		wait()
-		eventPlayer.setAllowedHeroes(getAllHeroes())
+		eventPlayer.setAllowedHeroes(getAllHeroes().exclude(Hero.JETPACK_CAT))
 	elif isShopRound:
 		for eventPlayer.i in range(4):
 			if distance(eventPlayer.getPosition(), shopOptionPos(eventPlayer.i)) <= shopOptionRad:
@@ -384,20 +437,22 @@ rule "shop select":
 						else:
 							eventPlayer.milk -= eventPlayer.rerollCost
 							playEffect(eventPlayer, DynamicEffect.SOMBRA_LOGO_SOUND, Color.TEAM_1, eventPlayer, 20)
-							playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.TEAM_1, shopOptionPos(2), 5)
+							playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.TEAM_1, shopOptionPos(2), 15)
 							rerollItems()
 						break
 					default: # buy
 						if eventPlayer.milk < boonCost(eventPlayer.i):
 							smallMessage(eventPlayer, "can't afford this!")
-						elif eventPlayer.bought[i]:
-							smallMessage(eventPlayer, "already bought this round.")
+						elif eventPlayer.bought[eventPlayer.i]:
+							smallMessage(eventPlayer, "out of stock.")
 						else:
 							eventPlayer.boonStacks[eventPlayer.i]++
 							playEffect(eventPlayer, DynamicEffect.BUFF_IMPACT_SOUND, Color.TEAM_1, eventPlayer, 20)
-							playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.TEAM_1, shopOptionPos(eventPlayer.i), 5)
+							playEffect(eventPlayer, DynamicEffect.GOOD_PICKUP_EFFECT, Color.TEAM_1, shopOptionPos(eventPlayer.i), 15)
 							eventPlayer.milk -= boonCost(eventPlayer.i)
-							eventPlayer.bought[i] = true
+							eventPlayer.bought[eventPlayer.i] = true
+							wait()
+							applyStatBoons()
 						break
 				return
 	elif isThreatPickRound:
@@ -587,3 +642,33 @@ rule "echo hook unbreaky":
 	victim.clearStatusEffect(Status.FROZEN)
 	wait(0.48, Wait.ABORT_WHEN_FALSE)
 	victim.setStatusEffect(null, Status.FROZEN, 9999)
+
+# 3rd person - https://workshop.codes/DE8A7/snippet by jeshaal
+#Player variables
+playervar Camera_Distance
+playervar WorldVector_Offset
+playervar Facing_Distance
+
+rule "3rd Person Setup":
+    @Event eachPlayer
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT) == true
+
+    #Resets the Camera in case it's choppy
+    eventPlayer.stopCamera()
+    wait()
+    #3rd Person Camera
+    eventPlayer.startCamera(raycastHitPosition(eventPlayer + (eventPlayer.getEyePosition() - eventPlayer.getPosition()), eventPlayer + (eventPlayer.getEyePosition() - eventPlayer.getPosition()) + eventPlayer.getFacingDirection() * eventPlayer.Camera_Distance + worldVector(eventPlayer.WorldVector_Offset, eventPlayer, Transform.ROTATION), null, eventPlayer, false) + eventPlayer.getFacingDirection() * 0.3, eventPlayer + (eventPlayer.getEyePosition() - eventPlayer.getPosition()) + (eventPlayer.getFacingDirection() * eventPlayer.Facing_Distance * (ceil((distance(eventPlayer + (eventPlayer.getEyePosition() - eventPlayer.getPosition()), raycastHitPosition(eventPlayer + (eventPlayer.getEyePosition() - eventPlayer.getPosition()), eventPlayer + eventPlayer.getEyePosition() + eventPlayer.getPosition() + eventPlayer.getFacingDirection() * 1000, null, eventPlayer, false))) / eventPlayer.Facing_Distance))), 800)
+    #Distance from player and camera
+    eventPlayer.Camera_Distance = -4
+    #Offset
+    eventPlayer.WorldVector_Offset = vect(-0.6, 0, 0)
+    #Rather than a flat number or a raycast, the distance between eye position and facing direction*distance only updates every (Facing_Distance) meters.
+    eventPlayer.Facing_Distance = 22
+
+rule "Swap Shoulders":
+    @Event eachPlayer
+    @Condition eventPlayer.isHoldingButton(Button.CROUCH) == true
+
+    #chaseOverTime(eventPlayer.WorldVector_Offset, vect(eventPlayer.WorldVector_Offset.x * -1, 0, 0), 0.2)
+    #wait(0.2)
+    eventPlayer.WorldVector_Offset = vect(eventPlayer.WorldVector_Offset.x * -1, eventPlayer.WorldVector_Offset.y, eventPlayer.WorldVector_Offset.z)
