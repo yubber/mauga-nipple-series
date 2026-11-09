@@ -1,11 +1,6 @@
 #!mainFile "main.opy"
 
-globalvar threatIcons
-globalvar threatScores
-globalvar threatNames
-globalvar threatDescs
 globalvar threatStacks
-globalvar threatMaxStacks
 
 globalvar mortarPos = [null,null,null,null,null]
 globalvar mortarI
@@ -53,6 +48,25 @@ enum THREATS:
 	MEDUSA,
 	MORTAR # LAST
 
+# collection
+tabularTranslateFix(["threatNames","threatScores","threatMaxStacks","threatIcons","threatDescs"],
+	[true, false, false, false, true],[
+	["jailor", 3, 99999, "<tx0C000000000039DA>", "spawns a small mauga that charges you and\ntraps you in his ult. kill him to stop it.\neach stack increases his health."],
+	["more maugas", 5, 99999, "heroIcon(Hero.MAUGA)", "spawns an extra mauga that charges a\ndeadly attack. kill him to stop it.\neach stack increases his health."],
+	["shrapnel", 6, 5, "iconString(Icon.ASTERISK)", "a shard falls from the sky,\nshattering into pieces that fly out.\neach stack increases shrapnel count."],
+	["pandora's box", 6, 5, "<tx0C00000000017C2A>", "a box spawns in the center and opens after 15s.\ntouch it to reset the timer.\nyou don't want to know what's inside...\neach stack makes it open faster."],
+	["niplets", 6, 5, "<tx0C0000000000ABAD>", "mauga launches milk glands that burst into\nexpanding waves of even more glands.\neach stack adds an extra wave."],
+
+	["sticky handshake", 3, 99999, "<tx0C00000000005A0B>", "mauga reaches out and tries to grab you to him.\neach stack increases \"hand\" speed."],
+	["chained together", 6, 99999, "abilityIconString(Hero.MAUGA, Button.ULTIMATE)", "mauga pulls you in if you're on the far side of the arena.\neach stack reduces minimum distance to be pulled."],
+	["frostbitties", 3, 99999, "<tx0C0000000000B93A>", "mauga shoots freezing icicles.\neach stack increases fire rate."],
+	["milk wall", 5, 99999, "<tx0C00000000004121>", "mauga sends forth a wall that stuns on impact.\neach stack increases build speed."],
+	["double d-day", 2, 99999, "iconString(Icon.RADIOACTIVE)", "a singularity follows players around.\non contact, mauga nukes it to create a deadly fallout zone.\neach stack increases singularity speed."],
+	["flashing flood", 2, 99999, "iconString(Icon.BOLT)", "storm clouds move back and forth in rows.\neach stack increases damage."],
+	["milkdusa", 7, 99999, "iconString(Icon.EYE)", "a gorgon spawns on the map. staring at it slows\nand eventually petrifies you.\neach stack increases damage and petrify duration."],
+	["moo-rtar", 2, 99999, "iconString(Icon.DIZZY)", "bombs random spaces on the map.\neach stack adds explosion radius."],
+])
+
 macro chainThreatZLimit = 20 - (40 * 0.75 ** threatStacks[THREATS.CHAIN])
 macro isFacingGorgon(player):
 	angleBetweenVectors(player.getFacingDirection(), directionTowards(player.getEyePosition(), gorgonPos)) < 50
@@ -62,27 +76,9 @@ macro threatMilkBonus(id):
 macro threatMinRound(id):
 	threatScores[id] - 2
 
-# collection,
-rule "threat info":
-	tabular([threatNames,threatScores,threatMaxStacks,threatIcons,threatDescs], [
-		"jailor", 3, 99999, "<tx0C000000000039DA>", "spawns a small mauga that charges you and\ntraps you in his ult. kill him to stop it.\neach stack increases his health.",
-		"more maugas", 5, 99999, heroIcon(Hero.MAUGA), "spawns an extra mauga that charges a\ndeadly attack. kill him to stop it.\neach stack increases his health.",
-		"shrapnel", 6, 5, iconString(Icon.ASTERISK), "a shard falls from the sky,\nshattering into pieces that fly out.\neach stack increases shrapnel count.",
-		"pandora's box", 6, 5, "<tx0C00000000017C2A>", "a box spawns in the center and opens after 15s.\ntouch it to reset the timer.\nyou don't want to know what's inside...\neach stack makes it open faster.",
-		"niplets", 6, 5, "<tx0C0000000000ABAD>", "mauga launches milk glands that burst into\nexpanding waves of even more glands.\neach stack adds an extra wave.",
-		# og threats
-		"sticky handshake", 3, 99999, "<tx0C00000000005A0B>", "mauga reaches out and tries to grab you to him.\neach stack increases \"hand\" speed.",
-		"chained together", 6, 99999, abilityIconString(Hero.MAUGA, Button.ULTIMATE), "mauga pulls you in if you're on the far side of the arena.\neach stack reduces minimum distance to be pulled.",
-		"frostbitties", 3, 99999, "<tx0C0000000000B93A>", "mauga shoots freezing icicles.\neach stack increases fire rate.",
-		"milk wall", 5, 99999, "<tx0C00000000004121>", "mauga sends forth a wall that stuns on impact.\neach stack increases build speed.",
-		"double d-day", 2, 99999, iconString(Icon.RADIOACTIVE), "a singularity follows players around.\non contact, mauga nukes it to create a deadly fallout zone.\neach stack increases singularity speed.",
-		"flashing flood", 2, 99999, iconString(Icon.BOLT), "storm clouds move back and forth in rows.\neach stack increases damage.",
-		"milkdusa", 7, 99999, iconString(Icon.EYE), "a gorgon spawns on the map. staring at it slows\nand eventually petrifies you.\neach stack increases damage and petrify duration.",
-		"moo-rtar", 2, 99999, iconString(Icon.DIZZY), "bombs random spaces on the map.\neach stack adds explosion radius.",
-	])
-	threatStacks = [0 for x in threatNames]
-
 rule "perma threat fx":
+	wait(1)
+	threatStacks = [0 for x in threatNames]
 	# medusa
 	createIcon(getAllPlayers() if gorgonPos else null, gorgonPos, Icon.EYE, IconReeval.VISIBILITY_AND_POSITION, Color.YELLOW, true)
 	createProjectileEffect(getAllPlayers() if gorgonPos else null, Projectile.ORISA_FUSION_DRIVER, getAllPlayers(), gorgonPos + Vector.UP * (1 + sin(getTotalTimeElapsed())), Vector.DOWN, 0.5, ProjectileEffectReeval.VISIBILITY_FRIENDLINESS_POSITION_DIRECTION_AND_SIZE)
@@ -115,7 +111,7 @@ rule "launch mobs on respawn":
 rule "niplets":
 	@Condition phase == PHASE.SURVIVE
 	@Condition threatStacks[THREATS.NIPLETS]
-	
+
 
 rule "niplets":
 	@Condition phase == PHASE.SURVIVE

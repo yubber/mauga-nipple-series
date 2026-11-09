@@ -149,18 +149,156 @@ msgstr ""
 msgid "do not the mauga"
 msgstr ""
 
-#. file threats.opy, line 89, rule "perma threat fx"
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "jailor"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "more maugas"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "shrapnel"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "pandora's box"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "niplets"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "sticky handshake"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "chained together"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "frostbitties"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "milk wall"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "double d-day"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "flashing flood"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "milkdusa"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "moo-rtar"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"spawns a small mauga that charges you and\n"
+"traps you in his ult. kill him to stop it.\n"
+"each stack increases his health."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"spawns an extra mauga that charges a\n"
+"deadly attack. kill him to stop it.\n"
+"each stack increases his health."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"a shard falls from the sky,\n"
+"shattering into pieces that fly out.\n"
+"each stack increases shrapnel count."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"a box spawns in the center and opens after 15s.\n"
+"touch it to reset the timer.\n"
+"you don't want to know what's inside...\n"
+"each stack makes it open faster."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"mauga launches milk glands that burst into\n"
+"expanding waves of even more glands.\n"
+"each stack adds an extra wave."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"mauga reaches out and tries to grab you to him.\n"
+"each stack increases \"hand\" speed."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"mauga pulls you in if you're on the far side of the arena.\n"
+"each stack reduces minimum distance to be pulled."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"mauga shoots freezing icicles.\n"
+"each stack increases fire rate."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"mauga sends forth a wall that stuns on impact.\n"
+"each stack increases build speed."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"a singularity follows players around.\n"
+"on contact, mauga nukes it to create a deadly fallout zone.\n"
+"each stack increases singularity speed."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"storm clouds move back and forth in rows.\n"
+"each stack increases damage."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"a gorgon spawns on the map. staring at it slows\n"
+"and eventually petrifies you.\n"
+"each stack increases damage and petrify duration."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"bombs random spaces on the map.\n"
+"each stack adds explosion radius."
+msgstr ""
+
+#. file threats.opy, line 85, rule "perma threat fx"
 msgid "don't look!"
 msgstr ""
 
-#. file threats.opy, line 214, rule "toe medusa"
+#. file threats.opy, line 210, rule "toe medusa"
 msgid "petrified! don't look at the gorgon!"
 msgstr ""
 
 # TODO: check if all occurrences have the same translation
 #. 2 occurrences:
-#.  - file threats.opy, line 275, rule "grab"
-#.  - file threats.opy, line 281, rule "grab"
+#.  - file threats.opy, line 271, rule "grab"
+#.  - file threats.opy, line 277, rule "grab"
 #, hasMultipleOccurrencesNotification
 msgid "grabbed by mauga!"
 msgstr ""
