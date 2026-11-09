@@ -133,7 +133,7 @@ settings {
     }
 }
 
-#!translations en
+#!translations en ko
 
 #!extension beamEffects
 #!extension buffStatusEffects
@@ -174,6 +174,8 @@ enum PHASE:
 	INTERMISSION,
 	SURVIVE,
 
+globalvar configItemNames = [___("swap hero"), ___("toggle 3rd person"), ___("change camera distance"), ___("swap camera shoulder")]
+
 macro isShopRound = teamScore(Team.1) % 4 == 3
 macro isThreatPickRound = teamScore(Team.1) % 4 != 3
 macro selectBoons = phase == PHASE.INTERMISSION and isShopRound
@@ -187,6 +189,8 @@ macro Player.isFixedMauga = self.getPosition().y < -10 and self.getEyePosition()
 
 #!define LeftNip NipmanLeftConst
 #!define RightNip NipmanRightConst
+
+#!define tabularTranslateFix(vars, wrapTranslate, arr) __script__("tabularTranslateFix.js")
 
 #!include "boons.opy"
 #!include "threats.opy"
@@ -249,7 +253,7 @@ rule "player init":
 	eventPlayer.milk = nipman.milk
 	if phase == PHASE.SURVIVE:
 		kill(eventPlayer, null)
-		smallMessage(eventPlayer, "you will join next round.")
+		smallMessage(eventPlayer, t"you will join next round.")
 
 rule "round start, add threats":
 	@Condition phase == PHASE.INTERMISSION
@@ -340,7 +344,8 @@ macro shopOptionPos(itemI, y=0, z=15):
 	vect(evenSpaceCentered(itemI, 4, 30), y, z)
 macro shopOptionRad = 4
 macro heroSwapPos(y=0):
-	vect(0,y,-10)
+	shopOptionPos(0, y, -15)
+macro shopZOffset = 30
 
 def rerollItems():
 	if isShopRound:
@@ -352,49 +357,50 @@ def rerollItems():
 			wait(0.032)
 
 rule "shop / threat select / cam / hero select huds":
-	# shop: 2 items, reroll, ready
+	### shop: 2 items, reroll, ready
 	for i in range(4):
 		# ring
 		createEffect(getAllPlayers() if selectBoons else null, Effect.RING, Color.SKY_BLUE, shopOptionPos(i), shopOptionRad, EffectReeval.VISIBILITY)
 	for i in range(2):
 		wait(0.24)
 		# icon
-		createInWorldText(getAllPlayers() if selectBoons else null, boonIcons[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectBoons else null, boonIcons[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, shopZOffset), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# title
-		createInWorldText(getAllPlayers() if selectBoons else null, boonNames[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 5, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.SKY_BLUE)
+		createInWorldText(getAllPlayers() if selectBoons else null, _(boonNames[localPlayer.offeredChoices[evalOnce(i)]]), shopOptionPos(i, 5, shopZOffset), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.SKY_BLUE)
 		# desc
-		createInWorldText(getAllPlayers() if selectBoons else null, boonDescs[localPlayer.offeredChoices[evalOnce(i)]], shopOptionPos(i, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectBoons else null, _(boonDescs[localPlayer.offeredChoices[evalOnce(i)]]), shopOptionPos(i, 2, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# buy
-		createInWorldText(getAllPlayers() if selectBoons else null, ft"{iconString(Icon.CHECKMARK)} bought!" if localPlayer.bought[evalOnce(i)] else tf"buy: {boonCost(localPlayer.offeredChoices[evalOnce(i)])} milk", shopOptionPos(i, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.GRAY if localPlayer.bought[evalOnce(i)] else Color.WHITE)
+		createInWorldText(getAllPlayers() if selectBoons else null, ft"{iconString(Icon.CHECKMARK)} bought!" if localPlayer.bought[evalOnce(i)] else tf"buy: {boonCost(localPlayer.offeredChoices[evalOnce(i)])} milk", shopOptionPos(i, 1, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.GRAY if localPlayer.bought[evalOnce(i)] else Color.WHITE)
 	# reroll
-	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.RECYCLE), shopOptionPos(2, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
-	createInWorldText(getAllPlayers() if selectBoons else null, ft"{buttonToString(Button.INTERACT)} - reroll ({localPlayer.rerollCost} milk)", shopOptionPos(2, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.RECYCLE), shopOptionPos(2, 2, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, ft"{buttonToString(Button.INTERACT)} - reroll ({localPlayer.rerollCost} milk)", shopOptionPos(2, 1, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
 	# ready
-	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.CHECKMARK) if localPlayer.ready else iconString(Icon.EXCLAMATION_MARK), shopOptionPos(3, 2, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
-	createInWorldText(getAllPlayers() if selectBoons else null, "{} - {}".format(buttonToString(Button.INTERACT), t"cancel ready" if localPlayer.ready else t"ready up"), shopOptionPos(3, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, iconString(Icon.CHECKMARK) if localPlayer.ready else iconString(Icon.EXCLAMATION_MARK), shopOptionPos(3, 2, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectBoons else null, tf"{buttonToString(Button.INTERACT)} - cancel ready" if localPlayer.ready else tf"{buttonToString(Button.INTERACT)} - ready up", shopOptionPos(3, 1, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_STRING_AND_COLOR, Color.WHITE)
 
-	# threats: 3, abstain
+	### threats: 3, abstain
 	for i in range(4):
 		# ring
 		createEffect(getAllPlayers() if selectThreats else null, Effect.RING, Color.ORANGE, shopOptionPos(i), shopOptionRad, EffectReeval.VISIBILITY)
 	for i in range(3):
 		wait(0.24)
 		# icon
-		createInWorldText(getAllPlayers() if selectThreats else null, threatIcons[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, 18), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectThreats else null, threatIcons[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 6.5, shopZOffset), 3, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# title
-		createInWorldText(getAllPlayers() if selectThreats else null, threatNames[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 5, 18), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.ORANGE)
+		createInWorldText(getAllPlayers() if selectThreats else null, _(threatNames[nipman.offeredChoices[evalOnce(i)]]), shopOptionPos(i, 5, shopZOffset), 2.6, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.ORANGE)
 		# desc
-		createInWorldText(getAllPlayers()if selectThreats else null, threatDescs[nipman.offeredChoices[evalOnce(i)]], shopOptionPos(i, 2.7, 18), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers()if selectThreats else null, _(threatDescs[nipman.offeredChoices[evalOnce(i)]]), shopOptionPos(i, 2.7, shopZOffset), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# milk bonus
-		createInWorldText(getAllPlayers()if selectThreats else null, tf"+{threatMilkBonus(evalOnce(i))} milk per round", shopOptionPos(i, 1.7, 18), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers()if selectThreats else null, tf"+{threatMilkBonus(evalOnce(i))} milk per round", shopOptionPos(i, 1.7, shopZOffset), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 		# buy
-		createInWorldText(getAllPlayers() if selectThreats else null, ft"{iconString(Icon.CHECKMARK)} voted!" if localPlayer.bought == evalOnce(i) else tf"{buttonToString(Button.INTERACT)} - vote", shopOptionPos(i, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+		createInWorldText(getAllPlayers() if selectThreats else null, ft"{iconString(Icon.CHECKMARK)} voted!" if localPlayer.bought == evalOnce(i) else tf"{buttonToString(Button.INTERACT)} - vote", shopOptionPos(i, 1, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 
-	createInWorldText(getAllPlayers() if selectThreats else null, ft"{iconString(Icon.CHECKMARK)} abstained!" if localPlayer.bought == 3 else tf"{buttonToString(Button.INTERACT)} - abstain", shopOptionPos(i, 1, 18), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
+	createInWorldText(getAllPlayers() if selectThreats else null, ft"{iconString(Icon.CHECKMARK)} abstained!" if localPlayer.bought == 3 else tf"{buttonToString(Button.INTERACT)} - abstain", shopOptionPos(i, 1, shopZOffset), 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.WHITE)
 
-	# change hero
-	createEffect(getAllPlayers() if phase == PHASE.INTERMISSION else null, Effect.RING, Color.GRAY, heroSwapPos(0), 4, EffectReeval.VISIBILITY)
-	createInWorldText(getAllPlayers() if phase == PHASE.INTERMISSION else null, tf"{buttonToString(Button.INTERACT)} - swap hero", heroSwapPos(1), 1, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.LIGHT_VIOLET)
+	### misc: hero, cam settings
+	for i in range(4):
+		createEffect(getAllPlayers() if phase == PHASE.INTERMISSION else null, Effect.RING, Color.WHITE, shopOptionPos(i, 0, -15), 4, EffectReeval.VISIBILITY)
+		createInWorldText(getAllPlayers() if phase == PHASE.INTERMISSION else null, tf"{buttonToString(Button.INTERACT)} - {_(configItemNames[evalOnce(i)])}", heroSwapPos(1), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_AND_STRING, Color.LIGHT_VIOLET)
 
 rule "init select boons":
 	@Event eachPlayer

@@ -1,0 +1,166 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ko\n"
+"X-Generator: OverPy\n"
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "explorer's boots"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "leg day"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "strong bones"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "milk excavator"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "mozzarellazarus"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "overtime"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "time off"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "+10% movespeed"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "+20% jump height"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "+15% max health"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "+15% milk gained"
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid ""
+"respawn after 30s, but total hp is halved.\n"
+"you lose if everyone is dead at the same time.\n"
+"respawn timer ticks 20% faster per stack."
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "+20s to each round, +30 milk per round."
+msgstr ""
+
+#. file boons.opy, line 3, rule "domina ult"
+msgid "rounds are 20% shorter."
+msgstr ""
+
+#. file main.opy, line 177, rule "domina ult"
+msgid "swap hero"
+msgstr ""
+
+#. file main.opy, line 177, rule "domina ult"
+msgid "toggle 3rd person"
+msgstr ""
+
+#. file main.opy, line 177, rule "domina ult"
+msgid "change camera distance"
+msgstr ""
+
+#. file main.opy, line 177, rule "domina ult"
+msgid "swap camera shoulder"
+msgstr ""
+
+#. file main.opy, line 234, rule "global init"
+msgid "team lives: {0}"
+msgstr ""
+
+#. file main.opy, line 256, rule "player init"
+msgid "you will join next round."
+msgstr ""
+
+#. file main.opy, line 332, rule "all dead"
+msgid "game over. survived {0} rounds!"
+msgstr ""
+
+#. file main.opy, line 335, rule "all dead"
+msgid "everybody's dead! {0} team lives left."
+msgstr ""
+
+#. file main.opy, line 373, rule "shop / threat select / cam / hero select huds"
+msgid "{0} bought!"
+msgstr ""
+
+#. file main.opy, line 373, rule "shop / threat select / cam / hero select huds"
+msgid "buy: {0} milk"
+msgstr ""
+
+#. file main.opy, line 376, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - reroll ({1} milk)"
+msgstr ""
+
+#. file main.opy, line 379, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - cancel ready"
+msgstr ""
+
+#. file main.opy, line 379, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - ready up"
+msgstr ""
+
+#. file main.opy, line 394, rule "shop / threat select / cam / hero select huds"
+msgid "+{0} milk per round"
+msgstr ""
+
+#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
+msgid "{0} voted!"
+msgstr ""
+
+#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - vote"
+msgstr ""
+
+#. file main.opy, line 398, rule "shop / threat select / cam / hero select huds"
+msgid "{0} abstained!"
+msgstr ""
+
+#. file main.opy, line 398, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - abstain"
+msgstr ""
+
+#. file main.opy, line 403, rule "shop / threat select / cam / hero select huds"
+msgid "{0} - {1}"
+msgstr ""
+
+# TODO: check if all occurrences have the same translation
+#. 4 occurrences:
+#.  - file main.opy, line 564, rule "charge no breaky"
+#.  - file main.opy, line 576, rule "charge no breaky more maugas"
+#.  - file main.opy, line 588, rule "echo charge no breaky"
+#.  - file main.opy, line 601, rule "echo charge no breaky more maugas"
+#, hasMultipleOccurrencesNotification
+msgid "do not the mauga"
+msgstr ""
+
+#. file threats.opy, line 89, rule "perma threat fx"
+msgid "don't look!"
+msgstr ""
+
+#. file threats.opy, line 214, rule "toe medusa"
+msgid "petrified! don't look at the gorgon!"
+msgstr ""
+
+# TODO: check if all occurrences have the same translation
+#. 2 occurrences:
+#.  - file threats.opy, line 275, rule "grab"
+#.  - file threats.opy, line 281, rule "grab"
+#, hasMultipleOccurrencesNotification
+msgid "grabbed by mauga!"
+msgstr ""
