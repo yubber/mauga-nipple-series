@@ -63,88 +63,92 @@ msgstr ""
 msgid "rounds are 20% shorter."
 msgstr ""
 
-#. file main.opy, line 177, rule "domina ult"
-msgid "swap hero"
+#. file main.opy, line 246, rule "global init"
+msgid "<tx0C0000000001935F> {0} | {1} milk"
 msgstr ""
 
-#. file main.opy, line 177, rule "domina ult"
-msgid "toggle 3rd person"
+#. file main.opy, line 248, rule "global init"
+msgid "hero tweaks"
 msgstr ""
 
-#. file main.opy, line 177, rule "domina ult"
-msgid "change camera distance"
+#. file main.opy, line 250, rule "global init"
+msgid "team lives"
 msgstr ""
 
-#. file main.opy, line 177, rule "domina ult"
-msgid "swap camera shoulder"
-msgstr ""
-
-#. file main.opy, line 234, rule "global init"
-msgid "team lives: {0}"
-msgstr ""
-
-#. file main.opy, line 256, rule "player init"
+#. file main.opy, line 274, rule "player init"
 msgid "you will join next round."
 msgstr ""
 
-#. file main.opy, line 332, rule "all dead"
+#. file main.opy, line 347, rule "all dead"
 msgid "game over. survived {0} rounds!"
 msgstr ""
 
-#. file main.opy, line 335, rule "all dead"
+#. file main.opy, line 351, rule "all dead"
 msgid "everybody's dead! {0} team lives left."
 msgstr ""
 
-#. file main.opy, line 373, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 370, rule "heels broke = died"
+msgid "swap hero"
+msgstr ""
+
+#. file main.opy, line 370, rule "heels broke = died"
+msgid "toggle 3rd person"
+msgstr ""
+
+#. file main.opy, line 370, rule "heels broke = died"
+msgid "change camera distance"
+msgstr ""
+
+#. file main.opy, line 370, rule "heels broke = died"
+msgid "swap camera shoulder"
+msgstr ""
+
+#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
 msgid "{0} bought!"
 msgstr ""
 
-#. file main.opy, line 373, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
 msgid "buy: {0} milk"
 msgstr ""
 
-#. file main.opy, line 376, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 399, rule "shop / threat select / cam / hero select huds"
 msgid "{0} - reroll ({1} milk)"
 msgstr ""
 
-#. file main.opy, line 379, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 402, rule "shop / threat select / cam / hero select huds"
 msgid "{0} - cancel ready"
 msgstr ""
 
-#. file main.opy, line 379, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 402, rule "shop / threat select / cam / hero select huds"
 msgid "{0} - ready up"
 msgstr ""
 
-#. file main.opy, line 394, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 417, rule "shop / threat select / cam / hero select huds"
 msgid "+{0} milk per round"
 msgstr ""
 
-#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 419, rule "shop / threat select / cam / hero select huds"
 msgid "{0} voted!"
 msgstr ""
 
-#. file main.opy, line 396, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 419, rule "shop / threat select / cam / hero select huds"
 msgid "{0} - vote"
 msgstr ""
 
-#. file main.opy, line 398, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 421, rule "shop / threat select / cam / hero select huds"
 msgid "{0} abstained!"
 msgstr ""
 
-#. file main.opy, line 398, rule "shop / threat select / cam / hero select huds"
+#. file main.opy, line 421, rule "shop / threat select / cam / hero select huds"
 msgid "{0} - abstain"
-msgstr ""
-
-#. file main.opy, line 403, rule "shop / threat select / cam / hero select huds"
-msgid "{0} - {1}"
 msgstr ""
 
 # TODO: check if all occurrences have the same translation
 #. 4 occurrences:
-#.  - file main.opy, line 564, rule "charge no breaky"
-#.  - file main.opy, line 576, rule "charge no breaky more maugas"
-#.  - file main.opy, line 588, rule "echo charge no breaky"
-#.  - file main.opy, line 601, rule "echo charge no breaky more maugas"
+#.  - file main.opy, line 616, rule "charge no breaky"
+#.  - file main.opy, line 628, rule "charge no breaky more maugas"
+#.  - file main.opy, line 640, rule "echo charge no breaky"
+#.  - file main.opy, line 653, rule "echo charge no breaky more maugas"
 #, hasMultipleOccurrencesNotification
 msgid "do not the mauga"
 msgstr ""
@@ -198,10 +202,6 @@ msgid "milkdusa"
 msgstr ""
 
 #. file threats.opy, line 52, rule "Subroutine applyStatBoons"
-msgid "moo-rtar"
-msgstr ""
-
-#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
 msgid ""
 "spawns a small mauga that charges you and\n"
 "traps you in his ult. kill him to stop it.\n"
@@ -245,12 +245,6 @@ msgstr ""
 
 #. file threats.opy, line 52, rule "Subroutine applyStatBoons"
 msgid ""
-"mauga pulls you in if you're on the far side of the arena.\n"
-"each stack reduces minimum distance to be pulled."
-msgstr ""
-
-#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
-msgid ""
 "mauga shoots freezing icicles.\n"
 "each stack increases fire rate."
 msgstr ""
@@ -283,22 +277,33 @@ msgstr ""
 
 #. file threats.opy, line 52, rule "Subroutine applyStatBoons"
 msgid ""
-"bombs random spaces on the map.\n"
-"each stack adds explosion radius."
+"mauga pulls you in if you're on the far side of the arena.\n"
+"crouch to avoid being pulled.\n"
+"each stack reduces minimum distance to be pulled."
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid "geysers"
+msgstr ""
+
+#. file threats.opy, line 52, rule "Subroutine applyStatBoons"
+msgid ""
+"geysers shoot out from the ground.\n"
+"each stack adds number of geysers."
 msgstr ""
 
 #. file threats.opy, line 85, rule "perma threat fx"
 msgid "don't look!"
 msgstr ""
 
-#. file threats.opy, line 210, rule "toe medusa"
+#. file threats.opy, line 239, rule "toe medusa"
 msgid "petrified! don't look at the gorgon!"
 msgstr ""
 
 # TODO: check if all occurrences have the same translation
 #. 2 occurrences:
-#.  - file threats.opy, line 271, rule "grab"
-#.  - file threats.opy, line 277, rule "grab"
+#.  - file threats.opy, line 300, rule "grab"
+#.  - file threats.opy, line 306, rule "grab"
 #, hasMultipleOccurrencesNotification
 msgid "grabbed by mauga!"
 msgstr ""

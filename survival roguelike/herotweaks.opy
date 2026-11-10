@@ -10,7 +10,7 @@ rule "hero tweak text":
 		Hero.TRACER, "pulse bomb resets everyone's cooldowns\n(if it's not bugged in workshop, like abilities with charges...)",
 		Hero.CASSIDY, "invulnerable during ult. can still be stunned out of it.",
 		Hero.ASHE, "dynamite is slower and has no gravity. levitate while burning.",
-		Hero.DOMINA, "your ult grants a barrier to allies in its path.",
+		Hero.DOMINA, "your ult grants 100 overhealth to you and allies in its path.",
 		# non ws
 		Hero.SYMMETRA, "support your team with teleporters and farming your ult.",
 		Hero.TORBJORN, "overload instead grants a short burst of overhealth.",

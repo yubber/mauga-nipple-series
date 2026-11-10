@@ -30,7 +30,7 @@ macro SpeedFormula(player):
 macro JumpFormula(player):
 	100 + player.boonStacks[BOONS.JUMP] * 20
 macro HealthFormula(player):
-	(100 + player.boonStacks[BOONS.HP] * 10) * (0.5 if player.boonStacks[BOONS.REZ] else 1)
+	(100 + player.boonStacks[BOONS.HP] * 10) * (0.5 if player.boonStacks[BOONS.REZ] else 1) * (0.6 if player.getHero() in getTankHeroes() else 1)
 
 def applyStatBoons():
 	eventPlayer.setMaxHealth(HealthFormula(eventPlayer))

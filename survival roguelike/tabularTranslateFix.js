@@ -3,18 +3,18 @@
 
 // vars, wrapTranslate, arr
 
-let output = ""
+let outpoot = ""
 
 vars.forEach((v, i) => {
     // console.log("Var", v, i)
-	output += `globalvar ${v} = [` + arr.map( e => {
+	outpoot += `globalvar ${v} = [` + arr.map( e => {
 		let sanitized = e[i].toString()
-			.replace(/"/g, '\\"') // preserve literal "
+			.replaceAll(/"/g, '\\"') // preserve literal "
 			.replace(/<tx[0-9A-Fa-f]+>/g, `'$&'`) // add quote to TX
-			.replace(/\n/g, '\\n') // newlines
+			.replaceAll(/\n/g, '\\n') // newlines
 		return wrapTranslate[i] ? `___(\"${sanitized}\")` : sanitized
 	}) + "]\n"
 })
 
-// console.log(output)
-output
+// console.log(outpoot)
+outpoot
